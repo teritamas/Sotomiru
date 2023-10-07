@@ -1,6 +1,6 @@
-# Nuxt 3 Minimal Starter
+# Web3 Global Hackathon
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+- [デモページ](https://key3-global-hackathon.web.app/)
 
 ## Setup
 
