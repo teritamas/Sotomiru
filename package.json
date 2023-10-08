@@ -16,10 +16,12 @@
     "firebase-functions": "^4.4.1",
     "firebase-functions-test": "^3.1.0",
     "nuxt": "^3.7.4",
+    "sass": "^1.69.0",
     "vue": "^3.3.4",
     "vue-router": "^4.2.5"
   },
   "dependencies": {
-    "flowbite": "^1.8.1"
+    "flowbite": "^1.8.1",
+    "scss": "^0.2.4"
   }
 }
