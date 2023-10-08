@@ -52,7 +52,7 @@
           <small>パターン３</small>
         </div>
       </router-link>
-      <router-link class="footer-item block text-gray-500" to="/index4">
+      <router-link class="footer-item block text-gray-500" to="/mypage">
         <div class="p-1 py-2 grid justify-items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
