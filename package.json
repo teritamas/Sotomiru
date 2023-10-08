@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "flowbite": "^1.8.1",
+    "openai": "^4.11.1",
     "scss": "^0.2.4"
   }
 }

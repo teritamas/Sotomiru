@@ -25,13 +25,13 @@ const bingoId = ref("");
 const bingoCellId = ref("");
 const bingoCard = ref(null as BingoCard | null);
 
-// 最初の画面描画時にしりとりルームを作成
+// 最初の画面描画時にビンゴルームを作成
 onMounted(async () => {
-  // await createRoom(); // 動作確認用
+  await createBingoCard(); // 動作確認用
   bingoCard.value = await fetchBingoCard();
 });
 
-const createRoom = async () => {
+const createBingoCard = async () => {
   const res = await fetch("api/bingoCard", {
     method: "POST",
   });
