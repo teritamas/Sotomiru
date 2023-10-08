@@ -6,9 +6,15 @@
 </template>
 
 <style>
+@import url("https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&family=Open+Sans:wght@300;400&display=swap");
 body {
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
-    Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji,
-    Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+  font-family: "Mochiy Pop P One", sans-serif;
+  font-family: "Open Sans", sans-serif;
+  background: #f8fbff;
+}
+
+.bingo-card-frame {
+  max-width: 324px;
+  margin: 0 auto;
 }
 </style>

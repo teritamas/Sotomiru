@@ -2,7 +2,7 @@
   <div class="">
     <div class="main">
       <div class="p-3">
-        <BingoCard4
+        <BingoCardView
           @openBingoCardDetailModal="openBingoCardDetailModal"
           :bingoCells="bingoCard?.bingoCells!"
         />
