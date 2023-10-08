@@ -1,5 +1,5 @@
-import { firestore } from "@/server/firebase";
 import { BingoCard } from "@/server/models/bingo/dto";
+import { firestore } from "../firebase";
 
 /**
  * ビンゴカードの内容を取得する
