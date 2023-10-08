@@ -46,9 +46,10 @@
               >写真をアップロード</label
             >
             <input
-              class="white w-full text-sm text-gray-900 border border-gray-700 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+              class="white w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
               id="file_input"
               type="file"
+              @change="onFileChange"
             />
           </div>
           <div class="mt-3">
@@ -106,8 +107,25 @@ const targetBingoCell = computed(() => {
   return props.bingoCells.filter((value) => value.id === props.bingoCellId)[0];
 });
 
-const emits = defineEmits(["closeBingoCardDetailModal"]);
+const emits = defineEmits([
+  "closeBingoCardDetailModal",
+  "postBingoCellRequest",
+]);
+
+// モーダルをクローズする
 const closeBingoCardDetailModal = async () => {
   await emits("closeBingoCardDetailModal");
+};
+
+// 投稿する
+const form = ref({
+  comments: "",
+});
+let selectedFile = ref(null);
+const onFileChange = (e: any) => {
+  selectedFile.value = e.target.files[0];
+};
+const postBingoCellRequest = async () => {
+  await emits("postBingoCellRequest", form.value, selectedFile.value);
 };
 </script>

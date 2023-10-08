@@ -9,6 +9,7 @@
         <BingoCardDetailModal
           v-if="modalIsOpen"
           @closeBingoCardDetailModal="closeBingoCardDetailModal"
+          @postBingoCellRequest="postBingoCellRequest"
           :bingoCells="bingoCard?.bingoCells!"
           :bingoCellId="bingoCellId"
         />
@@ -22,37 +23,62 @@ import { BingoCard } from "@/server/models/bingo/dto";
 
 const modalIsOpen = ref(false);
 const bingoId = ref("");
+const bingoCardId = ref("");
 const bingoCellId = ref("");
 const bingoCard = ref(null as BingoCard | null);
 
 // 最初の画面描画時にビンゴルームを作成
 onMounted(async () => {
-  await createBingoCard(); // 動作確認用
+  // await createBingoCard(); // 動作確認用
+  bingoCardId.value = "ae0c40aa-6617-4128-b0ea-fca29233b9b6";
   bingoCard.value = await fetchBingoCard();
 });
 
+// 将来的にTopページに移動する
 const createBingoCard = async () => {
   const res = await fetch("api/bingoCard", {
     method: "POST",
   });
   const data = (await res.json()) as { message: string; bingoCardId: string };
 
-  bingoId.value = data.bingoCardId;
+  bingoCardId.value = data.bingoCardId;
 };
 
+// ビンゴカードの情報取得
 const fetchBingoCard = async () => {
-  const res = await fetch(`api/bingoCard/ae0c40aa-6617-4128-b0ea-fca29233b9b6`); // 動作確認用
-  // const res = await fetch(`api/bingoCard/${bingoId.value}`);
+  const res = await fetch(`api/bingoCard/${bingoCardId.value}`);
   const data = (await res.json()) as BingoCard;
   return data;
 };
 
-const openBingoCardDetailModal = async (bingoCellIdByChild) => {
+// ビンゴカードの詳細を開く
+const openBingoCardDetailModal = async (bingoCellIdByChild: string) => {
   modalIsOpen.value = true;
   bingoCellId.value = bingoCellIdByChild;
 };
 
+// ビンゴカードの詳細を閉じる
 const closeBingoCardDetailModal = async () => {
+  modalIsOpen.value = false;
+};
+
+// ビンゴカードの詳細を投稿する
+// 投稿完了後、ビンゴカードの最新の状態を取得し、モーダルを閉じる
+const postBingoCellRequest = async (form: { comments: string }, file: any) => {
+  const formData = new FormData();
+  formData.append(
+    "request",
+    JSON.stringify({
+      bingoCellId: bingoCellId.value,
+      ...form,
+    } as BingoCellPostRequest)
+  );
+  formData.append("file", file);
+  await useFetch(`api/bingoCell/${bingoCardId.value}`, {
+    method: "PUT",
+    body: formData,
+  });
+  bingoCard.value = await fetchBingoCard();
   modalIsOpen.value = false;
 };
 </script>
