@@ -11,7 +11,6 @@ export const getBingoCard = async (bingoCardId: string) => {
       .doc(bingoCardId)
       .get();
     const bingoCard = querySnapshot.data() as BingoCard;
-    console.log(bingoCardId, querySnapshot.data());
     return bingoCard;
   } catch (e) {
     console.error("[getBingoCard]", e);

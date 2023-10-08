@@ -14,13 +14,13 @@ import { BingoCard } from "@/server/models/bingo/dto";
 const bingoId = ref("");
 const bingoCard = ref(null as BingoCard | null);
 
-// 最初の画面描画時にしりとりルームを作成
+// 最初の画面描画時にビンゴルームを作成
 onMounted(async () => {
-  // await createRoom(); // 動作確認用
+  await createBingoCard(); // 動作確認用
   bingoCard.value = await fetchBingoCard();
 });
 
-const createRoom = async () => {
+const createBingoCard = async () => {
   const res = await fetch("api/bingoCard", {
     method: "POST",
   });
@@ -30,7 +30,7 @@ const createRoom = async () => {
 };
 
 const fetchBingoCard = async () => {
-  const res = await fetch(`api/bingoCard/a4344b38-c5e9-44f7-a0b4-6b087a3ddb88`); // 動作確認用
+  const res = await fetch(`api/bingoCard/ae0c40aa-6617-4128-b0ea-fca29233b9b6`); // 動作確認用
   // const res = await fetch(`api/bingoCard/${bingoId.value}`);
   const data = (await res.json()) as BingoCard;
   return data;
