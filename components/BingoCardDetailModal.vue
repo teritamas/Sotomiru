@@ -39,10 +39,10 @@
           <p
             class="text-base font-bold rounded-lg leading-relaxed text-gray-700 border p-5 bg-white"
           >
-            {{ targetBingoCell.description }}
+            {{ targetBingoCell.name }}
           </p>
           <p class="text-base leading-relaxed text-white font-bold">
-            ミッションの詳細などあればここに
+            {{ targetBingoCell.description }}
           </p>
           <div class="mt-8">
             <label
@@ -54,6 +54,7 @@
               class="white w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
               id="file_input"
               type="file"
+              @change="onFileChange"
             />
           </div>
           <div class="mt-3">
@@ -67,12 +68,14 @@
               rows="4"
               class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
               placeholder="コメント"
+              v-model="form.comments"
             ></textarea>
           </div>
         </div>
         <!-- Modal footer -->
         <div class="flex items-center p-6 space-x-2 rounded-b">
           <button
+            @click="postBingoCellRequest()"
             data-modal-hide="extralarge-modal"
             type="button"
             class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -111,8 +114,25 @@ const targetBingoCell = computed(() => {
   return props.bingoCells.filter((value) => value.id === props.bingoCellId)[0];
 });
 
-const emits = defineEmits(["closeBingoCardDetailModal"]);
+const emits = defineEmits([
+  "closeBingoCardDetailModal",
+  "postBingoCellRequest",
+]);
+
+// モーダルをクローズする
 const closeBingoCardDetailModal = async () => {
   await emits("closeBingoCardDetailModal");
+};
+
+// 投稿する
+const form = ref({
+  comments: "",
+});
+let selectedFile = ref(null);
+const onFileChange = (e: any) => {
+  selectedFile.value = e.target.files[0];
+};
+const postBingoCellRequest = async () => {
+  await emits("postBingoCellRequest", form.value, selectedFile.value);
 };
 </script>
