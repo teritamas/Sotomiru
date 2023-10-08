@@ -1,5 +1,8 @@
 import { createError, MultiPartData } from "h3";
-import { updateBingoCell } from "~/server/facades/repositories/bingoContents";
+import { v4 as uuidv4 } from "uuid";
+import { updateBingoCell } from "@/server/facades/repositories/bingoContents";
+import { uploadBingoCellImage } from "@/server/facades/storage/bingoCellImage";
+import fs from "fs";
 
 export default defineEventHandler(async (event) => {
   try {
@@ -45,7 +48,8 @@ export default defineEventHandler(async (event) => {
     }
 
     // ファイルをCloud Storageに保存
-    const fileId = "hoge"; // 暫定ダミーデータ
+    const fileId = uuidv4();
+    await uploadImage(file, fileId);
 
     // DBにデータを保存
     const updateDto = {
@@ -73,3 +77,13 @@ export default defineEventHandler(async (event) => {
     };
   }
 });
+
+/**
+ * file画像を変換してstorageにアップロードする
+ */
+async function uploadImage(file: Buffer, fileId: string) {
+  console.log("[uploadImage]aaa", file);
+
+  fs.writeFileSync("temp.png", file); // デバッグ様にローカルに保存
+  await uploadBingoCellImage(file, fileId);
+}
