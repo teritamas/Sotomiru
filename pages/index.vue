@@ -47,7 +47,7 @@ const fetchBingoCard = async () => {
   return data;
 };
 
-const openBingoCardDetailModal = async (bingoCellIdByChild) => {
+const openBingoCardDetailModal = async (bingoCellIdByChild: string) => {
   modalIsOpen.value = true;
   bingoCellId.value = bingoCellIdByChild;
 };
