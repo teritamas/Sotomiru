@@ -17,9 +17,8 @@
         class="flex flex-col hover:bg-sky-100 items-center justify-center bg-white border-b border-gray-200 border-r"
       >
         <a
+          @click="openBingoCardDetailModal(bingoCell.id)"
           class="hover:cursor-pointer block text-center p-4 md:p-8"
-          :data-modal-target="'authentication-modal' + bingoCell.id"
-          :data-modal-toggle="'authentication-modal' + bingoCell.id"
         >
           <blockquote
             class="max-w-2xl mx-auto text-gray-500 lg:mb-8 dark:text-gray-400"
@@ -32,7 +31,6 @@
             </p>
           </blockquote>
         </a>
-        <BingoCardDetail :mission="bingoCell" />
       </figure>
     </div>
   </div>
@@ -47,6 +45,11 @@ const props = defineProps({
     required: true,
   },
 });
+
+const emits = defineEmits(["openBingoCardDetailModal"]);
+const openBingoCardDetailModal = async (bingoCellId) => {
+  await emits("openBingoCardDetailModal", bingoCellId);
+};
 </script>
 
 <style>
