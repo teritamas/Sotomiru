@@ -2,7 +2,7 @@
   <div class="">
     <div class="main">
       <div class="p-3">
-        <BingoCard4
+        <BingoCardView
           @openBingoCardDetailModal="openBingoCardDetailModal"
           :bingoCells="bingoCard?.bingoCells!"
         />
@@ -22,6 +22,7 @@
 import { BingoCard } from "@/server/models/bingo/dto";
 
 const modalIsOpen = ref(false);
+const bingoId = ref("");
 const bingoCardId = ref("");
 const bingoCellId = ref("");
 const bingoCard = ref(null as BingoCard | null);
