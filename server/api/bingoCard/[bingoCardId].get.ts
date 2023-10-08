@@ -1,8 +1,8 @@
-import { getBingoCard } from "~/server/facades/repositories/bingoContents";
+import { getBingoCard } from "@/server/facades/repositories/bingoContents";
 
 export default defineEventHandler(async (event) => {
   try {
-    const bingoCardId: string | undefined = event.context.params?.roomId;
+    const bingoCardId: string | undefined = event.context.params?.bingoCardId;
     if (!bingoCardId) {
       return {
         status: 400,

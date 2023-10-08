@@ -1,4 +1,4 @@
-interface BingoContent {
+export interface BingoCell {
   id: string;
   name: string; // ビンゴの内容
   description: string; // ビンゴの説明
@@ -15,10 +15,10 @@ interface BingoContent {
   completed: boolean; // 完了したかどうか
 }
 
-interface BingoCard {
+export interface BingoCard {
   id: string;
   name: string;
-  bingoCell: BingoContent[];
+  bingoCells: BingoCell[];
   createdAt: Date;
   updatedAt: Date;
 }

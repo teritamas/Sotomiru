@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
-import { addBingoCard } from "~/server/facades/repositories/bingoContents";
+import { addBingoCard } from "@/server/facades/repositories/bingoContents";
+import { BingoCard, BingoContent } from "@/server/models/bingo/dto";
 
 /**
  * ビンゴカードを新規作成する
@@ -14,19 +15,13 @@ export default defineEventHandler(async (event) => {
     addBingoCard(entryBingoCard);
 
     return {
-      status: 200,
-      body: {
-        message: "OK",
-        bingoCardId: entryBingoCard.id,
-      },
+      message: "OK",
+      bingoCardId: entryBingoCard.id,
     };
   } catch (e) {
     console.error(e);
     return {
-      status: 500,
-      body: {
-        message: "Internal Server Error",
-      },
+      message: "Internal Server Error",
     };
   }
 });
@@ -38,13 +33,13 @@ function createBingoCard() {
   const entryBingoCard = {
     id: uuidv4(),
     name: "test",
-    bingoCell: [],
+    bingoCells: [],
     createdAt: new Date(),
     updatedAt: new Date(),
   } as BingoCard;
 
   sampleBingoCell.forEach((element) => {
-    entryBingoCard.bingoCell.push({
+    entryBingoCard.bingoCells.push({
       id: uuidv4(),
       name: element.title,
       description: element.description,
