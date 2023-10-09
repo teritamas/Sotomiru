@@ -4,6 +4,7 @@
       <div class="p-3">
         <BingoCardView
           @openBingoCardDetailModal="openBingoCardDetailModal"
+          :title="bingoCard?.name!"
           :bingoCells="bingoCard?.bingoCells!"
         />
         <BingoCardDetailModal
