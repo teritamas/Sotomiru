@@ -11,11 +11,11 @@
       <div
         v-for="bingoCell in props.bingoCells"
         :key="bingoCell.id"
-        class="w-24 h-24 md:w-36 md:h-36 flex justify-center items-center border rounded-2xl border-gray-700 my-1 bg-white bingo-cell-image"
+        class="w-24 h-24 flex justify-center items-center border rounded-2xl border-gray-700 my-1 bg-white bingo-cell-image"
         :style="{ '--bg-url': `url(${bingoCell.imageUrl})` }"
       >
         <a
-          class="hover:cursor-pointer block text-center flex justify-center items-center p-2 w-24 h-24 md:w-36 md:h-36"
+          class="hover:cursor-pointer block text-center flex justify-center items-center p-2 w-24 h-24"
           @click="openBingoCardDetailModal(bingoCell.id)"
         >
           <h3 class="text-lg font-semibold text-gray-900">
