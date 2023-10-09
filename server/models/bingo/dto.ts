@@ -18,6 +18,8 @@ export interface BingoCell {
 export interface BingoCard {
   id: string;
   name: string;
+  theme: string;
+  imageColor: string;
   bingoCells: BingoCell[];
   createdAt: Date;
   updatedAt: Date;

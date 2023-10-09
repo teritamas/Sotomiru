@@ -38,7 +38,7 @@
               name="image"
             />
             <label for="travel"
-              ><img src="@/assets/img/ryokou.jpg" width="150px"
+              ><img src="@/assets/img/ryokou.jpg" width="150"
             /></label>
             <small class="text-gray-700">旅行</small>
           </div>
@@ -51,7 +51,7 @@
               name="image"
             />
             <label for="everyday"
-              ><img src="@/assets/img/nichijo.jpg" width="150px"
+              ><img src="@/assets/img/nichijo.jpg" width="150"
             /></label>
             <small class="text-gray-700">日常</small>
           </div>
@@ -124,6 +124,9 @@ const createBingoCard = async () => {
     } as BongoCreateRequest),
   });
   const data = (await res.json()) as { message: string; bingoCardId: string };
+
+  // DBの更新に時間がかか場合があるため、1秒待つ
+  await new Promise((resolve) => setTimeout(resolve, 1000));
 
   router.push(`/BingoCard/${data.bingoCardId}`);
 };
