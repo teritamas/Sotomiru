@@ -12,8 +12,8 @@ export default defineEventHandler(async (event) => {
     const body: BongoCreateRequest = await readBody(event);
 
     // ChatGPTによるお題の生成
-    // const gptGenerateTheme = await createBingoCellTheme(9);
-    const gptGenerateTheme = null; // 生成に時間がかかるのでDebug時はnullを入れる
+    const gptGenerateTheme = await createBingoCellTheme(body, 9);
+    // const gptGenerateTheme = null; // 生成に時間がかかるのでDebug時はnullを入れる
     const entryBingoCard = createBingoCard(gptGenerateTheme);
 
     // DBに追加

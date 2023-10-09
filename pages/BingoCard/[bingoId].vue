@@ -29,19 +29,8 @@ const bingoCard = ref(null as BingoCard | null);
 
 // 最初の画面描画時にビンゴルームを作成
 onMounted(async () => {
-  // await createBingoCard(); // 動作確認用
   bingoCard.value = await fetchBingoCard();
 });
-
-// 将来的にTopページに移動する
-const createBingoCard = async () => {
-  const res = await fetch("/api/bingoCard", {
-    method: "POST",
-  });
-  const data = (await res.json()) as { message: string; bingoCardId: string };
-
-  // bingoCardId.value = data.bingoCardId;
-};
 
 // ビンゴカードの情報取得
 const fetchBingoCard = async () => {
