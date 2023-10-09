@@ -10,6 +10,10 @@ export const uploadBingoCellImage = async (image: Buffer, filename: string) => {
   try {
     await file.save(image);
     await file.setMetadata({ contentType: "image/png" });
+
+    // アップロードが完了したら、画像のURLを返す。
+    const url = `https://firebasestorage.googleapis.com/v0/b/key3-global-hackathon.appspot.com/o/bingoCellImage%2F${filename}.png?alt=media`;
+    return url;
   } catch (e) {
     console.error("[uploadImage]", e);
   }

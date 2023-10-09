@@ -39,31 +39,58 @@
           >
             {{ targetBingoCell.description }}
           </p>
-          <div class="mt-8">
-            <label
-              class="block mb-2 text-sm font-medium text-gray-700"
-              for="file_input"
-              >写真をアップロード</label
-            >
-            <input
-              class="white w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
-              id="file_input"
-              type="file"
-              @change="onFileChange"
-            />
+          <!-- 投稿済みの時 -->
+          <div v-if="registered">
+            <div class="mt-8">
+              <label class="block mb-2 text-sm font-medium text-gray-700"
+                >あなたが投稿した画像</label
+              >
+              <img :src="targetBingoCell.imageUrl!" alt="" />
+            </div>
+            <div class="mt-3">
+              <label
+                for="message"
+                class="block mb-2 text-sm font-medium text-gray-700"
+                >あなたが投稿したコメント</label
+              >
+              <textarea
+                id="message"
+                rows="4"
+                class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-700 focus:ring-blue-500 focus:border-blue-500"
+                :value="targetBingoCell.comments!"
+                disabled
+              ></textarea>
+            </div>
           </div>
-          <div class="mt-3">
-            <label
-              for="message"
-              class="block mb-2 text-sm font-medium text-gray-700"
-              >コメントを残す</label
-            >
-            <textarea
-              id="message"
-              rows="4"
-              class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-700 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="コメント"
-            ></textarea>
+          <!-- 投稿済みでない場合 -->
+          <div v-else>
+            <div class="mt-8">
+              <label
+                class="block mb-2 text-sm font-medium text-gray-700"
+                for="file_input"
+                >写真をアップロード</label
+              >
+              <input
+                class="white w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+                id="file_input"
+                type="file"
+                @change="onFileChange"
+              />
+            </div>
+            <div class="mt-3">
+              <label
+                for="message"
+                class="block mb-2 text-sm font-medium text-gray-700"
+                >コメントを残す</label
+              >
+              <textarea
+                id="message"
+                rows="4"
+                class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-700 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="コメント"
+                v-model="form.comments"
+              ></textarea>
+            </div>
           </div>
         </div>
         <!-- Modal footer -->
@@ -77,6 +104,7 @@
             戻る
           </button>
           <button
+            v-if="!registered"
             @click="postBingoCellRequest"
             data-modal-hide="extralarge-modal"
             type="button"
@@ -118,6 +146,11 @@ const closeBingoCardDetailModal = async () => {
   await emits("closeBingoCardDetailModal");
 };
 
+// モーダルが投稿済みかどうか
+const registered = computed(() => {
+  return targetBingoCell.value.completed;
+});
+
 // 投稿する
 const form = ref({
   comments: "",
@@ -127,6 +160,7 @@ const onFileChange = (e: any) => {
   selectedFile.value = e.target.files[0];
 };
 const postBingoCellRequest = async () => {
+  console.log(form.value);
   await emits("postBingoCellRequest", form.value, selectedFile.value);
 };
 </script>

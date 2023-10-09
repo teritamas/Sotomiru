@@ -49,11 +49,11 @@ export default defineEventHandler(async (event) => {
 
     // ファイルをCloud Storageに保存
     const fileId = uuidv4();
-    await uploadImage(file, fileId);
+    const imageUrl = await uploadImage(file, fileId);
 
     // DBにデータを保存
     const updateDto = {
-      imageUrl: fileId,
+      imageUrl: imageUrl,
       comments: requestBody.comments,
       answered_user: 0, // 暫定値
       answered_at: new Date(),
@@ -85,5 +85,5 @@ async function uploadImage(file: Buffer, fileId: string) {
   console.log("[uploadImage]aaa", file);
 
   fs.writeFileSync("temp.png", file); // デバッグ様にローカルに保存
-  await uploadBingoCellImage(file, fileId);
+  return await uploadBingoCellImage(file, fileId);
 }
