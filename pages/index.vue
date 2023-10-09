@@ -13,6 +13,8 @@
         />
       </a>
     </div>
+
+    <bingo-card-carousel />
   </div>
 </template>
 
