@@ -38,7 +38,7 @@
               name="image"
             />
             <label for="travel"
-              ><img src="@/assets/img/ryokou.jpg" width="150px"
+              ><img src="@/assets/img/ryokou.jpg" width="150"
             /></label>
             <small class="text-gray-700">旅行</small>
           </div>
@@ -51,7 +51,7 @@
               name="image"
             />
             <label for="everyday"
-              ><img src="@/assets/img/nichijo.jpg" width="150px"
+              ><img src="@/assets/img/nichijo.jpg" width="150"
             /></label>
             <small class="text-gray-700">日常</small>
           </div>
