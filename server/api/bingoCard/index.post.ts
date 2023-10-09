@@ -9,7 +9,9 @@ import { CreateBingoCellThemeResponse } from "@/server/models/facades/generative
  */
 export default defineEventHandler(async (event) => {
   try {
-    const body: BongoCreateRequest = await readBody(event);
+    const body = (await readBody(event).then((b) =>
+      JSON.parse(b)
+    )) as BongoCreateRequest;
 
     // ChatGPTによるお題の生成
     const gptGenerateTheme = await createBingoCellTheme(body, 9);
@@ -38,6 +40,7 @@ function createBingoCard(
   body: BongoCreateRequest,
   gptGenerateTheme: CreateBingoCellThemeResponse[] | null
 ) {
+  console.log(body.title);
   const entryBingoCard = {
     id: uuidv4(),
     name: body.title,
