@@ -14,7 +14,16 @@ body {
 }
 
 .bingo-card-frame {
-  max-width: 324px;
+  max-width: 600px;
+  margin: 1rem 0.25rem;
+  padding-top: 2.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-bottom: 4rem;
+}
+
+.bingo-cell-frame {
+  max-width: 456px;
   margin: 0 auto;
 }
 </style>
