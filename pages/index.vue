@@ -1,20 +1,6 @@
 <template>
   <div class="main">
-    <div class="p-3 bg-gray-200" style="display: flex; overflow-x: scroll">
-      <a
-        v-for="bingoCard in bingoLists"
-        :href="`/BingoCard/${bingoCard.id}`"
-        class="min-w-[98%] md:min-w-[70%] mr-1"
-      >
-        <BingoCardView
-          :title="bingoCard.name"
-          :bingoCells="bingoCard.bingoCells"
-          class="bg-white hover:bg-sky-100"
-        />
-      </a>
-    </div>
-
-    <bingo-card-carousel />
+    <bingo-card-carousel :bingoCards="bingoCards" />
   </div>
 </template>
 
@@ -22,12 +8,12 @@
 import { BingoCard } from "@/server/models/bingo/dto";
 import { BingoCardsGetAllResponse } from "@/server/models/bingo/response";
 
-const bingoLists = ref(null as BingoCard[] | null);
+const bingoCards = ref([] as BingoCard[]);
 
 // 全てのビンゴカードを取得
 onMounted(async () => {
   const res = await getAllBingoCard();
-  bingoLists.value = res.bingoCards;
+  bingoCards.value = res.bingoCards;
 });
 
 // ビンゴカードの情報取得
