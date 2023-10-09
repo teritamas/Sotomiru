@@ -1,12 +1,12 @@
 <template>
-  <div class="block p-6">
+  <div class="block border border-gray-700 bingo-card-frame">
     <h1
       class="text-center tracking-wider mb-10 font-normal text-xl text-gray-700"
     >
       NATURE BINGO
     </h1>
     <div
-      class="bingo-card-frame grid mb-8 rounded-lg md:mb-12 grid-cols-3 justify-center items-center"
+      class="bingo-cell-frame grid mb-8 rounded-lg md:mb-12 grid-cols-3 justify-center items-center"
     >
       <div
         v-for="bingoCell in props.bingoCells"
