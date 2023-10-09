@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <bingo-card-carousel :bingoCards="bingoCards" />
+    <BingoCardCarousel :bingoCards="bingoCards" />
   </div>
 </template>
 

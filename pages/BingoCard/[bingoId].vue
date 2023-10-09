@@ -5,6 +5,7 @@
         <BingoCardView
           @openBingoCardDetailModal="openBingoCardDetailModal"
           :title="bingoCard?.name!"
+          :imageColor="bingoCard?.imageColor!"
           :bingoCells="bingoCard?.bingoCells!"
         />
         <BingoCardDetailModal
