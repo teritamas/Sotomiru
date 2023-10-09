@@ -8,15 +8,16 @@
       BINGO <span class="text-lg">をつくる</span>
     </h1>
 
-    <form class="px-5 md:px-12">
+    <div class="px-5 md:px-12">
       <div class="relative z-0 w-full mb-6 group">
         <input
-          type="email"
+          type="text"
           name="title"
           id="title"
           class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b border-gray-700 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
           placeholder=" "
           required
+          v-model="form.title"
         />
         <label
           for="title"
@@ -29,22 +30,40 @@
         <legend class="text-sm text-gray-500 mb-1">テーマ</legend>
         <div class="sample-form flex">
           <div class="w-1/3 text-center">
-            <input id="ryokou" type="radio" value="ryokou" name="image" />
-            <label for="ryokou"
+            <input
+              v-model="form.theme"
+              id="travel"
+              type="radio"
+              value="travel"
+              name="image"
+            />
+            <label for="travel"
               ><img src="@/assets/img/ryokou.jpg" width="150px"
             /></label>
             <small class="text-gray-700">旅行</small>
           </div>
           <div class="w-1/3 text-center">
-            <input id="nichijo" type="radio" value="nichijo" name="image" />
-            <label for="nichijo"
+            <input
+              v-model="form.theme"
+              id="everyday"
+              type="radio"
+              value="everyday"
+              name="image"
+            />
+            <label for="everyday"
               ><img src="@/assets/img/nichijo.jpg" width="150px"
             /></label>
             <small class="text-gray-700">日常</small>
           </div>
           <div class="w-1/3 text-center">
-            <input id="tuukin" type="radio" value="tuukin" name="image" />
-            <label for="tuukin"
+            <input
+              v-model="form.theme"
+              id="commute"
+              type="radio"
+              value="commute"
+              name="image"
+            />
+            <label for="commute"
               ><img src="@/assets/img/tuukin.jpg" width="150"
             /></label>
             <small class="text-gray-700">通勤</small>
@@ -55,9 +74,9 @@
         <fieldset class="flex">
           <legend class="text-sm text-gray-500 mb-1">テーマカラー</legend>
           <div class="flex items-center mb-4 mr-9">
-            <input type="color" v-model="color" class="w-1/2 mr-3" />
+            <input type="color" v-model="form.imageColor" class="w-1/2 mr-3" />
             <input
-              v-model="color"
+              v-model="form.imageColor"
               type="text"
               name="color"
               id="color"
@@ -68,17 +87,46 @@
         </fieldset>
       </div>
       <button
-        type="submit"
+        @click="createBingoCard()"
         class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        :disabled="submitting"
       >
-        Submit
+        {{ submitButtonMessage }}
       </button>
-    </form>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-const color = ref("#6B8CFF");
+const submitting = ref(false);
+// ボタンのテキスト
+const submitButtonMessage = computed(() => {
+  return submitting.value ? "作成中..." : "作成する";
+});
+
+const form = ref({
+  title: "",
+  theme: "",
+  imageColor: "#6B8CFF",
+});
+
+const router = useRouter();
+
+// ビンゴカードの作成リクエスト
+const createBingoCard = async () => {
+  submitting.value = true;
+  const res = await fetch("/api/bingoCard", {
+    method: "POST",
+    body: JSON.stringify({
+      title: form.value.title,
+      theme: form.value.theme,
+      imageColor: form.value.imageColor,
+    } as BongoCreateRequest),
+  });
+  const data = (await res.json()) as { message: string; bingoCardId: string };
+
+  router.push(`/BingoCard/${data.bingoCardId}`);
+};
 </script>
 
 <style scoped>

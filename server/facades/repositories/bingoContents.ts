@@ -18,6 +18,19 @@ export const getBingoCard = async (bingoCardId: string) => {
 };
 
 /**
+ * 全権取得
+ */
+export const getAllBingoCard = async () => {
+  try {
+    const querySnapshot = await firestore.collection("bingoCard").get();
+    const bingoCard = querySnapshot.docs.map((doc) => doc.data() as BingoCard);
+    return bingoCard;
+  } catch (e) {
+    console.error("[getAllBingoCard]", e);
+  }
+};
+
+/**
  * ビンゴカードを新規作成する
  */
 export const addBingoCard = async (bingoCard: BingoCard) => {

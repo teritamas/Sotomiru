@@ -3,7 +3,7 @@
     <h1
       class="text-center tracking-wider mb-10 font-normal text-xl text-gray-700"
     >
-      NATURE BINGO
+      {{ props.title }}
     </h1>
     <div
       class="bingo-cell-frame grid mb-8 rounded-lg md:mb-12 grid-cols-3 justify-center items-center"
@@ -31,6 +31,10 @@
 import { BingoCell } from "@/server/models/bingo/dto";
 
 const props = defineProps({
+  title: {
+    type: String,
+    required: true,
+  },
   bingoCells: {
     type: Array as PropType<BingoCell[]>,
     required: true,

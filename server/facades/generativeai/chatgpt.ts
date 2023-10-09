@@ -8,7 +8,10 @@ const openai = new OpenAI({
 /**
  * お題を9個生成する
  */
-export async function createBingoCellTheme(count: number) {
+export async function createBingoCellTheme(
+  body: BongoCreateRequest,
+  count: number
+) {
   try {
     console.log("生成を開始ます");
     const result = await openai.chat.completions.create({
@@ -17,7 +20,8 @@ export async function createBingoCellTheme(count: number) {
       messages: [
         {
           role: "user",
-          content: `あなたは自動車メーカーに勤めるイベントの企画者です。あなたは「社内から親しみ深い写真を撮ろうコンテスト」の、お題を考える役割を与えられました。お題を${count}個提出してください.お題は以下の形式で、タイトルと説明文で構成されています。
+          content: `あなたは自動車メーカーに勤めるイベントの企画者です。あなたは「車内から親しみ深い写真を撮ろうコンテスト」の、お題を考える役割を与えられました。ビンゴのタイトルは「${body.title}」、お題のテーマは「${body.theme}」です。
+上記の条件を満たすお題を、${count}個提出してください.お題は以下の形式で、タイトルと説明文で構成されています。
 
 [{
   "name": "1つ目のお題のタイトル。20文字以内",
