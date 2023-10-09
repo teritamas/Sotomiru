@@ -15,7 +15,7 @@ body {
 
 .bingo-card-frame {
   max-width: 600px;
-  margin: 1rem 0.25rem;
+  margin: 1rem auto;
   padding-top: 2.5rem;
   padding-left: 1rem;
   padding-right: 1rem;

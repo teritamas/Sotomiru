@@ -4,7 +4,7 @@
       <a
         v-for="BingoList in BingoLists"
         :href="`/BingoCard/${BingoList.id}`"
-        class="min-w-[98%] md:min-w-[70%]"
+        class="min-w-[98%] md:min-w-[70%] mr-1"
       >
         <BingoCardView
           :bingoCells="BingoList.bingoCells"

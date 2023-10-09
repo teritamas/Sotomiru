@@ -2,7 +2,7 @@
   <footer
     class="text-gray-600 body-font fixed bottom-2 border border-gray-700 w-11/12"
   >
-    <div class="bg-footer grid grid-cols-4">
+    <div class="bg-footer grid grid-cols-3">
       <router-link class="footer-item block text-gray-500" to="/">
         <div class="p-1 py-2 grid justify-items-center">
           <svg
@@ -20,38 +20,6 @@
           <small>TOP</small>
         </div>
       </router-link>
-      <router-link class="footer-item block text-gray-500" to="/test">
-        <div class="p-1 py-2 grid justify-items-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            class="w-6 h-6"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M2.625 6.75a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm4.875 0A.75.75 0 018.25 6h12a.75.75 0 010 1.5h-12a.75.75 0 01-.75-.75zM2.625 12a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zM7.5 12a.75.75 0 01.75-.75h12a.75.75 0 010 1.5h-12A.75.75 0 017.5 12zm-4.875 5.25a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm4.875 0a.75.75 0 01.75-.75h12a.75.75 0 010 1.5h-12a.75.75 0 01-.75-.75z"
-              clip-rule="evenodd"
-            />
-          </svg>
-          <small>パターン２</small>
-        </div>
-      </router-link>
-      <router-link class="footer-item block text-gray-500" to="/test">
-        <div class="p-1 py-2 grid justify-items-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            class="w-6 h-6"
-          >
-            <path
-              d="M9.375 3a1.875 1.875 0 000 3.75h1.875v4.5H3.375A1.875 1.875 0 011.5 9.375v-.75c0-1.036.84-1.875 1.875-1.875h3.193A3.375 3.375 0 0112 2.753a3.375 3.375 0 015.432 3.997h3.943c1.035 0 1.875.84 1.875 1.875v.75c0 1.036-.84 1.875-1.875 1.875H12.75v-4.5h1.875a1.875 1.875 0 10-1.875-1.875V6.75h-1.5V4.875C11.25 3.839 10.41 3 9.375 3zM11.25 12.75H3v6.75a2.25 2.25 0 002.25 2.25h6v-9zM12.75 12.75v9h6.75a2.25 2.25 0 002.25-2.25v-6.75h-9z"
-            />
-          </svg>
-          <small>パターン３</small>
-        </div>
-      </router-link>
       <router-link class="footer-item block text-gray-500" to="/mypage">
         <div class="p-1 py-2 grid justify-items-center">
           <svg
@@ -67,6 +35,23 @@
             />
           </svg>
           <small>マイページ</small>
+        </div>
+      </router-link>
+      <router-link class="footer-item block text-gray-500" to="/create">
+        <div class="p-1 py-2 grid justify-items-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="w-6 h-6"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M2.625 6.75a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm4.875 0A.75.75 0 018.25 6h12a.75.75 0 010 1.5h-12a.75.75 0 01-.75-.75zM2.625 12a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zM7.5 12a.75.75 0 01.75-.75h12a.75.75 0 010 1.5h-12A.75.75 0 017.5 12zm-4.875 5.25a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm4.875 0a.75.75 0 01.75-.75h12a.75.75 0 010 1.5h-12a.75.75 0 01-.75-.75z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          <small>ビンゴ作成</small>
         </div>
       </router-link>
     </div>
