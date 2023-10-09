@@ -11,7 +11,8 @@
       <div
         v-for="bingoCell in props.bingoCells"
         :key="bingoCell.id"
-        class="w-24 h-24 md:w-36 md:h-36 flex justify-center items-center border rounded-2xl border-gray-700 my-1 bg-white"
+        class="w-24 h-24 md:w-36 md:h-36 flex justify-center items-center border rounded-2xl border-gray-700 my-1 bg-white bingo-cell-image"
+        :style="{ '--bg-url': `url(${bingoCell.imageUrl})` }"
       >
         <a
           class="hover:cursor-pointer block text-center flex justify-center items-center p-2 w-24 h-24 md:w-36 md:h-36"
@@ -41,3 +42,16 @@ const openBingoCardDetailModal = async (bingoCellId) => {
   await emits("openBingoCardDetailModal", bingoCellId);
 };
 </script>
+
+<style scoped>
+.bingo-cell-image {
+  background: linear-gradient(
+      rgba(255, 255, 255, 0.5),
+      rgba(255, 255, 255, 0.5)
+    ),
+    var(--bg-url);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+</style>
