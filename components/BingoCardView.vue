@@ -38,7 +38,7 @@ const props = defineProps({
 });
 
 const emits = defineEmits(["openBingoCardDetailModal"]);
-const openBingoCardDetailModal = async (bingoCellId) => {
+const openBingoCardDetailModal = async (bingoCellId: string) => {
   await emits("openBingoCardDetailModal", bingoCellId);
 };
 </script>

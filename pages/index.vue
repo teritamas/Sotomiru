@@ -29,7 +29,7 @@ const bingoCard = ref(null as BingoCard | null);
 // 最初の画面描画時にビンゴルームを作成
 onMounted(async () => {
   // await createBingoCard(); // 動作確認用
-  bingoCardId.value = "ae0c40aa-6617-4128-b0ea-fca29233b9b6";
+  bingoCardId.value = "006bb342-31aa-4fd8-a0c7-af089858bd6d";
   bingoCard.value = await fetchBingoCard();
 });
 
