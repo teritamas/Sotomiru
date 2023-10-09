@@ -54,6 +54,7 @@
         >
           <BingoCardView
             :title="bingoCard.name"
+            :imageColor="bingoCard.imageColor"
             :bingoCells="bingoCard.bingoCells"
           />
         </a>

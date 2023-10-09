@@ -9,10 +9,18 @@ import { CreateBingoCellThemeResponse } from "@/server/models/facades/generative
  */
 export default defineEventHandler(async (event) => {
   try {
-    const body: BongoCreateRequest = await readBody(event);
+    const body = (await readBody(event).then((b) =>
+      JSON.parse(b)
+    )) as BongoCreateRequest;
 
     // ChatGPTによるお題の生成
     const gptGenerateTheme = await createBingoCellTheme(body, 9);
+    if (gptGenerateTheme == null) {
+      return {
+        status: 500,
+        message: "Internal Server Error",
+      };
+    }
     // const gptGenerateTheme = null; // 生成に時間がかかるのでDebug時はnullを入れる
     const entryBingoCard = createBingoCard(body, gptGenerateTheme);
 
@@ -26,6 +34,7 @@ export default defineEventHandler(async (event) => {
   } catch (e) {
     console.error(e);
     return {
+      status: 500,
       message: "Internal Server Error",
     };
   }
@@ -41,6 +50,8 @@ function createBingoCard(
   const entryBingoCard = {
     id: uuidv4(),
     name: body.title,
+    theme: body.theme,
+    imageColor: body.imageColor,
     bingoCells: [],
     createdAt: new Date(),
     updatedAt: new Date(),

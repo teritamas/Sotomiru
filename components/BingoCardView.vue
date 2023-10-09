@@ -1,5 +1,8 @@
 <template>
-  <div class="block border border-gray-700 bingo-card-frame">
+  <div
+    class="block border border-gray-700 bingo-card-frame"
+    :style="{ backgroundColor: imageColor }"
+  >
     <h1
       class="text-center tracking-wider mb-10 font-normal text-xl text-gray-700"
     >
@@ -32,6 +35,10 @@ import { BingoCell } from "@/server/models/bingo/dto";
 
 const props = defineProps({
   title: {
+    type: String,
+    required: true,
+  },
+  imageColor: {
     type: String,
     required: true,
   },
