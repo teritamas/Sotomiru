@@ -1,5 +1,5 @@
 import { BingoCard } from "./dto";
 
-interface BingoCardsGetAllResponse {
+export interface BingoCardsGetAllResponse {
   bingoCards: BingoCard[];
 }
