@@ -1,4 +1,8 @@
-interface BongoCreateRequest {}
+interface BongoCreateRequest {
+  title: string; // ビンゴのタイトル
+  theme: string; // ビンゴのテーマ
+  imageColor: string; // ビンゴの画像の色
+}
 
 interface BingoCellPostRequest {
   bingoCellId: string;
