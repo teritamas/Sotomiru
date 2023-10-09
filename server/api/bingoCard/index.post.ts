@@ -12,9 +12,9 @@ export default defineEventHandler(async (event) => {
     const body: BongoCreateRequest = await readBody(event);
 
     // ChatGPTによるお題の生成
-    // const gptGenerateTheme = await createBingoCellTheme(9);
-    const gptGenerateTheme = null; // 生成に時間がかかるのでDebug時はnullを入れる
-    const entryBingoCard = createBingoCard(gptGenerateTheme);
+    const gptGenerateTheme = await createBingoCellTheme(body, 9);
+    // const gptGenerateTheme = null; // 生成に時間がかかるのでDebug時はnullを入れる
+    const entryBingoCard = createBingoCard(body, gptGenerateTheme);
 
     // DBに追加
     addBingoCard(entryBingoCard);
@@ -35,11 +35,12 @@ export default defineEventHandler(async (event) => {
  * ビンゴカードを作成する
  */
 function createBingoCard(
+  body: BongoCreateRequest,
   gptGenerateTheme: CreateBingoCellThemeResponse[] | null
 ) {
   const entryBingoCard = {
     id: uuidv4(),
-    name: "test",
+    name: body.title,
     bingoCells: [],
     createdAt: new Date(),
     updatedAt: new Date(),

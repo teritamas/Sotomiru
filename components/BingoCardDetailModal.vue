@@ -160,7 +160,6 @@ const onFileChange = (e: any) => {
   selectedFile.value = e.target.files[0];
 };
 const postBingoCellRequest = async () => {
-  console.log(form.value);
   await emits("postBingoCellRequest", form.value, selectedFile.value);
 };
 </script>
