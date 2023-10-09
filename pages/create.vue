@@ -125,6 +125,9 @@ const createBingoCard = async () => {
   });
   const data = (await res.json()) as { message: string; bingoCardId: string };
 
+  // DBの更新に時間がかか場合があるため、1秒待つ
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
   router.push(`/BingoCard/${data.bingoCardId}`);
 };
 </script>
