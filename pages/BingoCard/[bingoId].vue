@@ -22,6 +22,7 @@
 
 <script setup lang="ts">
 import { BingoCard } from "@/server/models/bingo/dto";
+import { BingoCardsGetResponse } from "~/server/models/bingo/response";
 const route = useRoute();
 
 const bingoCardId = route.params.bingoId as string;
@@ -31,13 +32,15 @@ const bingoCard = ref(null as BingoCard | null);
 
 // 最初の画面描画時にビンゴルームを作成
 onMounted(async () => {
-  bingoCard.value = await fetchBingoCard();
+  const res = await fetchBingoCard();
+  bingoCard.value = res.bingoCard;
+  console.log(res);
 });
 
 // ビンゴカードの情報取得
 const fetchBingoCard = async () => {
   const res = await fetch(`/api/bingoCard/${bingoCardId}`);
-  const data = (await res.json()) as BingoCard;
+  const data = (await res.json()) as BingoCardsGetResponse;
   return data;
 };
 
@@ -68,7 +71,9 @@ const postBingoCellRequest = async (form: { comments: string }, file: any) => {
     method: "PUT",
     body: formData,
   });
-  bingoCard.value = await fetchBingoCard();
+  const res = await fetchBingoCard();
+  bingoCard.value = res.bingoCard;
   modalIsOpen.value = false;
+  console.log(res);
 };
 </script>
