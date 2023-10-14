@@ -1,3 +1,5 @@
+[![Deploy to Firebase Hosting/Function on merge](https://github.com/teritamas/key3-global-hackathon/actions/workflows/firebase-hosting-merge.yml/badge.svg?branch=main)](https://github.com/teritamas/key3-global-hackathon/actions/workflows/firebase-hosting-merge.yml)
+
 # Web3 Global Hackathon
 
 - [デモページ](https://key3-global-hackathon.web.app/)
@@ -52,10 +54,10 @@ npm run preview
 
 本アプリケーションは、Firebase Hosting と Function にデプロイされている。Github のリポジトリのシークレットに以下の環境変数を設定する。
 
-| 環境変数名               | 説明                      |
-| ------------------------ | ------------------------- |
-| FIREBASE_SERVICE_ACCOUNT | サービスアカウントを json |
-| CONFIG_VALUES            | 以下                      |
+| 環境変数名               | 説明                                               |
+| ------------------------ | -------------------------------------------------- |
+| FIREBASE_SERVICE_ACCOUNT | サービスアカウントを json を base64 に変換したもの |
+| CONFIG_VALUES            | 以下                                               |
 
 Firebase のコンソールからサービスアカウントを発行した場合、発行したサービスアカウントに以下の権限を追加で付与する。
 
