@@ -57,6 +57,7 @@ const openBingoCardDetailModal = async (bingoCellIdByChild: string) => {
 // ビンゴカードの詳細を閉じる
 const closeBingoCardDetailModal = async () => {
   modalIsOpen.value = false;
+  isFollowingSubject.value = null;
 };
 
 // アップロードした画像がテーマに沿っているかを確認する。
