@@ -61,6 +61,7 @@ Firebase のコンソールからサービスアカウントを発行した場�
 
 - Cloud Functions Developer
 - Firebase Hosting Admin
+- Service Account User
 
 CONFIG_VALUES には、アプリの起動に必要な環境変数を、半角スペース区切りで設定する。
 
