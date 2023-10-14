@@ -12,6 +12,7 @@
           v-if="modalIsOpen"
           @closeBingoCardDetailModal="closeBingoCardDetailModal"
           @postBingoCellRequest="postBingoCellRequest"
+          @postCheckFollowingSubject="postCheckFollowingSubject"
           :bingoCells="bingoCard?.bingoCells!"
           :bingoCellId="bingoCellId"
         />
@@ -53,6 +54,27 @@ const openBingoCardDetailModal = async (bingoCellIdByChild: string) => {
 // ビンゴカードの詳細を閉じる
 const closeBingoCardDetailModal = async () => {
   modalIsOpen.value = false;
+};
+
+// アップロードした画像がテーマに沿っているかを確認する。
+const postCheckFollowingSubject = async (file: any) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append(
+    "request",
+    JSON.stringify({
+      bingoCellId: bingoCellId.value,
+    } as CheckFollowingSubjectPostRequest)
+  );
+  const res = await fetch(
+    `/api/bingoCell/checkFollowingSubject/${bingoCardId}`,
+    {
+      method: "POST",
+      body: formData,
+    }
+  );
+  const data = await res.json();
+  console.log(data);
 };
 
 // ビンゴカードの詳細を投稿する

@@ -139,6 +139,7 @@ const targetBingoCell = computed(() => {
 const emits = defineEmits([
   "closeBingoCardDetailModal",
   "postBingoCellRequest",
+  "postCheckFollowingSubject",
 ]);
 
 // モーダルをクローズする
@@ -146,19 +147,23 @@ const closeBingoCardDetailModal = async () => {
   await emits("closeBingoCardDetailModal");
 };
 
-// モーダルが投稿済みかどうか
+// モーダルのセルが投稿済みの場合True
 const registered = computed(() => {
   return targetBingoCell.value.completed;
 });
+
+// ファイルが変更された時
+let selectedFile = ref(null);
+const onFileChange = async (e: any) => {
+  selectedFile.value = e.target.files[0];
+  await emits("postCheckFollowingSubject", selectedFile.value);
+};
 
 // 投稿する
 const form = ref({
   comments: "",
 });
-let selectedFile = ref(null);
-const onFileChange = (e: any) => {
-  selectedFile.value = e.target.files[0];
-};
+// 投稿ボタンが押されたときの処理
 const postBingoCellRequest = async () => {
   await emits("postBingoCellRequest", form.value, selectedFile.value);
 };
