@@ -18,5 +18,5 @@ jobs:
         with:
           args: deploy --only functions,hosting
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY3_GLOBAL_HACKATHON }}
+          GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY3_GLOBAL_HACKATHON }}
           CONFIG_VALUES: ${{ secrets.CONFIG_VALUES }}
