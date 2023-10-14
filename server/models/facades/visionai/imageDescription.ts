@@ -4,11 +4,11 @@ export interface IsFollowingSubjectResponse {
 }
 
 export interface ImageDescriptionResponse {
-  labels: Label[];
+  labels: VisionAiLabel[];
   description: string;
 }
 
-export interface Label {
+export interface VisionAiLabel {
   name: string;
   score: number;
 }
