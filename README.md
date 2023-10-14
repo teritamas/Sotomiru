@@ -6,7 +6,7 @@
 
 ### 1. 必要情報の取得
 
-はじめに下記のサービスにアクセスし、利用に必要な情報を取得する。
+はじめに下記のサービスにアクセスし、利用に必要な情報を取得する。API キーやアカウントが存在しない場合は作成する。
 
 | サービス名   | URL                               | 必要な情報                         |
 | ------------ | --------------------------------- | ---------------------------------- |
@@ -23,6 +23,7 @@ OPENAI_API_KEY=${OpenAIのAPIキー}
 
 # GCPの設定
 GOOGLE_APPLICATION_CREDENTIALS=${GCPのサービスアカウントキーのパス}
+FIRE_STORAGE_BUCKET=${GCPのサービスアカウントキーのパス}
 ```
 
 ### 2. サーバの起動
@@ -46,3 +47,26 @@ npm run dev
 ```bash
 npm run preview
 ```
+
+## デプロイ
+
+本アプリケーションは、Firebase Hosting と Function にデプロイされている。Github のリポジトリのシークレットに以下の環境変数を設定する。
+
+| 環境変数名               | 説明                      |
+| ------------------------ | ------------------------- |
+| FIREBASE_SERVICE_ACCOUNT | サービスアカウントを json |
+| CONFIG_VALUES            | 以下                      |
+
+Firebase のコンソールからサービスアカウントを発行した場合、発行したサービスアカウントに以下の権限を追加で付与する。
+
+- Cloud Functions Developer
+- Firebase Hosting Admin
+- Service Account User
+
+CONFIG_VALUES には、アプリの起動に必要な環境変数を、半角スペース区切りで設定する。
+
+```
+open_api_key=${OpenAPI のキー} fire_storage_bucket=${バケット名}
+```
+
+設定が完了後、Github Actions により自動的に検証環境にデプロイされる。
