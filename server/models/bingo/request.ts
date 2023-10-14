@@ -4,6 +4,16 @@ interface BongoCreateRequest {
   imageColor: string; // ビンゴの画像の色
 }
 
+/**
+ * ビンゴセルに投稿した画像が、ビンゴのタイトルに対して正しいかどうかを確認するリクエストに利用するDTO
+ */
+interface CheckFollowingSubjectPostRequest {
+  bingoCellId: string;
+}
+
+/**
+ * ビンゴセルの投稿リクエストに利用するDTO
+ */
 interface BingoCellPostRequest {
   bingoCellId: string;
   comments: string;
