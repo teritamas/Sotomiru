@@ -20,5 +20,6 @@ export async function validateImage(file: Buffer) {
     } as ImageDescriptionResponse;
   } catch (e) {
     console.error(e);
+    return null;
   }
 }

@@ -2,7 +2,10 @@ import { createError, MultiPartData } from "h3";
 import { getBingoCell } from "@/server/facades/repositories/bingoContents";
 import { BingoCell } from "@/server/models/bingo/dto";
 import { validateImage } from "@/server/facades/visionai/imageDescription";
-import { ImageDescriptionResponse } from "@/server/models/facades/visionai/imageDescription";
+import {
+  ImageDescriptionResponse,
+  IsFollowingSubjectResponse,
+} from "@/server/models/facades/visionai/imageDescription";
 import { validateFollowingSubject } from "~/server/facades/generativeai/chatgpt";
 
 export default defineEventHandler(async (event) => {
@@ -44,7 +47,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // ファイルをCloud Vision APIで検証
-    const result: ImageDescriptionResponse = await validateImage(file);
+    const result: ImageDescriptionResponse | null = await validateImage(file);
 
     // ビンゴカードのセルを取得
     const bingoCell: BingoCell | undefined = await getBingoCell(
@@ -52,11 +55,18 @@ export default defineEventHandler(async (event) => {
       requestBody!.bingoCellId
     );
 
-    // ChatGPTで画像が一致しているかを検証
-    const isFollowingSubject = await validateFollowingSubject(
-      bingoCell!,
-      result
-    );
+    if (result === null || bingoCell === undefined) {
+      return createError({
+        statusCode: 400,
+        statusMessage: "Failed to validate image",
+      });
+    }
+
+    // ChatGPTで画像がお題と一致しているかを検証
+    const isFollowingSubject: IsFollowingSubjectResponse | undefined =
+      await validateFollowingSubject(bingoCell, result);
+
+    return isFollowingSubject!;
   } catch (e) {
     console.error(e);
   }

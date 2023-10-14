@@ -59,13 +59,13 @@ ${res.labels
 {
   "isFollowingSubject": "画像がお題に対して正しいかどうか。True/Falseのどちらか",
   "score": "画像がお題に対してどれくらい正しいか",
-  "description: "判断理由を100文字以内で、改善点を踏まえて教えてください"
+  "reason: "判断理由を200文字以内で教えてください。その中には、改善点を踏まえて教えてください"
 }
 
 キーは必ず含ませる。
 JSON以外の情報は削除する。`;
     const response = await request(prompt);
-    const responseJson = JSON.parse(response!) as IsFollowingSubjectResponse[];
+    const responseJson = JSON.parse(response!) as IsFollowingSubjectResponse;
 
     return responseJson;
   } catch (e) {
