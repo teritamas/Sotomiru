@@ -1,8 +1,14 @@
 <template>
+  <div>
+    <card-carousel :items="props.bingoCards">
+      <div class="item">{{ item }}</div></card-carousel
+    >
+  </div>
+  <!--
   <div class="carousel">
     <button
       class="nav left text-4xl"
-      v-if="active > 0"
+      v-if="currentNum > 0"
       @click="activeDecrement"
     >
       <svg
@@ -25,26 +31,26 @@
       v-for="(bingoCard, i) in props.bingoCards"
       class="card-container"
       :style="
-        '--active:' +
-        [i === active ? 1 : 0] +
+        '--currentNum:' +
+        [i === currentNum ? 1 : 0] +
         ';' +
         '--offset:' +
-        [(active - i) / 3] +
+        [(currentNum - i) / 3] +
         ';' +
         '--direction:' +
-        [Math.sign(active - i)] +
+        [Math.sign(currentNum - i)] +
         ';' +
         '--abs-offset:' +
-        [Math.abs(active - i) / 3] +
+        [Math.abs(currentNum - i) / 3] +
         ';' +
         'pointer-events:' +
-        [i === active ? 'auto' : 'none'] +
+        [i === currentNum ? 'auto' : 'none'] +
         ';' +
         'opacity:' +
-        [Math.abs(active - i) >= maxVisibility ? '0' : '1'] +
+        [Math.abs(currentNum - i) >= maxVisibility ? '0' : '1'] +
         ';' +
         'display:' +
-        [Math.abs(active - i) > maxVisibility ? 'none' : 'block']
+        [Math.abs(currentNum - i) > maxVisibility ? 'none' : 'block']
       "
     >
       <div class="card">
@@ -62,7 +68,7 @@
     </div>
     <button
       class="nav right text-4xl"
-      v-if="active < props.bingoCards.length - 1"
+      v-if="currentNum < props.bingoCards.length - 1"
       @click="activeIncrement"
     >
       <svg
@@ -81,15 +87,22 @@
         ></path>
       </svg>
     </button>
-  </div>
+  </div>-->
 </template>
 
 <script setup lang="ts">
-const active = ref(2);
+const state = reactive({
+  items: [...Array(100).keys()],
+});
+
+const currentNum = ref(2);
 const maxVisibility = ref(3);
 
-const activeIncrement = () => active.value++;
-const activeDecrement = () => active.value--;
+const activeIncrement = () => currentNum.value++;
+const activeDecrement = () => currentNum.value--;
+
+const onSwipeRight = () => console.log("右スワイプ");
+const onSwipeLeft = () => console.log("左スワイプ");
 
 import { BingoCard } from "@/server/models/bingo/dto";
 

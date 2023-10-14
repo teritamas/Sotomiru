@@ -1,4 +1,5 @@
 <template>
+  <loading v-show="isLoading" />
   <div
     class="block border border-gray-700 p-5 m-3 md:max-w-[600px] md:m-auto md:mt-6 pb-10"
   >
@@ -111,9 +112,11 @@ const form = ref({
 });
 
 const router = useRouter();
+const isLoading = ref(false);
 
 // ビンゴカードの作成リクエスト
 const createBingoCard = async () => {
+  isLoading.value = true;
   submitting.value = true;
   const res = await fetch("/api/bingoCard", {
     method: "POST",
@@ -128,6 +131,7 @@ const createBingoCard = async () => {
   // DBの更新に時間がかか場合があるため、1秒待つ
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
+  isLoading.value = false;
   router.push(`/BingoCard/${data.bingoCardId}`);
 };
 </script>
