@@ -16,6 +16,7 @@ jobs:
         run: |
           echo "${{ secrets.CONFIG_VALUES }}" >> .env
           echo "${{secrets.FIREBASE_SERVICE_ACCOUNT}}" >> ./firebase-service-account.json
+          cat ./firebase-service-account.json
 
       - name: Install npm packages
         run: |
