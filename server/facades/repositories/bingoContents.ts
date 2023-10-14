@@ -46,6 +46,27 @@ export const addBingoCard = async (bingoCard: BingoCard) => {
 };
 
 /**
+ * ビンゴカードのセルを取得する
+ */
+export const getBingoCell = async (
+  bingoCardId: string,
+  bingoCellId: string
+) => {
+  try {
+    const docRef = await firestore
+      .collection("bingoCard")
+      .doc(bingoCardId)
+      .get();
+    const bingoCard = docRef.data() as BingoCard;
+    const bingoCells = bingoCard.bingoCells;
+    const bingoCell = bingoCells.find((cell) => cell.id === bingoCellId);
+    return bingoCell;
+  } catch (e) {
+    console.error("[getBingoCell]", e);
+  }
+};
+
+/**
  * ビンゴカードのセルを更新する
  */
 export const updateBingoCell = async (

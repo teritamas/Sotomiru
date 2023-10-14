@@ -76,6 +76,16 @@
                 type="file"
                 @change="onFileChange"
               />
+              <div v-if="isCheckProcessing">
+                <p>検証中...</p>
+              </div>
+              <div v-if="isFollowingSubject">
+                <p>
+                  判定: {{ checkResultMessage }}, スコア:
+                  {{ isFollowingSubject.score }}
+                </p>
+                <p>理由: {{ isFollowingSubject.reason }}</p>
+              </div>
             </div>
             <div class="mt-3">
               <label
@@ -120,6 +130,7 @@
 
 <script setup lang="ts">
 import { BingoCell } from "@/server/models/bingo/dto";
+import { IsFollowingSubjectResponse } from "@/server/models/facades/visionai/imageDescription";
 
 const props = defineProps({
   bingoCells: {
@@ -128,6 +139,10 @@ const props = defineProps({
   },
   bingoCellId: {
     type: String,
+    required: true,
+  },
+  isFollowingSubject: {
+    type: Object as PropType<IsFollowingSubjectResponse | null>,
     required: true,
   },
 });
@@ -139,6 +154,7 @@ const targetBingoCell = computed(() => {
 const emits = defineEmits([
   "closeBingoCardDetailModal",
   "postBingoCellRequest",
+  "postCheckFollowingSubject",
 ]);
 
 // モーダルをクローズする
@@ -146,19 +162,30 @@ const closeBingoCardDetailModal = async () => {
   await emits("closeBingoCardDetailModal");
 };
 
-// モーダルが投稿済みかどうか
+// モーダルのセルが投稿済みの場合True
 const registered = computed(() => {
   return targetBingoCell.value.completed;
+});
+
+// ファイルが変更された時
+let selectedFile = ref(null);
+const onFileChange = async (e: any) => {
+  selectedFile.value = e.target.files[0];
+  await emits("postCheckFollowingSubject", selectedFile.value);
+};
+// 検証プロセスが実行中の場合True
+const isCheckProcessing = computed(() => {
+  return selectedFile.value !== null && props.isFollowingSubject === null;
+});
+const checkResultMessage = computed(() => {
+  return props.isFollowingSubject?.isFollowingSubject ? "OK" : "NG";
 });
 
 // 投稿する
 const form = ref({
   comments: "",
 });
-let selectedFile = ref(null);
-const onFileChange = (e: any) => {
-  selectedFile.value = e.target.files[0];
-};
+// 投稿ボタンが押されたときの処理
 const postBingoCellRequest = async () => {
   await emits("postBingoCellRequest", form.value, selectedFile.value);
 };
