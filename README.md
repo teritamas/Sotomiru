@@ -57,7 +57,7 @@ npm run preview
 | FIREBASE_SERVICE_ACCOUNT | サービスアカウントを json を Base64 に変換したもの |
 | CONFIG_VALUES            | 以下                                               |
 
-Firebase のコンソールからサービスアカウントを発行した場合、発行したサービスアカウントに追加で以下の権限を付与する必要がある。
+Firebase のコンソールからサービスアカウントを発行した場合、発行したサービスアカウントに以下の権限を追加で付与する。
 
 - Cloud Functions Developer
 - Firebase Hosting Admin
