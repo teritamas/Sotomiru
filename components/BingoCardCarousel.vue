@@ -1,7 +1,7 @@
 <template>
   <div
     id="vue-carousel"
-    style="height: 31rem"
+    style="height: 31rem; width: 100vw; overflow: hidden"
     @touchstart="onTouchStart"
     @mousedown="onTouchStart"
   >
