@@ -127,6 +127,9 @@ const state = reactive({
   diffX: 0,
 });
 
+/**
+ *  ビンゴカード一覧のスワイプ処理
+ */
 const onTouchMove = (event: any) => {
   if (state.startX == null) {
     return;
@@ -176,9 +179,9 @@ const onTouchStart = (event: any) => {
   state.startX = "touches" in event ? event.touches[0].clientX : event.clientX;
 };
 
-const modalIsOpen = ref(false);
-
-// トップに表示されているビンゴカード
+/**
+ *  トップに表示されているビンゴカード
+ */
 const selectedBingoCard = computed(() => {
   return props.bingoCards[state.currentNum];
 });
@@ -192,18 +195,21 @@ const selectedBingoCardCell = computed(() => {
   )[0];
 });
 
-// アップロードモーダル上のイベント
-// ビンゴカードの詳細を開く
+/**
+ * モーダルの処理
+ */
+// ビンゴカード詳細モーダルを開く
+const modalIsOpen = ref(false);
 const openBingoCardDetailModal = async (bingoCellIdByChild: string) => {
   bingoCellId.value = bingoCellIdByChild;
   modalIsOpen.value = true;
 };
-// ビンゴカードの詳細を閉じる
+// ビンゴカード詳細モーダルを閉じる
 const closeBingoCardDetailModal = async () => {
   modalIsOpen.value = false;
   emits("clearIsFollowingSubject"); // モーダルを閉じる時に、検証結果をクローズする。
 };
-// 投稿ボタンが押されたときの処理のイベント発火
+// モーダルの投稿ボタンが押されたときの処理のイベント発火
 const postBingoCellRequest = async (form: { comments: string }, file: any) => {
   // bingoCellIdを付与して返す。
   await emits(
@@ -213,12 +219,10 @@ const postBingoCellRequest = async (form: { comments: string }, file: any) => {
     form,
     file
   );
-
   // 投稿処理後、モーダルを閉じる
   modalIsOpen.value = false;
 };
-
-// アップロードした画像がテーマに沿っているかを確認するイベント発火
+// モーダルでアップロードした画像がテーマに沿っているかを確認するイベント発火
 const postCheckFollowingSubject = async (file: any) => {
   // bingoCellIdを付与して返す。
   await emits(
