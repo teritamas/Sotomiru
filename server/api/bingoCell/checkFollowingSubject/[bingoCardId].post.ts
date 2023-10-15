@@ -6,7 +6,7 @@ import {
   ImageDescriptionResponse,
   IsFollowingSubjectResponse,
 } from "@/server/models/facades/visionai/imageDescription";
-import { validateFollowingSubject } from "~/server/facades/generativeai/chatgpt";
+import { validateFollowingSubject } from "@/server/facades/generativeai/chatgpt";
 
 export default defineEventHandler(async (event) => {
   try {

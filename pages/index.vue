@@ -1,6 +1,7 @@
 <template>
   <div class="main">
     <BingoCardCarousel
+      @clearIsFollowingSubject="clearIsFollowingSubject"
       @postBingoCellRequest="postBingoCellRequest"
       @postCheckFollowingSubject="postCheckFollowingSubject"
       :bingoCards="bingoCards"
@@ -11,31 +12,30 @@
 
 <script setup lang="ts">
 import { BingoCard } from "@/server/models/bingo/dto";
-import {
-  BingoCardsGetAllResponse,
-  BingoCardsGetResponse,
-} from "@/server/models/bingo/response";
-import { IsFollowingSubjectResponse } from "~/server/models/facades/visionai/imageDescription";
+import { BingoCardsGetAllResponse } from "@/server/models/bingo/response";
+import { IsFollowingSubjectResponse } from "@/server/models/facades/visionai/imageDescription";
 
 const bingoCards = ref([] as BingoCard[]);
-const bingoCardId = ref("");
 const isFollowingSubject = ref(null as IsFollowingSubjectResponse | null);
 
 // 全てのビンゴカードを取得
 onMounted(async () => {
-  const res = await getAllBingoCard();
-  bingoCards.value = res.bingoCards;
+  await getAllBingoCard();
 });
-
 // ビンゴカードの情報取得
 const getAllBingoCard = async () => {
   const res = await fetch(`api/bingoCard`);
   const data = (await res.json()) as BingoCardsGetAllResponse;
-  return data;
+  bingoCards.value = data.bingoCards;
 };
 
+// 投稿画像に対するチェック処理
 // アップロードした画像がテーマに沿っているかを確認する。
-const postCheckFollowingSubject = async (bingoCellId: string, file: any) => {
+const postCheckFollowingSubject = async (
+  bingoCardId: string,
+  bingoCellId: string,
+  file: any
+) => {
   // 前の検証結果をクリア
   isFollowingSubject.value = null;
 
@@ -57,10 +57,15 @@ const postCheckFollowingSubject = async (bingoCellId: string, file: any) => {
   );
   isFollowingSubject.value = await res.json();
 };
+// チェック処理の結果をクリア
+const clearIsFollowingSubject = async () => {
+  isFollowingSubject.value = null;
+};
 
-// ビンゴカードの詳細を投稿する
-// 投稿完了後、ビンゴカードの最新の状態を取得し、モーダルを閉じる
+// ビンゴセルに対する投稿処理
+// ビンゴセルに画像を投稿する。投稿完了後、ビンゴカードの最新の状態を取得する。
 const postBingoCellRequest = async (
+  bingoCardId: string,
   bingoCellId: string,
   form: { comments: string },
   file: any
@@ -78,15 +83,7 @@ const postBingoCellRequest = async (
     method: "PUT",
     body: formData,
   });
-  const res = await fetchBingoCard();
-  // bingoCard.value = res.bingoCard;
-  // modalIsOpen.value = false;
-};
-
-// ビンゴカードの情報取得
-const fetchBingoCard = async () => {
-  const res = await fetch(`/api/bingoCard/${bingoCardId}`);
-  const data = (await res.json()) as BingoCardsGetResponse;
-  return data;
+  // 最新の状態を取得
+  await getAllBingoCard();
 };
 </script>
