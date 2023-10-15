@@ -25,7 +25,7 @@ import { IsFollowingSubjectResponse } from "@/server/models/facades/visionai/ima
 
 const bingoCards = ref([] as BingoCard[]);
 const isFollowingSubject = ref(null as IsFollowingSubjectResponse | null);
-const congratulationsCompleteViewIsOpen = ref(true);
+const congratulationsCompleteViewIsOpen = ref(false);
 const congratulationsBingoViewIsOpen = ref(false);
 
 // 全てのビンゴカードを取得
