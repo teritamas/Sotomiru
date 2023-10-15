@@ -37,7 +37,7 @@
           <p
             class="text-base border border-gray-700 font-bold rounded-lg leading-relaxed text-gray-700 border p-5 bg-white"
           >
-            {{ targetBingoCell.description }}
+            <!--{{ targetBingoCell.description }}-->
           </p>
           <!-- 投稿済みの時 -->
           <div v-if="registered">
@@ -164,7 +164,8 @@ const closeBingoCardDetailModal = async () => {
 
 // モーダルのセルが投稿済みの場合True
 const registered = computed(() => {
-  return targetBingoCell.value.completed;
+  return true;
+  //return targetBingoCell.value.completed;
 });
 
 // ファイルが変更された時

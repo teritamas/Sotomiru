@@ -1,6 +1,6 @@
 <template>
   <div
-    class="block border border-gray-700 bingo-card-frame"
+    class="block border border-gray-700 bingo-card-frame rounded-lg"
     :style="{ backgroundColor: imageColor }"
   >
     <h1
@@ -8,17 +8,15 @@
     >
       {{ props.title }}
     </h1>
-    <div
-      class="bingo-cell-frame grid mb-8 rounded-lg md:mb-12 grid-cols-3 justify-center items-center"
-    >
+    <div class="container">
       <div
+        class="card bingo-cell-image rounded-lg border border-gray-700 bg-white"
         v-for="bingoCell in props.bingoCells"
         :key="bingoCell.id"
-        class="w-24 h-24 flex justify-center items-center border rounded-2xl border-gray-700 my-1 bg-white bingo-cell-image"
         :style="{ '--bg-url': `url(${bingoCell.imageUrl})` }"
       >
         <a
-          class="hover:cursor-pointer block text-center flex justify-center items-center p-2 w-24 h-24"
+          class="content hover:cursor-pointer block text-center flex justify-center items-center p-1"
           @click="openBingoCardDetailModal(bingoCell.id)"
         >
           <h3 class="text-lg font-semibold text-gray-900">
@@ -54,7 +52,32 @@ const openBingoCardDetailModal = async (bingoCellId: string) => {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.container {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(80px, 1fr));
+  gap: 0.5rem;
+  color: #fff;
+}
+.card {
+  /* This will come in handy later to center the contents */
+  position: relative;
+}
+
+.card:after {
+  content: "";
+  display: block;
+  padding-bottom: 100%;
+}
+
+.card .content {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
 .bingo-cell-image {
   background: linear-gradient(
       rgba(255, 255, 255, 0.5),
