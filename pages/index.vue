@@ -13,7 +13,7 @@
 <script setup lang="ts">
 import { BingoCard } from "@/server/models/bingo/dto";
 import { BingoCardsGetAllResponse } from "@/server/models/bingo/response";
-import { IsFollowingSubjectResponse } from "~/server/models/facades/visionai/imageDescription";
+import { IsFollowingSubjectResponse } from "@/server/models/facades/visionai/imageDescription";
 
 const bingoCards = ref([] as BingoCard[]);
 const isFollowingSubject = ref(null as IsFollowingSubjectResponse | null);

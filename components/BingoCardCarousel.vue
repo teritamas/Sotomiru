@@ -97,7 +97,7 @@
 
 <script setup lang="ts">
 import { BingoCard } from "@/server/models/bingo/dto";
-import { IsFollowingSubjectResponse } from "~/server/models/facades/visionai/imageDescription";
+import { IsFollowingSubjectResponse } from "@/server/models/facades/visionai/imageDescription";
 
 const props = defineProps({
   bingoCards: {
