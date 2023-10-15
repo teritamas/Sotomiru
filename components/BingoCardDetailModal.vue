@@ -76,6 +76,8 @@
                 type="file"
                 @change="onFileChange"
               />
+              <!-- アップロードした写真を表示 -->
+              <div v-if="fileUrl"><img :src="fileUrl" alt="" /></div>
               <div v-if="isCheckProcessing">
                 <p>検証中...</p>
               </div>
@@ -116,6 +118,7 @@
           <button
             v-if="!registered"
             @click="postBingoCellRequest"
+            :disabled="!isRegisterButtonActive"
             data-modal-hide="extralarge-modal"
             type="button"
             class="text-gray-700 bg-blue-400 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -149,37 +152,60 @@ const emits = defineEmits([
   "postCheckFollowingSubject",
 ]);
 
+/**
+ * モーダルの状態に関する定義
+ */
 // モーダルクローズのイベント発火
 const closeBingoCardDetailModal = async () => {
   await emits("closeBingoCardDetailModal");
 };
-
-// モーダルのセルが投稿済みの場合True
+// モーダルのセルが投稿済みの場合: True
 const registered = computed(() => {
   return props.selectedBingoCell.completed;
 });
+// モーダルが投稿可能な状態の場合: True
+const isRegisterButtonActive = computed(() => {
+  return (
+    !registered.value && // このセルが登録済みでない
+    form.value.comments !== "" && // コメントが入力されている
+    selectedFile.value !== null && // 画像が選択されている
+    props.isFollowingSubject?.isFollowingSubject // 画像がテーマに沿っている
+  );
+});
 
-// ファイルが変更された時、ファイルの検査処理のイベント発火
+/*
+ * 画像がアップロードされたときの処理
+ */
+//ファイルが変更された時、ファイルの検査処理のイベント発火
 let selectedFile = ref(null);
+let fileUrl = ref("");
 const onFileChange = async (e: any) => {
   selectedFile.value = e.target.files[0];
+  fileUrl.value = URL.createObjectURL(e.target.files[0]);
   await emits("postCheckFollowingSubject", selectedFile.value);
 };
-
-// 検証プロセスが実行中の場合True
+// 検証プロセスが実行中の場合: True
 const isCheckProcessing = computed(() => {
   return selectedFile.value !== null && props.isFollowingSubject === null;
 });
+// 検証結果のBooleanを文字列に変換
 const checkResultMessage = computed(() => {
   return props.isFollowingSubject?.isFollowingSubject ? "OK" : "NG";
 });
 
+/*
+ * 画像を投稿する処理
+ */
 // 投稿する
 const form = ref({
   comments: "",
 });
 // 投稿ボタンが押されたときのイベント発火
 const postBingoCellRequest = async () => {
+  if (!isRegisterButtonActive.value) {
+    // 投稿ボタンが押されたが、投稿できない場合は何もしない
+    return;
+  }
   await emits("postBingoCellRequest", form.value, selectedFile.value);
 };
 </script>
