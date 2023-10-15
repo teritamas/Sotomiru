@@ -37,7 +37,7 @@
           <p
             class="text-base border border-gray-700 font-bold rounded-lg leading-relaxed text-gray-700 border p-5 bg-white"
           >
-            <!--{{ targetBingoCell.description }}-->
+            {{ selectedBingoCell.description }}
           </p>
           <!-- 投稿済みの時 -->
           <div v-if="registered">
@@ -45,7 +45,7 @@
               <label class="block mb-2 text-sm font-medium text-gray-700"
                 >あなたが投稿した画像</label
               >
-              <img :src="targetBingoCell.imageUrl!" alt="" />
+              <img :src="selectedBingoCell.imageUrl!" alt="" />
             </div>
             <div class="mt-3">
               <label
@@ -57,7 +57,7 @@
                 id="message"
                 rows="4"
                 class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-700 focus:ring-blue-500 focus:border-blue-500"
-                :value="targetBingoCell.comments!"
+                :value="selectedBingoCell.comments!"
                 disabled
               ></textarea>
             </div>
@@ -133,12 +133,8 @@ import { BingoCell } from "@/server/models/bingo/dto";
 import { IsFollowingSubjectResponse } from "@/server/models/facades/visionai/imageDescription";
 
 const props = defineProps({
-  bingoCells: {
-    type: Array as PropType<BingoCell[]>,
-    required: true,
-  },
-  bingoCellId: {
-    type: String,
+  selectedBingoCell: {
+    type: Object as PropType<BingoCell>,
     required: true,
   },
   isFollowingSubject: {
@@ -147,33 +143,29 @@ const props = defineProps({
   },
 });
 
-const targetBingoCell = computed(() => {
-  return props.bingoCells.filter((value) => value.id === props.bingoCellId)[0];
-});
-
 const emits = defineEmits([
   "closeBingoCardDetailModal",
   "postBingoCellRequest",
   "postCheckFollowingSubject",
 ]);
 
-// モーダルをクローズする
+// モーダルクローズのイベント発火
 const closeBingoCardDetailModal = async () => {
   await emits("closeBingoCardDetailModal");
 };
 
 // モーダルのセルが投稿済みの場合True
 const registered = computed(() => {
-  return true;
-  //return targetBingoCell.value.completed;
+  return props.selectedBingoCell.completed;
 });
 
-// ファイルが変更された時
+// ファイルが変更された時、ファイルの検査処理のイベント発火
 let selectedFile = ref(null);
 const onFileChange = async (e: any) => {
   selectedFile.value = e.target.files[0];
   await emits("postCheckFollowingSubject", selectedFile.value);
 };
+
 // 検証プロセスが実行中の場合True
 const isCheckProcessing = computed(() => {
   return selectedFile.value !== null && props.isFollowingSubject === null;
@@ -186,7 +178,7 @@ const checkResultMessage = computed(() => {
 const form = ref({
   comments: "",
 });
-// 投稿ボタンが押されたときの処理
+// 投稿ボタンが押されたときのイベント発火
 const postBingoCellRequest = async () => {
   await emits("postBingoCellRequest", form.value, selectedFile.value);
 };
