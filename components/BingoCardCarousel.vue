@@ -181,6 +181,9 @@ const modalIsOpen = ref(false);
 const selectedBingoCard = computed(() => {
   return props.bingoCards[state.currentNum];
 });
+const selectedBingoCardId = computed(() => {
+  return selectedBingoCard.value.id;
+});
 // モーダルに表示するビンゴのセル
 const selectedBingoCardCell = computed(() => {
   return selectedBingoCard.value.bingoCells.filter(
@@ -201,12 +204,26 @@ const closeBingoCardDetailModal = async () => {
 // 投稿ボタンが押されたときの処理のイベント発火
 const postBingoCellRequest = async (form: { comments: string }, file: any) => {
   // bingoCellIdを付与して返す。
-  await emits("postBingoCellRequest", bingoCellId, form, file);
+  await emits(
+    "postBingoCellRequest",
+    selectedBingoCardId.value,
+    bingoCellId.value,
+    form,
+    file
+  );
+
+  // 投稿処理後、モーダルを閉じる
+  modalIsOpen.value = false;
 };
 // アップロードした画像がテーマに沿っているかを確認するイベント発火
-const postCheckFollowingSubject = async (bingoCellId: string, file: any) => {
+const postCheckFollowingSubject = async (file: any) => {
   // bingoCellIdを付与して返す。
-  await emits("postCheckFollowingSubject", bingoCellId, file);
+  await emits(
+    "postCheckFollowingSubject",
+    selectedBingoCardId.value,
+    bingoCellId.value,
+    file
+  );
 };
 </script>
 
