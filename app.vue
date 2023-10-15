@@ -45,9 +45,4 @@ body {
   padding-right: 1rem;
   padding-bottom: 4rem;
 }
-
-.bingo-cell-frame {
-  max-width: 456px;
-  margin: 0 auto;
-}
 </style>
