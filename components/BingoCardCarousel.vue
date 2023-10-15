@@ -97,7 +97,7 @@
 
 <script setup lang="ts">
 import { BingoCard } from "@/server/models/bingo/dto";
-import { IsFollowingSubjectResponse } from "~/server/models/facades/visionai/imageDescription";
+import { IsFollowingSubjectResponse } from "@/server/models/facades/visionai/imageDescription";
 
 const props = defineProps({
   bingoCards: {
@@ -114,6 +114,7 @@ const props = defineProps({
 const emits = defineEmits([
   "postBingoCellRequest",
   "postCheckFollowingSubject",
+  "clearIsFollowingSubject",
 ]);
 
 const bingoCellId = ref("");
@@ -126,6 +127,9 @@ const state = reactive({
   diffX: 0,
 });
 
+/**
+ *  ビンゴカード一覧のスワイプ処理
+ */
 const onTouchMove = (event: any) => {
   if (state.startX == null) {
     return;
@@ -175,11 +179,14 @@ const onTouchStart = (event: any) => {
   state.startX = "touches" in event ? event.touches[0].clientX : event.clientX;
 };
 
-const modalIsOpen = ref(false);
-
-// トップに表示されているビンゴカード
+/**
+ *  トップに表示されているビンゴカード
+ */
 const selectedBingoCard = computed(() => {
   return props.bingoCards[state.currentNum];
+});
+const selectedBingoCardId = computed(() => {
+  return selectedBingoCard.value.id;
 });
 // モーダルに表示するビンゴのセル
 const selectedBingoCardCell = computed(() => {
@@ -188,25 +195,42 @@ const selectedBingoCardCell = computed(() => {
   )[0];
 });
 
-// アップロードモーダル上のイベント
-// ビンゴカードの詳細を開く
+/**
+ * モーダルの処理
+ */
+// ビンゴカード詳細モーダルを開く
+const modalIsOpen = ref(false);
 const openBingoCardDetailModal = async (bingoCellIdByChild: string) => {
   bingoCellId.value = bingoCellIdByChild;
   modalIsOpen.value = true;
 };
-// ビンゴカードの詳細を閉じる
+// ビンゴカード詳細モーダルを閉じる
 const closeBingoCardDetailModal = async () => {
   modalIsOpen.value = false;
+  emits("clearIsFollowingSubject"); // モーダルを閉じる時に、検証結果をクローズする。
 };
-// 投稿ボタンが押されたときの処理のイベント発火
+// モーダルの投稿ボタンが押されたときの処理のイベント発火
 const postBingoCellRequest = async (form: { comments: string }, file: any) => {
   // bingoCellIdを付与して返す。
-  await emits("postBingoCellRequest", bingoCellId, form, file);
+  await emits(
+    "postBingoCellRequest",
+    selectedBingoCardId.value,
+    bingoCellId.value,
+    form,
+    file
+  );
+  // 投稿処理後、モーダルを閉じる
+  modalIsOpen.value = false;
 };
-// アップロードした画像がテーマに沿っているかを確認するイベント発火
-const postCheckFollowingSubject = async (bingoCellId: string, file: any) => {
+// モーダルでアップロードした画像がテーマに沿っているかを確認するイベント発火
+const postCheckFollowingSubject = async (file: any) => {
   // bingoCellIdを付与して返す。
-  await emits("postCheckFollowingSubject", bingoCellId, file);
+  await emits(
+    "postCheckFollowingSubject",
+    selectedBingoCardId.value,
+    bingoCellId.value,
+    file
+  );
 };
 </script>
 

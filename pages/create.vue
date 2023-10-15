@@ -132,7 +132,7 @@ const createBingoCard = async () => {
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
   isLoading.value = false;
-  router.push(`/BingoCard/${data.bingoCardId}`);
+  router.push(`/`);
 };
 </script>
 

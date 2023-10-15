@@ -1,10 +1,10 @@
 import { OpenAI } from "openai";
-import { BingoCell } from "~/server/models/bingo/dto";
-import { CreateBingoCellThemeResponse } from "~/server/models/facades/generativeai/chatgpt";
+import { BingoCell } from "@/server/models/bingo/dto";
+import { CreateBingoCellThemeResponse } from "@/server/models/facades/generativeai/chatgpt";
 import {
   ImageDescriptionResponse,
   IsFollowingSubjectResponse,
-} from "~/server/models/facades/visionai/imageDescription";
+} from "@/server/models/facades/visionai/imageDescription";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
