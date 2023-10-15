@@ -118,10 +118,9 @@
           <button
             v-if="!registered"
             @click="postBingoCellRequest"
-            :disabled="!isRegisterButtonActive"
-            data-modal-hide="extralarge-modal"
             type="button"
-            class="text-gray-700 bg-blue-400 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            :class="buttonClass"
+            :disabled="!isRegisterButtonActive"
           >
             保存する
           </button>
@@ -168,9 +167,17 @@ const isRegisterButtonActive = computed(() => {
   return (
     !registered.value && // このセルが登録済みでない
     form.value.comments !== "" && // コメントが入力されている
-    selectedFile.value !== null && // 画像が選択されている
-    props.isFollowingSubject?.isFollowingSubject // 画像がテーマに沿っている
+    selectedFile.value !== null // 画像が選択されている
+    // props.isFollowingSubject?.isFollowingSubject // 画像がテーマに沿っている、検証中のためコメントアウト
   );
+});
+// ボタンの表示を切り替えるためのクラス
+const buttonClass = computed(() => {
+  return `text-white font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none ${
+    isRegisterButtonActive.value
+      ? "bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+      : "bg-gray-400 cursor-not-allowed"
+  }`;
 });
 
 /*
