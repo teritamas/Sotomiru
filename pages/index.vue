@@ -1,6 +1,7 @@
 <template>
   <div class="main">
     <BingoCardCarousel
+      @clearIsFollowingSubject="clearIsFollowingSubject"
       @postBingoCellRequest="postBingoCellRequest"
       @postCheckFollowingSubject="postCheckFollowingSubject"
       :bingoCards="bingoCards"
@@ -36,7 +37,6 @@ const postCheckFollowingSubject = async (
   file: any
 ) => {
   // 前の検証結果をクリア
-  console.log(bingoCardId);
   isFollowingSubject.value = null;
 
   // リクエストボディの作成
@@ -56,6 +56,9 @@ const postCheckFollowingSubject = async (
     }
   );
   isFollowingSubject.value = await res.json();
+};
+const clearIsFollowingSubject = async () => {
+  isFollowingSubject.value = null;
 };
 
 // ビンゴカードの詳細を投稿する

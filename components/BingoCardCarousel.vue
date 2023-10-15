@@ -114,6 +114,7 @@ const props = defineProps({
 const emits = defineEmits([
   "postBingoCellRequest",
   "postCheckFollowingSubject",
+  "clearIsFollowingSubject",
 ]);
 
 const bingoCellId = ref("");
@@ -200,6 +201,7 @@ const openBingoCardDetailModal = async (bingoCellIdByChild: string) => {
 // ビンゴカードの詳細を閉じる
 const closeBingoCardDetailModal = async () => {
   modalIsOpen.value = false;
+  emits("clearIsFollowingSubject"); // モーダルを閉じる時に、検証結果をクローズする。
 };
 // 投稿ボタンが押されたときの処理のイベント発火
 const postBingoCellRequest = async (form: { comments: string }, file: any) => {
@@ -215,6 +217,7 @@ const postBingoCellRequest = async (form: { comments: string }, file: any) => {
   // 投稿処理後、モーダルを閉じる
   modalIsOpen.value = false;
 };
+
 // アップロードした画像がテーマに沿っているかを確認するイベント発火
 const postCheckFollowingSubject = async (file: any) => {
   // bingoCellIdを付与して返す。
