@@ -22,7 +22,6 @@ const isFollowingSubject = ref(null as IsFollowingSubjectResponse | null);
 onMounted(async () => {
   await getAllBingoCard();
 });
-
 // ビンゴカードの情報取得
 const getAllBingoCard = async () => {
   const res = await fetch(`api/bingoCard`);
@@ -30,6 +29,7 @@ const getAllBingoCard = async () => {
   bingoCards.value = data.bingoCards;
 };
 
+// 投稿画像に対するチェック処理
 // アップロードした画像がテーマに沿っているかを確認する。
 const postCheckFollowingSubject = async (
   bingoCardId: string,
@@ -57,12 +57,13 @@ const postCheckFollowingSubject = async (
   );
   isFollowingSubject.value = await res.json();
 };
+// チェック処理の結果をクリア
 const clearIsFollowingSubject = async () => {
   isFollowingSubject.value = null;
 };
 
-// ビンゴカードの詳細を投稿する
-// 投稿完了後、ビンゴカードの最新の状態を取得し、モーダルを閉じる
+// ビンゴセルに対する投稿処理
+// ビンゴセルに画像を投稿する。投稿完了後、ビンゴカードの最新の状態を取得する。
 const postBingoCellRequest = async (
   bingoCardId: string,
   bingoCellId: string,
@@ -82,6 +83,7 @@ const postBingoCellRequest = async (
     method: "PUT",
     body: formData,
   });
+  // 最新の状態を取得
   await getAllBingoCard();
 };
 </script>
