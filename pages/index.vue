@@ -7,6 +7,14 @@
       :isFollowingSubject="isFollowingSubject"
     />
   </div>
+  <congratulations-complete
+    v-if="congratulationsCompleteViewIsOpen"
+    @closeCongratulationsCompleteView="closeCongratulationsCompleteView"
+  />
+  <congratulations-bingo
+    v-if="congratulationsBingoViewIsOpen"
+    @closeCongratulationsBingoView="closeCongratulationsBingoView"
+  />
 </template>
 
 <script setup lang="ts">
@@ -20,6 +28,8 @@ import { IsFollowingSubjectResponse } from "~/server/models/facades/visionai/ima
 const bingoCards = ref([] as BingoCard[]);
 const bingoCardId = ref("");
 const isFollowingSubject = ref(null as IsFollowingSubjectResponse | null);
+const congratulationsCompleteViewIsOpen = ref(true);
+const congratulationsBingoViewIsOpen = ref(false);
 
 // 全てのビンゴカードを取得
 onMounted(async () => {
@@ -88,5 +98,25 @@ const fetchBingoCard = async () => {
   const res = await fetch(`/api/bingoCard/${bingoCardId}`);
   const data = (await res.json()) as BingoCardsGetResponse;
   return data;
+};
+
+// ビンゴカードをコンプリートしたときのお祝い画面をひらく
+const openCongratulationsCompleteView = async () => {
+  congratulationsCompleteViewIsOpen.value = true;
+};
+
+// ビンゴカードをコンプリートしたときのお祝い画面をとじる
+const closeCongratulationsCompleteView = async () => {
+  congratulationsCompleteViewIsOpen.value = false;
+};
+
+// ビンゴしたときのお祝い画面をひらく
+const openCongratulationsBingoView = async () => {
+  congratulationsBingoViewIsOpen.value = true;
+};
+
+// ビンゴしたときのお祝い画面をとじる
+const closeCongratulationsBingoView = async () => {
+  congratulationsBingoViewIsOpen.value = false;
 };
 </script>
