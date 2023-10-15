@@ -55,19 +55,10 @@
       >
         <div class="card bg-white">
           <BingoCardView
-            @openBingoCardDetailModal="openBingoCardDetailModal(bingoCard.id)"
+            @openBingoCardDetailModal="openBingoCardDetailModal"
             :title="bingoCard?.name!"
             :imageColor="bingoCard?.imageColor!"
             :bingoCells="bingoCard?.bingoCells!"
-          />
-          <BingoCardDetailModal
-            v-if="modalIsOpen"
-            @closeBingoCardDetailModal="closeBingoCardDetailModal"
-            @postBingoCellRequest="postBingoCellRequest"
-            @postCheckFollowingSubject="postCheckFollowingSubject"
-            :bingoCells="bingoCard?.bingoCells!"
-            :bingoCellId="bingoCellId"
-            :isFollowingSubject="isFollowingSubject"
           />
         </div>
       </div>
@@ -93,19 +84,20 @@
         </svg>
       </button>
     </div>
+    <BingoCardDetailModal
+      v-if="modalIsOpen"
+      @closeBingoCardDetailModal="closeBingoCardDetailModal"
+      @postBingoCellRequest="postBingoCellRequest"
+      @postCheckFollowingSubject="postCheckFollowingSubject"
+      :selectedBingoCell="selectedBingoCardCell"
+      :isFollowingSubject="isFollowingSubject"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { BingoCard } from "@/server/models/bingo/dto";
-const MOVE_THRESHOLD = 30;
-const NUM_DISPLAY_ITEM = 5;
-
-const maxVisibility = ref(3);
-
-const OFFSET_INDEXES = [...Array(NUM_DISPLAY_ITEM).keys()].map(
-  (index) => index - Math.floor(NUM_DISPLAY_ITEM / 2)
-);
+import { IsFollowingSubjectResponse } from "~/server/models/facades/visionai/imageDescription";
 
 const props = defineProps({
   bingoCards: {
@@ -113,8 +105,20 @@ const props = defineProps({
     type: Array as PropType<BingoCard[]>,
     required: true,
   },
+  isFollowingSubject: {
+    type: Object as PropType<IsFollowingSubjectResponse | null>,
+    required: true,
+  },
 });
 
+const emits = defineEmits([
+  "postBingoCellRequest",
+  "postCheckFollowingSubject",
+]);
+
+const bingoCellId = ref("");
+const MOVE_THRESHOLD = 30;
+const maxVisibility = ref(3);
 const state = reactive({
   currentNum: 3,
   isSwiping: false,
@@ -122,7 +126,7 @@ const state = reactive({
   diffX: 0,
 });
 
-const onTouchMove = (event) => {
+const onTouchMove = (event: any) => {
   if (state.startX == null) {
     return;
   }
@@ -131,7 +135,7 @@ const onTouchMove = (event) => {
   state.diffX = currentX - state.startX;
 };
 
-const canMove = (index) => {
+const canMove = (index: any) => {
   return props.loop ? true : props.bingoCards[index] != null;
 };
 
@@ -166,91 +170,43 @@ onBeforeUnmount(() => {
 const activeIncrement = () => state.currentNum++;
 const activeDecrement = () => state.currentNum--;
 
-const onTouchStart = (event) => {
+const onTouchStart = (event: any) => {
   state.isSwiping = true;
   state.startX = "touches" in event ? event.touches[0].clientX : event.clientX;
 };
 
-import { BingoCardsGetResponse } from "~/server/models/bingo/response";
-import { IsFollowingSubjectResponse } from "~/server/models/facades/visionai/imageDescription";
-const route = useRoute();
-
-const bingoCardId = ref("");
-//const bingoCardId = route.params.bingoId as string;
 const modalIsOpen = ref(false);
-const bingoCellId = ref("");
-//const bingoCard = ref(null as BingoCard | null);
-const isFollowingSubject = ref(null as IsFollowingSubjectResponse | null);
 
-// 最初の画面描画時にビンゴルームを作成
-//onMounted(async () => {
-//  const res = await fetchBingoCard();
-//  bingoCard.value = res.bingoCard;
-//  console.log(res);
-//});
+// トップに表示されているビンゴカード
+const selectedBingoCard = computed(() => {
+  return props.bingoCards[state.currentNum];
+});
+// モーダルに表示するビンゴのセル
+const selectedBingoCardCell = computed(() => {
+  return selectedBingoCard.value.bingoCells.filter(
+    (value) => value.id === bingoCellId.value
+  )[0];
+});
 
-// ビンゴカードの情報取得
-const fetchBingoCard = async () => {
-  const res = await fetch(`/api/bingoCard/${bingoCardId}`);
-  const data = (await res.json()) as BingoCardsGetResponse;
-  return data;
-};
-
+// アップロードモーダル上のイベント
 // ビンゴカードの詳細を開く
 const openBingoCardDetailModal = async (bingoCellIdByChild: string) => {
-  bingoCardId.value = bingoCellIdByChild;
+  bingoCellId.value = bingoCellIdByChild;
   modalIsOpen.value = true;
 };
-
 // ビンゴカードの詳細を閉じる
 const closeBingoCardDetailModal = async () => {
   modalIsOpen.value = false;
-  isFollowingSubject.value = null;
 };
-
-// アップロードした画像がテーマに沿っているかを確認する。
-const postCheckFollowingSubject = async (file: any) => {
-  // 前の検証結果をクリア
-  isFollowingSubject.value = null;
-
-  // リクエストボディの作成
-  const formData = new FormData();
-  formData.append("file", file);
-  formData.append(
-    "request",
-    JSON.stringify({
-      bingoCellId: bingoCellId.value,
-    } as CheckFollowingSubjectPostRequest)
-  );
-  const res = await fetch(
-    `/api/bingoCell/checkFollowingSubject/${bingoCardId}`,
-    {
-      method: "POST",
-      body: formData,
-    }
-  );
-  isFollowingSubject.value = await res.json();
-};
-
-// ビンゴカードの詳細を投稿する
-// 投稿完了後、ビンゴカードの最新の状態を取得し、モーダルを閉じる
+// 投稿ボタンが押されたときの処理のイベント発火
 const postBingoCellRequest = async (form: { comments: string }, file: any) => {
-  const formData = new FormData();
-  formData.append(
-    "request",
-    JSON.stringify({
-      bingoCellId: bingoCellId.value,
-      ...form,
-    } as BingoCellPostRequest)
-  );
-  formData.append("file", file);
-  await useFetch(`/api/bingoCell/${bingoCardId}`, {
-    method: "PUT",
-    body: formData,
-  });
-  const res = await fetchBingoCard();
-  bingoCard.value = res.bingoCard;
-  modalIsOpen.value = false;
+  // bingoCellIdを付与して返す。
+  await emits("postBingoCellRequest", bingoCellId, form, file);
+};
+// アップロードした画像がテーマに沿っているかを確認するイベント発火
+const postCheckFollowingSubject = async (bingoCellId: string, file: any) => {
+  // bingoCellIdを付与して返す。
+  await emits("postCheckFollowingSubject", bingoCellId, file);
 };
 </script>
 
