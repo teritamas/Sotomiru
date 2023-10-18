@@ -52,17 +52,12 @@ export default {
 
 <style scoped>
 header {
-  z-index: 10000;
+  z-index: 10;
 }
 .router-link-active {
   border-bottom: #878c8d 1px solid;
 }
 
-.router-link-active path {
-  /*fill: white;*/
-}
-.bg-footer {
-}
 .footer-item:hover {
   border-bottom: #878c8d 1px solid;
   /*color: white;*/
