@@ -1,8 +1,11 @@
 <template>
-  <NuxtLayout>
-    <NuxtPage />
-    <AppFooter />
-  </NuxtLayout>
+  <AppHeader />
+  <div class="main">
+    <NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
+  </div>
+  <AppFooter />
 </template>
 
 <style>
@@ -36,6 +39,7 @@ body {
 .main {
   /*max-width: 600px;*/
   margin: 0 auto;
+  padding-top: 5rem;
 }
 .bingo-card-frame {
   max-width: 500px;
