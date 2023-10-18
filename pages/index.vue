@@ -1,13 +1,11 @@
 <template>
-  <div class="main">
-    <BingoCardCarousel
-      @clearIsFollowingSubject="clearIsFollowingSubject"
-      @postBingoCellRequest="postBingoCellRequest"
-      @postCheckFollowingSubject="postCheckFollowingSubject"
-      :bingoCards="bingoCards"
-      :isFollowingSubject="isFollowingSubject"
-    />
-  </div>
+  <BingoCardCarousel
+    @clearIsFollowingSubject="clearIsFollowingSubject"
+    @postBingoCellRequest="postBingoCellRequest"
+    @postCheckFollowingSubject="postCheckFollowingSubject"
+    :bingoCards="bingoCards"
+    :isFollowingSubject="isFollowingSubject"
+  />
   <congratulations-complete
     v-if="congratulationsCompleteViewIsOpen"
     @closeCongratulationsCompleteView="closeCongratulationsCompleteView"
