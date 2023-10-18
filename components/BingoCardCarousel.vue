@@ -175,6 +175,7 @@ const activeIncrement = () => state.currentNum++;
 const activeDecrement = () => state.currentNum--;
 
 const onTouchStart = (event: any) => {
+  if (modalIsOpen.value) return false;
   state.isSwiping = true;
   state.startX = "touches" in event ? event.touches[0].clientX : event.clientX;
 };
