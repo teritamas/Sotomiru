@@ -40,7 +40,6 @@ export default {
 footer {
   border-radius: 100%;
   margin: 1rem;
-  z-index: 10000;
   right: 2%;
   bottom: 10%;
 }
