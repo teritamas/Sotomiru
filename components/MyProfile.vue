@@ -40,7 +40,7 @@
 </template>
 <script>
 export default {
-  name: "proposal-form",
+  name: "MyProfile",
   components: {},
   data() {
     return {
