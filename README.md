@@ -26,6 +26,14 @@ OPENAI_API_KEY=${OpenAIのAPIキー}
 # GCPの設定
 GOOGLE_APPLICATION_CREDENTIALS=${GCPのサービスアカウントキーのパス}
 FIRE_STORAGE_BUCKET=${GCPのサービスアカウントキーのパス}
+
+# Firebase Authenticationの設定
+FIREBASE_API_KEY=${firebaseのAPIキー}
+FIREBASE_AUTH_DOMAIN=${firebaseの認証ドメイン}
+FIREBASE_PROJECT_ID=${firebaseのプロジェクトID}
+FIREBASE_MESSAGING_SENDER_ID=${firebaseのメッセージング送信者ID}
+FIREBASE_APP_ID=${firebaseのアプリID}
+FIREBASE_MEASUREMENT_ID=${firebaseの測定ID}
 ```
 
 ### 2. サーバの起動
