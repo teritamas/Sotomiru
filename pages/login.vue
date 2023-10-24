@@ -35,6 +35,10 @@ const config = {
 };
 
 onMounted(() => {
-  ui.start("#firebase-ui-auth-container", config);
+  if (!currentUser.value) {
+    ui.start("#firebase-ui-auth-container", config);
+  } else {
+    router.push(`/mypage`);
+  }
 });
 </script>
