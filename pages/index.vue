@@ -20,7 +20,9 @@
 import { BingoCard } from "@/server/models/bingo/dto";
 import { BingoCardsGetAllResponse } from "@/server/models/bingo/response";
 import { IsFollowingSubjectResponse } from "@/server/models/facades/visionai/imageDescription";
+import { useCurrentUser } from "vuefire";
 
+const currentUser = useCurrentUser();
 const bingoCards = ref([] as BingoCard[]);
 const isFollowingSubject = ref(null as IsFollowingSubjectResponse | null);
 const congratulationsCompleteViewIsOpen = ref(false);
@@ -32,7 +34,11 @@ onMounted(async () => {
 });
 // ビンゴカードの情報取得
 const getAllBingoCard = async () => {
-  const res = await fetch(`api/bingoCard`);
+  const res = await fetch(`api/bingoCard`, {
+    headers: {
+      Authorization: `Bearer ${await currentUser.value?.getIdToken()}`,
+    },
+  });
   const data = (await res.json()) as BingoCardsGetAllResponse;
   bingoCards.value = data.bingoCards;
 };
