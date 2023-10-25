@@ -3,10 +3,10 @@
     <div class="card card-one">
       <div class="head">
         <div class="avatar">
-          <img :src="avatarImage" alt="sayako" />
+          <img :src="avatarImageURL" alt="sayako" />
         </div>
       </div>
-      <h3>{{ userName }}</h3>
+      <h3>{{ props.displayName }}</h3>
       <div class="stats px-5">
         <div class="stat text-center">
           <i>現金と交換可能なトークン</i>
@@ -38,28 +38,31 @@
     </div>
   </div>
 </template>
-<script>
-export default {
-  name: "MyProfile",
-  components: {},
-  data() {
-    return {
-      exchangeableToken: 100,
-      avatarImage:
-        "https://flowbite.s3.amazonaws.com/docs/gallery/square/image.jpg",
-      missionClearCount: 25,
-      missionCreateCount: 10,
-      missionClearedByOtherCount: 120,
-      userName: "sayako",
-      message: "なにかあれば",
-      walletAddress: "testtesttest",
-    };
+<script lang="ts" setup>
+const props = defineProps({
+  avatarImageUrl: {
+    type: String as PropType<string | null>,
+    required: true,
   },
-  props: {},
-  computed: {},
-  created() {},
-  methods: {},
-};
+  displayName: {
+    type: String as PropType<string | null>,
+    required: true,
+  },
+});
+
+// プロフィール画像が設定されていない場合のデフォルト画像
+const avatarImageURL = computed(() => {
+  return (
+    props.avatarImageUrl ??
+    "https://flowbite.s3.amazonaws.com/docs/gallery/square/image.jpg"
+  );
+});
+
+const exchangeableToken = 100;
+const missionClearCount = 25;
+const missionCreateCount = 10;
+const missionClearedByOtherCount = 120;
+const walletAddress = "testtesttest";
 </script>
 
 <style lang="scss" scoped>

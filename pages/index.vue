@@ -20,6 +20,7 @@
 import { BingoCard } from "@/server/models/bingo/dto";
 import { BingoCardsGetAllResponse } from "@/server/models/bingo/response";
 import { IsFollowingSubjectResponse } from "@/server/models/facades/visionai/imageDescription";
+import { useCurrentUser } from "vuefire";
 
 const bingoCards = ref([] as BingoCard[]);
 const isFollowingSubject = ref(null as IsFollowingSubjectResponse | null);
