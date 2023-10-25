@@ -1,9 +1,12 @@
 <template>
-  <MyProfile />
+  <MyProfile
+    v-if="currentUser"
+    :avatarImageUrl="currentUser.photoURL"
+    :displayName="currentUser.displayName"
+  />
   <!-- サインアウトボタン -->
-  <div class="flex justify-center">
+  <div v-if="currentUser" class="flex justify-center">
     <button
-      v-if="currentUser"
       class="text-white font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300"
       @click="logout"
     >
@@ -19,7 +22,7 @@ import { useCurrentUser } from "vuefire";
 const currentUser = useCurrentUser();
 const router = useRouter();
 
-onMounted(() => {
+onBeforeMount(() => {
   if (!currentUser.value) {
     console.log("Not logged in");
     router.push(`/login`);

@@ -118,10 +118,10 @@ const emits = defineEmits([
 ]);
 
 const bingoCellId = ref("");
-const MOVE_THRESHOLD = 30;
-const maxVisibility = ref(3);
+const moveThreshold = 30;
+const maxVisibility = 3; // 画面に描画されるビンゴカードの数
 const state = reactive({
-  currentNum: 3,
+  currentNum: 1, // 少ないと変な感じになるので1
   isSwiping: false,
   startX: null,
   diffX: 0,
@@ -140,16 +140,17 @@ const onTouchMove = (event: any) => {
 };
 
 const canMove = (index: any) => {
-  return props.loop ? true : props.bingoCards[index] != null;
+  // return props.loop ? true : props.bingoCards[index] != null; // prop.loopは未実装のためコメントアウト
+  return props.bingoCards[index] != null;
 };
 
 const onTouchEnd = () => {
   if (state.startX == null) {
     return;
   }
-  if (state.diffX > MOVE_THRESHOLD && canMove(state.currentNum - 1)) {
+  if (state.diffX > moveThreshold && canMove(state.currentNum - 1)) {
     state.currentNum--;
-  } else if (state.diffX < -MOVE_THRESHOLD && canMove(state.currentNum + 1)) {
+  } else if (state.diffX < -moveThreshold && canMove(state.currentNum + 1)) {
     state.currentNum++;
   }
   state.isSwiping = false;

@@ -21,6 +21,7 @@ export interface BingoCard {
   theme: string;
   imageColor: string;
   bingoCells: BingoCell[];
+  createdUid: string;
   createdAt: Date;
   updatedAt: Date;
 }

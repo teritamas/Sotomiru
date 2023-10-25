@@ -107,6 +107,9 @@
 </template>
 
 <script setup lang="ts">
+import { useCurrentUser } from "vuefire";
+
+const currentUser = useCurrentUser();
 const submitting = ref(false);
 // ボタンのテキスト
 const submitButtonMessage = computed(() => {
@@ -128,6 +131,9 @@ const createBingoCard = async () => {
   submitting.value = true;
   const res = await fetch("/api/bingoCard", {
     method: "POST",
+    headers: {
+      Authorization: `Bearer ${await currentUser.value?.getIdToken()}`,
+    },
     body: JSON.stringify({
       title: form.value.title,
       theme: form.value.theme,
