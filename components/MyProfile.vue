@@ -29,7 +29,7 @@
       </div>
       <div class="footer">
         <i class="text-white">ウォレットアドレス</i>
-        <v-icon @click="copyToClipboard(text)"
+        <v-icon @click=""
           ><p class="text-white" style="word-break: break-all">
             {{ walletAddress }}
           </p>
