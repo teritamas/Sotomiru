@@ -3,12 +3,16 @@ import { addBingoCard } from "@/server/facades/repositories/bingoContents";
 import { BingoCard, BingoCell } from "@/server/models/bingo/dto";
 import { createBingoCellTheme } from "@/server/facades/generativeai/chatgpt";
 import { CreateBingoCellThemeResponse } from "@/server/models/facades/generativeai/chatgpt";
+import { idAuthentication } from "@/server/facades/auth/idAuthentication";
 
 /**
  * ビンゴカードを新規作成する
  */
 export default defineEventHandler(async (event) => {
   try {
+    const token = await getHeaders(event)["authorization"];
+    const uid = await idAuthentication(token);
+
     const body = (await readBody(event).then((b) =>
       JSON.parse(b)
     )) as BongoCreateRequest;
@@ -22,7 +26,7 @@ export default defineEventHandler(async (event) => {
       };
     }
     // const gptGenerateTheme = null; // 生成に時間がかかるのでDebug時はnullを入れる
-    const entryBingoCard = createBingoCard(body, gptGenerateTheme);
+    const entryBingoCard = createBingoCard(uid, body, gptGenerateTheme);
 
     // DBに追加
     addBingoCard(entryBingoCard);
@@ -44,6 +48,7 @@ export default defineEventHandler(async (event) => {
  * ビンゴカードを作成する
  */
 function createBingoCard(
+  uid: string,
   body: BongoCreateRequest,
   gptGenerateTheme: CreateBingoCellThemeResponse[] | null
 ) {
@@ -53,6 +58,7 @@ function createBingoCard(
     theme: body.theme,
     imageColor: body.imageColor,
     bingoCells: [],
+    createdUid: uid,
     createdAt: new Date(),
     updatedAt: new Date(),
   } as BingoCard;
