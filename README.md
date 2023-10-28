@@ -76,7 +76,7 @@ Firebase のコンソールからサービスアカウントを発行した場�
 CONFIG_VALUES には、アプリの起動に必要な環境変数を、半角スペース区切りで設定する。
 
 ```
-open_api_key=${OpenAPI のキー} fire_storage_bucket=${バケット名}
+open_api_key=${OpenAPI のキー} fire_storage_bucket=${バケット名} firebase_api_key=${firebaseのAPIキー} firebase_auth_domain=${firebaseの認証ドメイン} firebase_project_id=${firebaseのプロジェクトID} firebase_messaging_sender_id=${firebaseのメッセージング送信者ID} firebase_app_id=${firebaseのアプリID} firebase_measurement_id=${firebaseのMeasurementID}
 ```
 
 設定が完了後、Github Actions により自動的に検証環境にデプロイされる。
