@@ -23,6 +23,12 @@
   },
   "dependencies": {
     "@google-cloud/vision": "^4.0.2",
+    "@wagmi/chains": "^1.8.0",
+    "@wagmi/core": "^1.4.5",
+    "@walletconnect/web3wallet": "^1.9.3",
+    "@web3modal/ethereum": "^2.7.1",
+    "@web3modal/html": "^2.7.1",
+    "ethers": "^6.8.0",
     "firebase": "^10.5.0",
     "firebaseui": "^6.1.0",
     "flowbite": "^1.8.1",
