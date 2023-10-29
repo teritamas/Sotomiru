@@ -96,13 +96,13 @@
 </template>
 
 <script setup lang="ts">
-import { BingoCard } from "@/server/models/bingo/dto";
+import { BingoCardDetail } from "@/server/models/bingo/dto";
 import { IsFollowingSubjectResponse } from "@/server/models/facades/visionai/imageDescription";
 
 const props = defineProps({
   bingoCards: {
     default: [],
-    type: Array as PropType<BingoCard[]>,
+    type: Array as PropType<BingoCardDetail[]>,
     required: true,
   },
   isFollowingSubject: {

@@ -1,5 +1,5 @@
 <template>
-  <footer class="fixed bottom" v-if="incompleteBingoCardCount <= 3">
+  <footer class="fixed bottom" v-if="isBingoCardCreatable">
     <router-link
       data-tooltip-target="tooltip-default"
       class="block text-gray-500 border rounded-full border-gray-700 hover:bg-gray-200"
@@ -31,52 +31,41 @@
 </template>
 
 <script setup lang="ts">
-import { BingoCard } from "@/server/models/bingo/dto";
-import { BingoCardsGetAllResponse } from "@/server/models/bingo/response";
-import { useCurrentUser } from "vuefire";
+import { BingoCardDetail } from "@/server/models/bingo/dto";
 
-const currentUser = useCurrentUser();
-const bingoCards = ref([] as BingoCard[]);
-
-// 全てのビンゴカードを取得
-onMounted(async () => {
-  await getAllBingoCard();
+const props = defineProps({
+  bingoCardDetails: {
+    default: [],
+    type: Array as PropType<BingoCardDetail[]>,
+  },
 });
-// ビンゴカードの情報取得
-const getAllBingoCard = async () => {
-  const res = await fetch(`api/bingoCard`, {
-    headers: {
-      Authorization: `Bearer ${await currentUser.value?.getIdToken()}`,
-    },
-  });
-  const data = (await res.json()) as BingoCardsGetAllResponse;
-  bingoCards.value = data.bingoCards;
-};
 
-const incompleteBingoCardCount = computed(() =>
-  countIncompleteBingoCardCount(bingoCards.value)
-);
+const maxIncompleteBingoCardCount = 3;
 
-// "bingoCells" 配列内で "completed" フィールドが false のセルが1つでもある場合にカウントする関数
-function countIncompleteBingoCardCount(dataArray) {
-  let count = 0;
+// 新しいビンゴカードを作成できるかどうか
+const isBingoCardCreatable = computed(() => {
+  let inCompletedBingoCardCount = 0;
+  if (!Array.isArray(props.bingoCardDetails)) return true;
 
-  if (Array.isArray(dataArray)) {
-    for (const data of dataArray) {
-      if (data && data.bingoCells && Array.isArray(data.bingoCells)) {
-        // このカード内の "completed" フィールドが false のセルの数をカウント
-        const falseCellCount = data.bingoCells.filter(
-          (cell) => cell.completed === false
-        ).length;
-        if (falseCellCount > 0) {
-          count += 1;
-        }
-      }
+  for (const bingoCardDetail of props.bingoCardDetails) {
+    if (
+      bingoCardDetail &&
+      bingoCardDetail.bingoCells &&
+      Array.isArray(bingoCardDetail.bingoCells)
+    ) {
+      // completed == falseが1つでもあれば、未完了のビンゴカードとしてカウントする
+      const completedCard =
+        bingoCardDetail.bingoCells.filter((cell) => cell.completed).length ===
+        9;
+      if (!completedCard) inCompletedBingoCardCount += 1;
+      if (inCompletedBingoCardCount >= maxIncompleteBingoCardCount)
+        return false; // 閾値を超えたときはそれ以上、カウントする必要がないのでreturnする
     }
   }
 
-  return count;
-}
+  // ループを抜ける = 作成可能なビンゴカード数を超えていないということなので、trueを返す
+  return true;
+});
 </script>
 
 <style scoped>
