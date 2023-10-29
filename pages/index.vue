@@ -40,7 +40,7 @@ const getAllBingoCard = async () => {
     },
   });
   const data = (await res.json()) as BingoCardsGetAllResponse;
-  bingoCards.value = data.bingoCards;
+  bingoCards.value = data.bingoCardDetails;
 };
 
 // 投稿画像に対するチェック処理
