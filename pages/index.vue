@@ -3,7 +3,7 @@
     @clearIsFollowingSubject="clearIsFollowingSubject"
     @postBingoCellRequest="postBingoCellRequest"
     @postCheckFollowingSubject="postCheckFollowingSubject"
-    :bingoCards="bingoCards"
+    :bingoCards="bingoCardDetails"
     :isFollowingSubject="isFollowingSubject"
   />
   <congratulations-complete
@@ -14,16 +14,17 @@
     v-if="congratulationsBingoViewIsOpen"
     @closeCongratulationsBingoView="closeCongratulationsBingoView"
   />
+  <AppFooter :bingoCardDetails="bingoCardDetails" />
 </template>
 
 <script setup lang="ts">
-import { BingoCard } from "@/server/models/bingo/dto";
+import { BingoCardDetail } from "@/server/models/bingo/dto";
 import { BingoCardsGetAllResponse } from "@/server/models/bingo/response";
 import { IsFollowingSubjectResponse } from "@/server/models/facades/visionai/imageDescription";
 import { useCurrentUser } from "vuefire";
 
-const currentUser = useCurrentUser();
-const bingoCards = ref([] as BingoCard[]);
+const currentUser = useCurrentUser(); // TODO: 画面をリロードすると全てのビンゴカードが表示される不具合あり
+const bingoCardDetails = ref([] as BingoCardDetail[]);
 const isFollowingSubject = ref(null as IsFollowingSubjectResponse | null);
 const congratulationsCompleteViewIsOpen = ref(false);
 const congratulationsBingoViewIsOpen = ref(false);
@@ -40,7 +41,7 @@ const getAllBingoCard = async () => {
     },
   });
   const data = (await res.json()) as BingoCardsGetAllResponse;
-  bingoCards.value = data.bingoCardDetails;
+  bingoCardDetails.value = data.bingoCardDetails;
 };
 
 // 投稿画像に対するチェック処理
