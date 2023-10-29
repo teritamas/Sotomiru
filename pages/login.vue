@@ -41,4 +41,11 @@ onMounted(() => {
     router.push(`/mypage`);
   }
 });
+
+// リロード時ログインしていたらマイページに遷移
+onUpdated(() => {
+  if (currentUser.value) {
+    router.push(`/mypage`);
+  }
+});
 </script>
