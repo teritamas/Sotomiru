@@ -33,7 +33,6 @@
 <script lang="ts" setup>
 import { signOut, getAuth } from "firebase/auth";
 import { useCurrentUser } from "vuefire";
-
 import {
   EthereumClient,
   w3mConnectors,
@@ -94,4 +93,24 @@ const walletAccount = ref(Object as unknown as GetAccountResult<PublicClient>);
 onMounted(async () => {
   walletAccount.value = getAccount();
 });
+
+onUpdated(async () => {
+  if (walletAccount.value.isConnected) {
+    // useテーブルにウォレットアドレスを登録
+    await registerWallet();
+  }
+});
+// useテーブルにウォレットを登録
+const registerWallet = async () => {
+  await fetch("/api/user/wallet", {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${await currentUser.value?.getIdToken()}`,
+      ContentType: "application/json",
+    },
+    body: JSON.stringify({
+      walletAddress: walletAccount.value.address?.toString(),
+    } as UserWalletPutRequest),
+  });
+};
 </script>
