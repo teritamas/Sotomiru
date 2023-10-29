@@ -48,6 +48,10 @@ const props = defineProps({
     type: String as PropType<string | null>,
     required: true,
   },
+  walletAccount: {
+    type: Object,
+    required: true,
+  },
 });
 
 // プロフィール画像が設定されていない場合のデフォルト画像
@@ -62,7 +66,13 @@ const exchangeableToken = 100;
 const missionClearCount = 25;
 const missionCreateCount = 10;
 const missionClearedByOtherCount = 120;
-const walletAddress = "testtesttest";
+const walletAddress = computed(() => {
+  console.log(props.walletAccount);
+  return (
+    props.walletAccount?.address ??
+    "接続されていません。ウォレットと接続してください"
+  );
+});
 </script>
 
 <style lang="scss" scoped>
@@ -255,7 +265,6 @@ body {
     float: none;
     margin-left: auto;
     margin-right: auto;
-    z-index: 100;
   }
 }
 

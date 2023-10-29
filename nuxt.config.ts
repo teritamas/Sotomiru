@@ -9,6 +9,11 @@ export default defineNuxtConfig({
       gen: 2,
     },
   },
+  runtimeConfig: {
+    public: {
+      walletConnectProjectId: process.env.WALLET_CONNECT_PROJECT_ID || "",
+    },
+  },
   vuefire: {
     auth: true, // enable Firebase Authentication
     config: {
