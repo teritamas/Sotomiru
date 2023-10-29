@@ -31,7 +31,7 @@ export const getAllBingoCardByUid = async (uid: string) => {
     const bingoCard = querySnapshot.docs.map((doc) => doc.data() as BingoCard);
     return bingoCard;
   } catch (e) {
-    console.error("[getAllBingoCardByUid]", e);
+    console.error("[getAllBingoCardByUid] uid: ", uid, e);
   }
 };
 
