@@ -85,6 +85,7 @@ const postBingoCellRequest = async (
   form: { comments: string },
   file: any
 ) => {
+  const countCompleteBingoLineBefore = countCompleteBingoLines(bingoCardId);
   const formData = new FormData();
   formData.append(
     "request",
@@ -100,6 +101,21 @@ const postBingoCellRequest = async (
   });
   // 最新の状態を取得
   await getAllBingoCard();
+  const countCompleteBingoLineAfter = countCompleteBingoLines(bingoCardId);
+  if (countCompleteBingoLineAfter == 8) {
+    openCongratulationsCompleteView();
+  } else if (countCompleteBingoLineAfter > countCompleteBingoLineBefore) {
+    openCongratulationsBingoView();
+  }
+};
+
+// ビンゴカードのbingoの数を数える
+const countCompleteBingoLines = (bingoCardId: String) => {
+  // ビンゴカードを特定
+  const bingoCard = bingoCardDetails.value.filter(
+    (card) => card.id === bingoCardId
+  );
+  return bingoCard[0].completeBingoLines.length;
 };
 
 // ビンゴカードをコンプリートしたときのお祝い画面をひらく

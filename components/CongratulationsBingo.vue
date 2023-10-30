@@ -29,7 +29,6 @@
       <div v-for="x in 15" :class="'firework-' + x"></div>
       <div class="text-center pt-20">
         <div class="title">Nice Bingo! 🎉</div>
-        <div>あと マスでコンプリート！</div>
       </div>
     </div>
   </div>
@@ -46,7 +45,7 @@ const closeCongratulationsBingoView = async () => {
 .bg {
   height: 100vh;
   width: 100vw;
-  background-color: #fff;
+  background-color: #ffffffd0;
   top: 0;
   position: fixed;
 }
