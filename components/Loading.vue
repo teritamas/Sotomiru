@@ -29,14 +29,21 @@
       </div>
       <p
         class="font-bold text-white text-center"
-        style="position: relative; top: 74px"
+        style="position: relative; top: 74px; font-size: 1.25em"
       >
-        Loading...
+        {{ LoadingText }}
       </p>
     </div>
   </div>
 </template>
 
+<script setup lang="ts">
+const props = defineProps({
+  LoadingText: {
+    type: String,
+  },
+});
+</script>
 <style scoped>
 .demo_item {
   width: 50px;
@@ -135,7 +142,7 @@
 .full-view {
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.4);
   position: fixed;
   top: 0;
   left: 0;
