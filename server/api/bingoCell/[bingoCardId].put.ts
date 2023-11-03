@@ -7,10 +7,15 @@ import {
 import { uploadBingoCellImage } from "@/server/facades/storage/bingoCellImage";
 import fs from "fs";
 import { BingoCellPutResponse as BingoCellPutResponse } from "~/server/models/bingo/response";
+import { idAuthentication } from "~/server/facades/auth/idAuthentication";
+import { incrementBingoClearCount } from "~/server/facades/repositories/users";
 
 export default defineEventHandler(async (event) => {
   try {
-    if (event === undefined) {
+    const token = await getHeaders(event)["authorization"];
+    const uid = await idAuthentication(token);
+
+    if (event === undefined || uid === undefined) {
       return createError({
         statusCode: 400,
         statusMessage: "Failed to read body",
@@ -59,19 +64,22 @@ export default defineEventHandler(async (event) => {
     const updateDto = {
       imageUrl: imageUrl,
       comments: requestBody.comments,
-      answered_user: 0, // 暫定値
+      answered_user: uid, // 暫定値
       answered_at: new Date(),
       geo_location: null, // 利用するか不明なのでnull
       completed: true,
     } as UpdateBingoCellDto;
-    const updatedBingoCellId = await updateBingoCell(
-      bingoCardId,
-      requestBody.bingoCellId,
-      updateDto
-    );
+    await updateBingoCell(bingoCardId, requestBody.bingoCellId, updateDto);
 
     // 投稿後のビンゴカードにビンゴが成立しているかチェック
     const isBingoCompleteDto = await checkBingoComplete(bingoCardId);
+
+    // ビンゴカードとセルのクリア数を更新
+    incrementBingoClearCount(
+      uid,
+      isBingoCompleteDto?.appearBingoCount || 0, // 発生したビンゴの数
+      isBingoCompleteDto?.appearBingoCardComplete ? 1 : 0 // クリアした時は1
+    );
 
     return isBingoCompleteDto as BingoCellPutResponse;
   } catch (e) {

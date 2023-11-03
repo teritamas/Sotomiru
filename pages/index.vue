@@ -98,6 +98,9 @@ const postBingoCellRequest = async (
   formData.append("file", file);
   const res = await fetch(`/api/bingoCell/${bingoCardId}`, {
     method: "PUT",
+    headers: {
+      Authorization: `Bearer ${await currentUser.value?.getIdToken()}`,
+    },
     body: formData,
   });
   const data = (await res.json()) as BingoCellPutResponse;
