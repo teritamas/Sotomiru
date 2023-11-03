@@ -41,7 +41,7 @@
             <!--{{ mission.mission_title + ":" + mission }}-->
           </p>
           <p class="text-base leading-relaxed text-white font-bold">
-            ミッション詳細はここにかく
+            お題の詳細はここにかく
           </p>
           <div class="mt-8">
             <label

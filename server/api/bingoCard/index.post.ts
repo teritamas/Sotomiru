@@ -4,6 +4,7 @@ import { BingoCard, BingoCell } from "@/server/models/bingo/dto";
 import { createBingoCellTheme } from "@/server/facades/generativeai/chatgpt";
 import { CreateBingoCellThemeResponse } from "@/server/models/facades/generativeai/chatgpt";
 import { idAuthentication } from "@/server/facades/auth/idAuthentication";
+import { incrementBingoCreationCount } from "@/server/facades/repositories/users";
 
 /**
  * ビンゴカードを新規作成する
@@ -31,6 +32,8 @@ export default defineEventHandler(async (event) => {
     // DBに追加
     addBingoCard(entryBingoCard);
 
+    // ユーザが作成したビンゴカードの数を1増やす
+    await incrementBingoCreationCount(uid);
     return {
       message: "OK",
       bingoCardId: entryBingoCard.id,
