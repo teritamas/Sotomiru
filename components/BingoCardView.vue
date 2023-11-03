@@ -2,14 +2,14 @@
   <div class="block border border-gray-700 bingo-card-frame rounded-lg">
     <!--:style="{ backgroundColor: imageColor }"-->
     <h1
-      class="text-center tracking-wider mb-10 font-normal text-xl text-gray-700"
+      class="text-center tracking-wider mb-7 font-normal text-xl text-gray-700"
     >
-      {{ props.title }}
+      {{ bingoCard.name }}
     </h1>
     <div class="container">
       <div
         class="card bingo-cell-image rounded-lg border border-gray-700 bg-white"
-        v-for="bingoCell in props.bingoCells"
+        v-for="bingoCell in bingoCard.bingoCells"
         :key="bingoCell.id"
         :style="{ '--bg-url': `url(${bingoCell.imageUrl})` }"
       >
@@ -23,23 +23,20 @@
         </a>
       </div>
     </div>
+    <div class="pt-4">
+      {{ CreatedAt }}
+      {{ bingoCard.theme }}
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { BingoCell } from "@/server/models/bingo/dto";
+import dayjs from "dayjs";
+import "dayjs/locale/ja"; // 日本語ロケールを有効化
 
 const props = defineProps({
-  title: {
-    type: String,
-    required: true,
-  },
-  imageColor: {
-    type: String,
-    required: true,
-  },
-  bingoCells: {
-    type: Array as PropType<BingoCell[]>,
+  bingoCard: {
+    type: Array,
     required: true,
   },
 });
@@ -48,6 +45,13 @@ const emits = defineEmits(["openBingoCardDetailModal"]);
 const openBingoCardDetailModal = async (bingoCellId: string) => {
   await emits("openBingoCardDetailModal", bingoCellId);
 };
+// computed プロパティを作成
+const CreatedAt = computed(() => {
+  const timestamp =
+    props.bingoCard.createdAt._seconds * 1000 +
+    props.bingoCard.createdAt._nanoseconds / 1000000;
+  return dayjs(timestamp).locale("ja").format("YYYY年M月D日 HH:mm:ss");
+});
 </script>
 
 <style scoped lang="scss">

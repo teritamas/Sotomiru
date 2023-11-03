@@ -46,6 +46,6 @@ body {
   padding-top: 2.5rem;
   padding-left: 1rem;
   padding-right: 1rem;
-  padding-bottom: 4rem;
+  padding-bottom: 2rem;
 }
 </style>

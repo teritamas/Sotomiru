@@ -9,7 +9,9 @@
       <div class="relative border bg-white rounded-lg border-gray-700">
         <!-- Modal header -->
         <div class="flex items-center justify-between p-5 rounded-t">
-          <h3 class="text-md font-extrabold text-gray-700 pl-1">Mission</h3>
+          <h3 class="text-lg font-extrabold text-gray-700 pl-2">
+            {{ selectedBingoCell.name }}
+          </h3>
           <button
             @click="closeBingoCardDetailModal()"
             type="button"
@@ -38,6 +40,7 @@
           <p
             class="text-base border border-gray-700 font-bold rounded-lg leading-relaxed text-gray-700 border p-5 bg-white"
           >
+            Mission<br />
             {{ selectedBingoCell.description }}
           </p>
           <!-- 投稿済みの時 -->
