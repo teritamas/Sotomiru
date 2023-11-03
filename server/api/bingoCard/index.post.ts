@@ -33,7 +33,7 @@ export default defineEventHandler(async (event) => {
     addBingoCard(entryBingoCard);
 
     // ユーザが作成したビンゴカードの数を1増やす
-    await incrementBingoCreationCount(uid);
+    incrementBingoCreationCount(uid);
     return {
       message: "OK",
       bingoCardId: entryBingoCard.id,
