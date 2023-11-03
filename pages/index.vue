@@ -19,7 +19,10 @@
 
 <script setup lang="ts">
 import { BingoCardDetail } from "@/server/models/bingo/dto";
-import { BingoCardsGetAllResponse } from "@/server/models/bingo/response";
+import {
+  BingoCardsGetAllResponse,
+  BingoCellPutResponse,
+} from "@/server/models/bingo/response";
 import { IsFollowingSubjectResponse } from "@/server/models/facades/visionai/imageDescription";
 import { useCurrentUser } from "vuefire";
 
@@ -53,7 +56,6 @@ const postCheckFollowingSubject = async (
 ) => {
   // 前の検証結果をクリア
   isFollowingSubject.value = null;
-
   // リクエストボディの作成
   const formData = new FormData();
   formData.append("file", file);
@@ -85,7 +87,6 @@ const postBingoCellRequest = async (
   form: { comments: string },
   file: any
 ) => {
-  const countCompleteBingoLineBefore = countCompleteBingoLines(bingoCardId);
   const formData = new FormData();
   formData.append(
     "request",
@@ -95,27 +96,22 @@ const postBingoCellRequest = async (
     } as BingoCellPostRequest)
   );
   formData.append("file", file);
-  await useFetch(`/api/bingoCell/${bingoCardId}`, {
+  const res = await fetch(`/api/bingoCell/${bingoCardId}`, {
     method: "PUT",
     body: formData,
   });
-  // 最新の状態を取得
-  await getAllBingoCard();
-  const countCompleteBingoLineAfter = countCompleteBingoLines(bingoCardId);
-  if (countCompleteBingoLineAfter == 8) {
+  const data = (await res.json()) as BingoCellPutResponse;
+
+  if (data.appearBingoCardComplete) {
+    // ビンゴカードが完了したかどうか
     openCongratulationsCompleteView();
-  } else if (countCompleteBingoLineAfter > countCompleteBingoLineBefore) {
+  } else if (data.appearBingoComplete) {
+    // ビンゴしたかどうか
     openCongratulationsBingoView();
   }
-};
 
-// ビンゴカードのbingoの数を数える
-const countCompleteBingoLines = (bingoCardId: String) => {
-  // ビンゴカードを特定
-  const bingoCard = bingoCardDetails.value.filter(
-    (card) => card.id === bingoCardId
-  );
-  return bingoCard[0].completeBingoLines.length;
+  // 最新の状態を取得
+  await getAllBingoCard();
 };
 
 // ビンゴカードをコンプリートしたときのお祝い画面をひらく

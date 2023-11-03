@@ -1,8 +1,12 @@
 import { createError, MultiPartData } from "h3";
 import { v4 as uuidv4 } from "uuid";
-import { updateBingoCell } from "@/server/facades/repositories/bingoContents";
+import {
+  checkBingoComplete,
+  updateBingoCell,
+} from "@/server/facades/repositories/bingoContents";
 import { uploadBingoCellImage } from "@/server/facades/storage/bingoCellImage";
 import fs from "fs";
+import { BingoCellPutResponse as BingoCellPutResponse } from "~/server/models/bingo/response";
 
 export default defineEventHandler(async (event) => {
   try {
@@ -66,10 +70,10 @@ export default defineEventHandler(async (event) => {
       updateDto
     );
 
-    return {
-      message: "OK",
-      bingoCardId: updatedBingoCellId,
-    };
+    // 投稿後のビンゴカードにビンゴが成立しているかチェック
+    const isBingoCompleteDto = await checkBingoComplete(bingoCardId);
+
+    return isBingoCompleteDto as BingoCellPutResponse;
   } catch (e) {
     console.error(e);
     return {

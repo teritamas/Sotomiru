@@ -61,6 +61,8 @@ function createBingoCard(
     theme: body.theme,
     imageColor: body.imageColor,
     bingoCells: [],
+    countOfBingoLine: 0, // ビンゴラインの数
+    completed: false, // ビンゴカードが完成したかどうか
     createdUid: uid,
     createdAt: new Date(),
     updatedAt: new Date(),

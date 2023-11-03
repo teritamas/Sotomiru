@@ -21,6 +21,10 @@ export interface BingoCard {
   theme: string;
   imageColor: string;
   bingoCells: BingoCell[];
+
+  countOfBingoLine?: number; // ビンゴラインの数
+  completed?: boolean; // ビンゴカードが完成したかどうか
+
   createdUid: string;
   createdAt: Date;
   updatedAt: Date;
@@ -44,4 +48,10 @@ export interface CompleteBingoLine {
 export interface ReachLine {
   row: number | null;
   column: number | null;
+}
+
+export interface AppearBingoCompleteDto {
+  appearBingoComplete: boolean; // 今の投稿でビンゴが発生したか
+  appearBingoCount: number; // 発生したビンゴラインの数
+  appearBingoCardComplete: boolean; // 今の投稿でビンゴカードが完成したか
 }
