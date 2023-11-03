@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
     const token = await getHeaders(event)["authorization"];
     const uid = await idAuthentication(token);
 
-    const user = await getUserInfo(uid);
+    let user = await getUserInfo(uid);
 
     // ユーザが存在しない場合は作成する
     if (user == null) user = await addUserInfo(uid);

@@ -37,23 +37,26 @@ export const getAllBingoCardByUid = async (uid: string) => {
     return bingoCard;
   } catch (e) {
     console.error("[getAllBingoCardByUid] uid: ", uid, e);
+    return [];
   }
 };
 
 /**
- * 全件取得
+ * ユーザIDがないものを取得する
  */
-export const getAllBingoCard = async () => {
+export const getAnonymousBingoCard = async () => {
   try {
     // createdUidのカラムが存在しないものを取得する
     const querySnapshot = await firestore
       .collection("bingoCard")
+      .where("createdUid", "==", "")
       .orderBy("updatedAt", "desc")
       .get();
     const bingoCard = querySnapshot.docs.map((doc) => doc.data() as BingoCard);
     return bingoCard;
   } catch (e) {
     console.error("[getAllBingoCard]", e);
+    return [];
   }
 };
 
