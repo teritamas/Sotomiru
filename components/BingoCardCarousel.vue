@@ -56,9 +56,7 @@
         <div class="card bg-white">
           <BingoCardView
             @openBingoCardDetailModal="openBingoCardDetailModal"
-            :title="bingoCard?.name!"
-            :imageColor="bingoCard?.imageColor!"
-            :bingoCells="bingoCard?.bingoCells!"
+            :bingoCard="bingoCard"
           />
         </div>
       </div>
