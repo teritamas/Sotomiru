@@ -78,7 +78,7 @@ const walletAddress = computed(() => {
 <style lang="scss" scoped>
 /*** VARS ***/
 
-$main-col: #fbde60;
+$main-col: #6a60fb;
 //$main-col: rgb(251 191 36);
 $sec-col: lighten(#303f9f, 20%);
 $back-col: #c5cae9;
@@ -138,7 +138,7 @@ body {
 /*** CARD STLES ***/
 .card {
   float: left;
-  margin: 3rem;
+  margin: 3rem 3rem 0rem 3rem;
 }
 
 .card-one {

@@ -142,7 +142,7 @@ const createBingoCard = async () => {
       Authorization: `Bearer ${await currentUser.value?.getIdToken()}`,
     },
     body: JSON.stringify({
-      title: form.value.title,
+      title: form.value.title == "" ? "タイトルなし" : form.value.title,
       theme: form.value.theme,
       imageColor: form.value.imageColor,
     } as BongoCreateRequest),
