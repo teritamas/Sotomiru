@@ -14,6 +14,28 @@ export const getUserInfo = async (uid: string) => {
 };
 
 /**
+ * ユーザ情報を追加する
+ */
+export const addUserInfo = async (uid: string) => {
+  try {
+    const userInfo = {
+      uid: uid,
+      bingoCreationCount: 0,
+      bingoCellClearCount: 0,
+      bingoCardClearCount: 0,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    } as UserInfo;
+
+    const docRef = await firestore.collection("users").doc(uid);
+    await docRef.set({ ...userInfo });
+    return userInfo;
+  } catch (e) {
+    console.error("[addUserInfo]", e);
+  }
+};
+
+/**
  * ユーザアカウントにウォレットを紐づける
  */
 export const updateUserWallet = async (
@@ -24,16 +46,11 @@ export const updateUserWallet = async (
     const userInfo = {
       uid: uid,
       walletAddress: userWallet.walletAddress,
-      createdAt: new Date(),
       updatedAt: new Date(),
-
-      bingoCreationCount: 0,
-      bingoCellClearCount: 0,
-      bingoCardClearCount: 0,
     } as UserInfo;
 
     const docRef = await firestore.collection("users").doc(uid);
-    await docRef.set(userInfo); // 既に存在する場合は更新
+    await docRef.update({ userInfo }); // 既に存在する場合は更新
   } catch (e) {
     console.error("[updateUserWallet]", e);
   }
@@ -45,8 +62,14 @@ export const updateUserWallet = async (
 export const incrementBingoCreationCount = async (uid: string) => {
   try {
     const docRef = await firestore.collection("users").doc(uid);
+    const bingoCreationCount = (await docRef.get()).data()!.bingoCreationCount;
+    const count = bingoCreationCount ? bingoCreationCount : 0;
+    console.error("[incrementBingoCreationCount]", uid, count);
+
     await docRef.update({
-      bingoCreationCount: (await docRef.get()).data()?.bingoCreationCount + 1,
+      uid: uid,
+      bingoCreationCount: count + 1,
+      updatedAt: new Date(),
     });
   } catch (e) {
     console.error("[incrementBingoCreationCount]", e);
@@ -63,11 +86,23 @@ export const incrementBingoClearCount = async (
 ) => {
   try {
     const docRef = await firestore.collection("users").doc(uid);
+
+    // 存在しない場合は0を入れる
+    const bingoCellClearCountInDB = (await docRef.get()).data()
+      ?.bingoCellClearCount;
+    const bingoCellClearCountInDBCount = bingoCellClearCountInDB
+      ? bingoCellClearCountInDB
+      : 0;
+    const bingoCardClearCountInDB = (await docRef.get()).data()
+      ?.bingoCardClearCount;
+    const bingoCardClearCountInDBCount = bingoCardClearCountInDB
+      ? bingoCardClearCountInDB
+      : 0;
     await docRef.update({
-      bingoCellClearCount:
-        (await docRef.get()).data()?.bingoCellClearCount + bingoCellClearCount,
-      bingoCardClearCount:
-        (await docRef.get()).data()?.bingoCardClearCount + bingoCardClearCount,
+      uid: uid,
+      bingoCellClearCount: bingoCellClearCountInDBCount + bingoCellClearCount,
+      bingoCardClearCount: bingoCardClearCountInDBCount + bingoCardClearCount,
+      updatedAt: new Date(),
     });
   } catch (e) {
     console.error("[incrementBingoCreationCount]", e);
