@@ -48,6 +48,7 @@ export const getAllBingoCard = async () => {
     // createdUidのカラムが存在しないものを取得する
     const querySnapshot = await firestore
       .collection("bingoCard")
+      .where("createdUid", "==", "")
       .orderBy("updatedAt", "desc")
       .get();
     const bingoCard = querySnapshot.docs.map((doc) => doc.data() as BingoCard);
