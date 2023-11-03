@@ -1,6 +1,7 @@
 <template>
   <div class="block border border-gray-700 bingo-card-frame rounded-lg">
     <!--:style="{ backgroundColor: imageColor }"-->
+    <CreateUserBadge :isAnonymousCard="isAnonymousCard" />
     <h1
       class="text-center tracking-wider mb-7 font-normal text-xl text-gray-700"
     >
@@ -33,10 +34,11 @@
 <script setup lang="ts">
 import dayjs from "dayjs";
 import "dayjs/locale/ja"; // 日本語ロケールを有効化
+import { BingoCardDetail } from "~/server/models/bingo/dto";
 
 const props = defineProps({
   bingoCard: {
-    type: Array,
+    type: Object as PropType<BingoCardDetail>,
     required: true,
   },
 });
@@ -47,10 +49,12 @@ const openBingoCardDetailModal = async (bingoCellId: string) => {
 };
 // computed プロパティを作成
 const CreatedAt = computed(() => {
-  const timestamp =
-    props.bingoCard.createdAt._seconds * 1000 +
-    props.bingoCard.createdAt._nanoseconds / 1000000;
+  const timestamp = props.bingoCard.createdAt.getTime as any;
   return dayjs(timestamp).locale("ja").format("YYYY年M月D日 HH:mm:ss");
+});
+
+const isAnonymousCard = computed(() => {
+  return props.bingoCard.createdUid === "";
 });
 </script>
 

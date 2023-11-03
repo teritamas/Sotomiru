@@ -1,5 +1,5 @@
 import {
-  getAllBingoCard,
+  getAnonymousBingoCard,
   getAllBingoCardByUid,
 } from "@/server/facades/repositories/bingoContents";
 import { BingoCardsGetAllResponse } from "@/server/models/bingo/response";
@@ -13,16 +13,16 @@ import { checkBingoOrReachLines } from "../../utils/bingoCheck";
 export default defineEventHandler(async (event) => {
   try {
     const token = await getHeaders(event)["authorization"];
-    let bingoCards: BingoCard[] | undefined = [];
+    let bingoCards: BingoCard[] = [];
+    // uidがない場合は全件取得
+    bingoCards = await getAnonymousBingoCard();
     await idAuthentication(token)
       .then(async (uid) => {
         // uidがある場合はuidでフィルタして取得
-        bingoCards = await getAllBingoCardByUid(uid);
+        const myBingoCards = await getAllBingoCardByUid(uid);
+        bingoCards = bingoCards.concat(myBingoCards);
       })
-      .catch(async (e) => {
-        // uidがない場合は全件取得
-        bingoCards = await getAllBingoCard();
-      });
+      .catch(async (e) => {});
 
     const bingoCardDetails = bingoCards.map((bingoCard) => {
       const checkBingoOrReachLinesResult = checkBingoOrReachLines(bingoCard);
