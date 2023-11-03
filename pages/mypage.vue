@@ -3,28 +3,35 @@
     v-if="currentUser"
     :avatarImageUrl="currentUser.photoURL"
     :displayName="currentUser.displayName"
+    :userInfo="userInfo"
     :walletAccount="walletAccount"
   />
 
-  <div class="flex flex-col justify-center text-center">
+  <div class="flex flex-col justify-center text-center mt-5">
     <!-- ウォレットと接続するボタン -->
     <div>
       <div class="mb-3">
-        <span class="mr-2">ウォレット</span>
+        <h2
+          class="text-center tracking-wider mb-3 font-normal text-xm text-gray-700"
+        >
+          ウォレット
+        </h2>
         <w3m-core-button themeVariables="--w3m-accent-color: #000" />
       </div>
       <!-- <div class="">
         <w3m-network-switch themeVariables="--w3m-accent-color: #000" />
       </div> -->
     </div>
+  </div>
 
+  <div class="flex flex-col justify-center text-center">
     <!-- サインアウトボタン -->
     <div v-if="currentUser">
       <button
-        class="text-white font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300"
+        class="text-white font-medium rounded-lg text-sm px-5 py-2.5 mt-5 focus:outline-none bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300"
         @click="logout"
       >
-        Sign Out
+        ログアウトする
       </button>
     </div>
   </div>
@@ -47,12 +54,27 @@ const currentUser = useCurrentUser();
 const router = useRouter();
 
 // ログインしていない場合はログイン画面にリダイレクト
-onBeforeMount(() => {
+onBeforeMount(async () => {
   if (!currentUser.value) {
     console.log("Not logged in");
     router.push(`/login`);
+  } else {
+    await getUser();
   }
 });
+
+// ユーザ情報をDBから取得
+const userInfo = ref(Object as unknown as UserInfo);
+const getUser = async () => {
+  const res = await fetch("/api/user", {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${await currentUser.value?.getIdToken()}`,
+    },
+  });
+  const data = await res.json();
+  userInfo.value = data;
+};
 
 // サインアウトボタン
 const logout = async () => {

@@ -6,7 +6,7 @@
     <h1
       class="text-center tracking-wider mb-5 mt-5 font-normal text-xl text-gray-700"
     >
-      BINGO <span class="text-lg">をつくる</span>
+      ビンゴカード <span class="text-lg">をつくる</span>
     </h1>
 
     <div class="px-5 md:px-12">
@@ -25,10 +25,16 @@
           class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
           >タイトル</label
         >
-        <small>例：冬の景色と車、家族との思い出</small>
+        <small
+          >このビンゴカードのタイトルを入力してください<br />
+          例：冬の景色と車、家族との思い出</small
+        >
       </div>
       <div class="mb-3">
         <legend class="text-sm text-gray-500 mb-1">テーマ</legend>
+        <small
+          >これから何をしますか？テーマに沿ったビンゴカードを作成します。</small
+        >
         <div class="sample-form flex">
           <div class="w-1/3 text-center">
             <input
@@ -71,7 +77,8 @@
           </div>
         </div>
       </div>
-      <div class="mb-6">
+      <!-- テーマカラーは利用方法が見つからないのでコメントアウト -->
+      <!-- <div class="mb-6">
         <fieldset class="flex">
           <legend class="text-sm text-gray-500 mb-1">テーマカラー</legend>
           <div class="flex items-center mb-4 mr-9">
@@ -86,7 +93,7 @@
             />
           </div>
         </fieldset>
-      </div>
+      </div> -->
       <div class="flex justify-between">
         <router-link
           class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2"
@@ -135,7 +142,7 @@ const createBingoCard = async () => {
       Authorization: `Bearer ${await currentUser.value?.getIdToken()}`,
     },
     body: JSON.stringify({
-      title: form.value.title,
+      title: form.value.title == "" ? "タイトルなし" : form.value.title,
       theme: form.value.theme,
       imageColor: form.value.imageColor,
     } as BongoCreateRequest),
