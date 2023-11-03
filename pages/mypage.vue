@@ -24,11 +24,25 @@
     </div>
   </div>
 
-  <div class="flex flex-col justify-center text-center">
-    <!-- サインアウトボタン -->
+  <div class="flex flex-col justify-center text-center mt-5">
+    <h2
+      class="text-center tracking-wider mb-3 font-normal text-xm text-gray-700"
+    >
+      その他の操作
+    </h2>
+    <!-- 画面の更新ボタン -->
     <div v-if="currentUser">
       <button
-        class="text-white font-medium rounded-lg text-sm px-5 py-2.5 mt-5 focus:outline-none bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300"
+        type="button"
+        class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:focus:ring-yellow-900"
+        @click="router.push(`/login`)"
+      >
+        画面を更新する
+      </button>
+
+      <!-- ログアウトボタン -->
+      <button
+        class="text-white font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300"
         @click="logout"
       >
         ログアウトする
