@@ -1,4 +1,5 @@
 <template>
+  <loading v-show="isCheckProcessing" LoadingText="AIが画像を確認しています" />
   <!-- Extra Large Modal -->
   <div
     class="bingo-card-frame fixed top-0 left-0 right-0 z-50 w-full py-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)]"
@@ -77,15 +78,30 @@
                 @change="onFileChange"
               />
               <!-- アップロードした写真を表示 -->
-              <div v-if="fileUrl"><img :src="fileUrl" alt="" /></div>
-              <div v-if="isCheckProcessing">
-                <p>検証中...</p>
+              <div v-if="fileUrl" class="border border-gray-200 my-2 shadow-md">
+                <img :src="fileUrl" alt="アップロードした写真" />
               </div>
-              <div v-if="isFollowingSubject">
-                <p>
-                  判定: {{ checkResultMessage }}, スコア:
-                  {{ isFollowingSubject.score }}
-                </p>
+              <div
+                v-if="isFollowingSubject"
+                class="p-4 my-8 bg-white border border-gray-200 rounded-lg shadow-md sm:p-6 lg:p-8"
+              >
+                <div class="flex items-center mb-5">
+                  <p
+                    v-if="checkResultMessage == 'NG'"
+                    class="bg-red-100 text-red-800 text-sm font-semibold inline-flex items-center p-1.5 rounded"
+                  >
+                    {{ isFollowingSubject.score }}
+                  </p>
+                  <p
+                    v-if="checkResultMessage != 'NG'"
+                    class="bg-blue-100 text-blue-800 text-sm font-semibold inline-flex items-center p-1.5 rounded"
+                  >
+                    {{ isFollowingSubject.score }}
+                  </p>
+                  <p class="ml-2 font-medium text-gray-900 dark:text-white">
+                    {{ checkResultMessage }}
+                  </p>
+                </div>
                 <p>理由: {{ isFollowingSubject.reason }}</p>
               </div>
             </div>

@@ -1,5 +1,5 @@
 <template>
-  <loading v-show="isLoading" />
+  <loading v-show="isLoading" LoadingText="ビンゴカードを作成しています" />
   <div
     class="block border border-gray-700 p-5 m-3 md:max-w-[600px] md:m-auto md:mt-6 pb-10"
   >
