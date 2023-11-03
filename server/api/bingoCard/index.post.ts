@@ -12,28 +12,33 @@ import { incrementBingoCreationCount } from "@/server/facades/repositories/users
 export default defineEventHandler(async (event) => {
   try {
     const token = await getHeaders(event)["authorization"];
-    const uid = await idAuthentication(token);
+    let uid = "";
+    try {
+      uid = await idAuthentication(token);
+    } catch (e) {
+      uid = ""; // 認証に失敗した場合は空文字を入れる.
+    }
 
     const body = (await readBody(event).then((b) =>
       JSON.parse(b)
     )) as BongoCreateRequest;
 
     // ChatGPTによるお題の生成
-    const gptGenerateTheme = await createBingoCellTheme(body, 9);
-    if (gptGenerateTheme == null) {
-      return {
-        status: 500,
-        message: "Internal Server Error",
-      };
-    }
-    // const gptGenerateTheme = null; // 生成に時間がかかるのでDebug時はnullを入れる
+    // const gptGenerateTheme = await createBingoCellTheme(body, 9);
+    // if (gptGenerateTheme == null) {
+    //   return {
+    //     status: 500,
+    //     message: "Internal Server Error",
+    //   };
+    // }
+    const gptGenerateTheme = null; // 生成に時間がかかるのでDebug時はnullを入れる
     const entryBingoCard = createBingoCard(uid, body, gptGenerateTheme);
 
     // DBに追加
     addBingoCard(entryBingoCard);
 
-    // ユーザが作成したビンゴカードの数を1増やす
-    incrementBingoCreationCount(uid);
+    // ユーザが作成した場合、ビンゴカードの数を1増やす
+    if (uid !== "") incrementBingoCreationCount(uid);
     return {
       message: "OK",
       bingoCardId: entryBingoCard.id,

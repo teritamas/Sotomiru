@@ -37,13 +37,14 @@ export const getAllBingoCardByUid = async (uid: string) => {
     return bingoCard;
   } catch (e) {
     console.error("[getAllBingoCardByUid] uid: ", uid, e);
+    return [];
   }
 };
 
 /**
- * 全件取得
+ * ユーザIDがないものを取得する
  */
-export const getAllBingoCard = async () => {
+export const getAnonymousBingoCard = async () => {
   try {
     // createdUidのカラムが存在しないものを取得する
     const querySnapshot = await firestore
@@ -55,6 +56,7 @@ export const getAllBingoCard = async () => {
     return bingoCard;
   } catch (e) {
     console.error("[getAllBingoCard]", e);
+    return [];
   }
 };
 
