@@ -15,16 +15,16 @@
       </div>
       <div class="stats px-5">
         <div class="stat text-center">
-          <i>クリアした回数</i>
-          <i class="grid">{{ missionClearCount }}<span>回</span></i>
+          <i>カードを作成した回数</i>
+          <i class="grid">{{ userInfo?.bingoCreationCount ?? 0 }}</i>
         </div>
         <div class="stat text-center">
-          <i>ビンゴを作成した回数</i>
-          <i class="grid">{{ missionCreateCount }}<span>回</span></i>
+          <i>ビンゴを達成した回数</i>
+          <i class="grid">{{ userInfo?.bingoCellClearCount ?? 0 }}</i>
         </div>
         <div class="stat text-center">
-          <i>ビンゴがクリアされた回数</i>
-          <i class="grid">{{ missionClearedByOtherCount }}<span>pts</span></i>
+          <i>ビンゴカードを<br />クリアした回数</i>
+          <i class="grid">{{ userInfo?.bingoCardClearCount ?? 0 }}</i>
         </div>
       </div>
       <div class="footer">
@@ -48,6 +48,10 @@ const props = defineProps({
     type: String as PropType<string | null>,
     required: true,
   },
+  userInfo: {
+    type: Object as PropType<UserInfo | null>,
+    required: true,
+  },
   walletAccount: {
     type: Object,
     required: true,
@@ -62,12 +66,14 @@ const avatarImageURL = computed(() => {
   );
 });
 
-const exchangeableToken = 100;
-const missionClearCount = 25;
-const missionCreateCount = 10;
-const missionClearedByOtherCount = 120;
+const exchangeableToken = computed(() => {
+  if (!props.walletAccount?.address) {
+    return "???";
+  }
+  // トークン取得は未実装
+  return 0;
+});
 const walletAddress = computed(() => {
-  console.log(props.walletAccount);
   return (
     props.walletAccount?.address ??
     "接続されていません。ウォレットと接続してください"

@@ -3,6 +3,7 @@
     v-if="currentUser"
     :avatarImageUrl="currentUser.photoURL"
     :displayName="currentUser.displayName"
+    :userInfo="userInfo"
     :walletAccount="walletAccount"
   />
 
@@ -53,12 +54,27 @@ const currentUser = useCurrentUser();
 const router = useRouter();
 
 // ログインしていない場合はログイン画面にリダイレクト
-onBeforeMount(() => {
+onBeforeMount(async () => {
   if (!currentUser.value) {
     console.log("Not logged in");
     router.push(`/login`);
+  } else {
+    await getUser();
   }
 });
+
+// ユーザ情報をDBから取得
+const userInfo = ref(Object as unknown as UserInfo);
+const getUser = async () => {
+  const res = await fetch("/api/user", {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${await currentUser.value?.getIdToken()}`,
+    },
+  });
+  const data = await res.json();
+  userInfo.value = data;
+};
 
 // サインアウトボタン
 const logout = async () => {
