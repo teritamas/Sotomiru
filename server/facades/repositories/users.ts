@@ -54,27 +54,20 @@ export const incrementBingoCreationCount = async (uid: string) => {
 };
 
 /**
- * ビンゴセルをビンゴした回数をインクリメントする
+ * ビンゴをした回数とビンゴカードをクリアした回数をインクリメントする
  */
-export const incrementBingoCellClearCount = async (uid: string) => {
+export const incrementBingoClearCount = async (
+  uid: string,
+  bingoCellClearCount: number,
+  bingoCardClearCount: number
+) => {
   try {
     const docRef = await firestore.collection("users").doc(uid);
     await docRef.update({
-      bingoCellClearCount: (await docRef.get()).data()?.bingoCellClearCount + 1,
-    });
-  } catch (e) {
-    console.error("[incrementBingoCreationCount]", e);
-  }
-};
-
-/**
- * ビンゴカードをクリアした回数をインクリメントする
- */
-export const incrementBingoCardClearCount = async (uid: string) => {
-  try {
-    const docRef = await firestore.collection("users").doc(uid);
-    await docRef.update({
-      bingoCardClearCount: (await docRef.get()).data()?.bingoCardClearCount + 1,
+      bingoCellClearCount:
+        (await docRef.get()).data()?.bingoCellClearCount + bingoCellClearCount,
+      bingoCardClearCount:
+        (await docRef.get()).data()?.bingoCardClearCount + bingoCardClearCount,
     });
   } catch (e) {
     console.error("[incrementBingoCreationCount]", e);

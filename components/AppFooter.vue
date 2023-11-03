@@ -44,6 +44,7 @@ const maxIncompleteBingoCardCount = 3;
 
 // 新しいビンゴカードを作成できるかどうか
 const isBingoCardCreatable = computed(() => {
+  return true; // TODO: 作成可能なビンゴカード数を超えたときにfalseを返すようにする
   let inCompletedBingoCardCount = 0;
   if (!Array.isArray(props.bingoCardDetails)) return true;
 

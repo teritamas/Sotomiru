@@ -1,5 +1,10 @@
-import { BingoCard, BingoCell } from "@/server/models/bingo/dto";
+import {
+  BingoCard,
+  BingoCell,
+  AppearBingoCompleteDto,
+} from "@/server/models/bingo/dto";
 import { firestore } from "../firebase";
+import { checkBingoOrReachLines } from "~/server/utils/bingoCheck";
 
 /**
  * ビンゴカードの内容を取得する
@@ -125,6 +130,44 @@ export const updateBingoCell = async (
       });
 
     return bingoCellId;
+  } catch (e) {
+    console.error("[updateBingoCell]", e);
+  }
+};
+
+/**
+ * ビンゴカードにビンゴが成立したかを確認する
+ * 直前の情報と比較して、ビンゴが成立していたら、その情報を返す。
+ */
+export const checkBingoComplete = async (bingoCardId: string) => {
+  try {
+    // bingoCardIdのドキュメントの中のbingoCellIdのドキュメントを更新する
+    const docRef = await firestore
+      .collection("bingoCard")
+      .doc(bingoCardId)
+      .get();
+    const bingoCard = docRef.data() as BingoCard;
+
+    const { completeBingoLines } = checkBingoOrReachLines(bingoCard);
+
+    const beforeBingoLine = bingoCard.countOfBingoLine ?? 0;
+
+    const response = {
+      appearBingoComplete: beforeBingoLine < completeBingoLines.length, // 増えていたらビンゴが成立した
+      appearBingoCount: completeBingoLines.length - beforeBingoLine, // 増えた数
+      appearBingoCardComplete: completeBingoLines.length >= 8, // 8以上になったらビンゴカードが完成した
+    } as AppearBingoCompleteDto;
+
+    // 更新
+    const updateDocRef = await firestore
+      .collection("bingoCard")
+      .doc(bingoCardId)
+      .update({
+        countOfBingoLine: completeBingoLines.length,
+        completed: completeBingoLines.length >= 8,
+      });
+
+    return response;
   } catch (e) {
     console.error("[updateBingoCell]", e);
   }
