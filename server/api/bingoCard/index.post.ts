@@ -33,7 +33,7 @@ export default defineEventHandler(async (event) => {
     addBingoCard(entryBingoCard);
 
     // ユーザが作成したビンゴカードの数を1増やす
-    await incrementBingoCreationCount(uid);
+    incrementBingoCreationCount(uid);
     return {
       message: "OK",
       bingoCardId: entryBingoCard.id,
@@ -61,6 +61,8 @@ function createBingoCard(
     theme: body.theme,
     imageColor: body.imageColor,
     bingoCells: [],
+    countOfBingoLine: 0, // ビンゴラインの数
+    completed: false, // ビンゴカードが完成したかどうか
     createdUid: uid,
     createdAt: new Date(),
     updatedAt: new Date(),
