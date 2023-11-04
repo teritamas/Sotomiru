@@ -145,6 +145,68 @@
           </button>
         </div>
       </div>
+
+      <button
+        class="nav right text-4xl"
+        v-if="canMove('right', selectedBingoCardCellNo)"
+        @click="move('right', selectedBingoCardCellNo)"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="1em"
+          viewBox="0 0 320 512"
+        >
+          <path
+            d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z"
+          />
+        </svg>
+      </button>
+      <button
+        class="nav up text-4xl"
+        v-if="canMove('up', selectedBingoCardCellNo)"
+        @click="move('up', selectedBingoCardCellNo)"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="1em"
+          viewBox="0 0 512 512"
+        >
+          <path
+            d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"
+          />
+        </svg>
+      </button>
+      <button
+        class="nav down text-4xl"
+        v-if="canMove('down', selectedBingoCardCellNo)"
+        @click="move('down', selectedBingoCardCellNo)"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="1em"
+          viewBox="0 0 448 512"
+        >
+          <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+          <path
+            d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"
+          />
+        </svg>
+      </button>
+      <button
+        class="nav left text-4xl"
+        v-if="canMove('left', selectedBingoCardCellNo)"
+        @click="move('left', selectedBingoCardCellNo)"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="1em"
+          viewBox="0 0 320 512"
+        >
+          <path
+            d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"
+          />
+        </svg>
+      </button>
     </div>
   </div>
 </template>
@@ -162,12 +224,58 @@ const props = defineProps({
     type: Object as PropType<IsFollowingSubjectResponse | null>,
     required: true,
   },
+  selectedBingoCardCellNo: {
+    type: Number,
+    required: true,
+  },
 });
+
+const currentPosition = ref(props.selectedBingoCardCellNo); // 現在の位置、初期値はセンターのセル
+
+const canMove = (direction, index) => {
+  switch (direction) {
+    case "up":
+      return index - 3 >= 0;
+    case "down":
+      return index + 3 <= 8;
+    case "left":
+      return index % 3 !== 0;
+    case "right":
+      return index % 3 !== 2;
+    default:
+      return false;
+  }
+};
+
+const move = (direction, index) => {
+  let newIndex = index;
+
+  switch (direction) {
+    case "up":
+      newIndex -= 3;
+      break;
+    case "down":
+      newIndex += 3;
+      break;
+    case "left":
+      if (index % 3 !== 0) {
+        newIndex -= 1;
+      }
+      break;
+    case "right":
+      if (index % 3 !== 2) {
+        newIndex += 1;
+      }
+      break;
+  }
+  emits("openNextBingoCardDetailModal", newIndex);
+};
 
 const emits = defineEmits([
   "closeBingoCardDetailModal",
   "postBingoCellRequest",
   "postCheckFollowingSubject",
+  "openNextBingoCardDetailModal",
 ]);
 
 /**
@@ -235,3 +343,37 @@ const postBingoCellRequest = async () => {
   await emits("postBingoCellRequest", form.value, selectedFile.value);
 };
 </script>
+
+<style scoped>
+.nav {
+  position: absolute;
+  padding: 0.5rem;
+  fill: gray;
+}
+
+.nav:hover {
+  background: lightgray;
+  border-radius: 6px;
+  fill: rgb(75 85 99 / 1);
+}
+
+.up {
+  top: -4%;
+  left: 42%;
+}
+
+.left {
+  top: 43%;
+  right: -4%;
+}
+
+.right {
+  top: 43%;
+  left: -4%;
+}
+
+.down {
+  bottom: -4%;
+  left: 42%;
+}
+</style>
