@@ -2,8 +2,8 @@
   <div
     id="vue-carousel"
     style="height: 31rem; width: 100vw; overflow: hidden"
-    @touchstart="onTouchStart"
-    @mousedown="onTouchStart"
+    @touchstart="onTouchStartCard"
+    @mousedown="onTouchStartCard"
   >
     <div class="carousel">
       <button
@@ -87,8 +87,10 @@
       @closeBingoCardDetailModal="closeBingoCardDetailModal"
       @postBingoCellRequest="postBingoCellRequest"
       @postCheckFollowingSubject="postCheckFollowingSubject"
+      @openNextBingoCardDetailModal="openNextBingoCardDetailModal"
       :selectedBingoCell="selectedBingoCardCell"
       :isFollowingSubject="isFollowingSubject"
+      :selectedBingoCardCellNo="selectedBingoCardCellNo"
     />
   </div>
 </template>
@@ -128,7 +130,7 @@ const state = reactive({
 /**
  *  ビンゴカード一覧のスワイプ処理
  */
-const onTouchMove = (event: any) => {
+const onTouchMoveCard = (event: any) => {
   if (state.startX == null) {
     return;
   }
@@ -142,7 +144,7 @@ const canMove = (index: any) => {
   return props.bingoCards[index] != null;
 };
 
-const onTouchEnd = () => {
+const onTouchEndCard = () => {
   if (state.startX == null) {
     return;
   }
@@ -157,23 +159,23 @@ const onTouchEnd = () => {
 };
 
 onMounted(() => {
-  window.addEventListener("mousemove", onTouchMove);
-  window.addEventListener("touchmove", onTouchMove);
-  window.addEventListener("mouseup", onTouchEnd);
-  window.addEventListener("touchend", onTouchEnd);
+  window.addEventListener("mousemove", onTouchMoveCard);
+  window.addEventListener("touchmove", onTouchMoveCard);
+  window.addEventListener("mouseup", onTouchEndCard);
+  window.addEventListener("touchend", onTouchEndCard);
 });
 
 onBeforeUnmount(() => {
-  window.removeEventListener("mousemove", onTouchMove);
-  window.removeEventListener("touchmove", onTouchMove);
-  window.removeEventListener("mouseup", onTouchEnd);
-  window.removeEventListener("touchend", onTouchEnd);
+  window.removeEventListener("mousemove", onTouchMoveCard);
+  window.removeEventListener("touchmove", onTouchMoveCard);
+  window.removeEventListener("mouseup", onTouchEndCard);
+  window.removeEventListener("touchend", onTouchEndCard);
 });
 
 const activeIncrement = () => state.currentNum++;
 const activeDecrement = () => state.currentNum--;
 
-const onTouchStart = (event: any) => {
+const onTouchStartCard = (event: any) => {
   if (modalIsOpen.value) return false;
   state.isSwiping = true;
   state.startX = "touches" in event ? event.touches[0].clientX : event.clientX;
@@ -194,12 +196,21 @@ const selectedBingoCardCell = computed(() => {
     (value) => value.id === bingoCellId.value
   )[0];
 });
+// モーダルに表示するビンゴのセル
+const selectedBingoCardCellNo = computed(() => {
+  return selectedBingoCard.value.bingoCells.findIndex(
+    (value) => value.id === bingoCellId.value
+  );
+});
 
 /**
  * モーダルの処理
  */
 // ビンゴカード詳細モーダルを開く
 const modalIsOpen = ref(false);
+const openNextBingoCardDetailModal = (index) => {
+  openBingoCardDetailModal(selectedBingoCard.value.bingoCells[index].id);
+};
 const openBingoCardDetailModal = async (bingoCellIdByChild: string) => {
   bingoCellId.value = bingoCellIdByChild;
   modalIsOpen.value = true;
