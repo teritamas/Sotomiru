@@ -1,6 +1,5 @@
 <template>
   <div class="block bingo-card-frame rounded-lg">
-    <!--:style="{ backgroundColor: imageColor }"-->
     <h1
       class="text-center tracking-wider mb-7 font-normal text-xl text-gray-700"
     >
@@ -12,15 +11,21 @@
     <div class="container">
       <div
         class="card bingo-cell-image rounded-lg border border-gray-300 bg-white"
-        v-for="bingoCell in bingoCard.bingoCells"
+        v-for="(bingoCell, index) in bingoCard.bingoCells"
         :key="bingoCell.id"
         :style="{ '--bg-url': `url(${bingoCell.imageUrl})` }"
       >
         <a
           class="content hover:cursor-pointer block text-center flex justify-center items-center p-1"
+          :class="isReach(index) && !bingoCell.completed ? 'reach' : ''"
           @click="openBingoCardDetailModal(bingoCell.id)"
         >
           <h3 class="text-xs text-gray-900">
+            <span
+              v-if="isReach(index) && !bingoCell.completed"
+              class="block color"
+              >リーチ！</span
+            >
             {{ bingoCell.name }}
           </h3>
         </a>
@@ -62,9 +67,75 @@ const CreatedAt = computed(() => {
 const isAnonymousCard = computed(() => {
   return props.bingoCard.createdUid === "";
 });
+
+const isReach = (index: number) => {
+  let cells = props.bingoCard.bingoCells;
+  // 各行のビンゴマスのcompletedステータスをチェックし、すべてがtrueの場合にtrueを返す
+  // 行のリーチの判定
+
+  // 行のリーチの判定
+  const row = Math.floor(index / 3); // 行番号
+  const rowCells = [cells[row * 3], cells[row * 3 + 1], cells[row * 3 + 2]];
+  const rowReach = rowCells.filter((cell) => cell.completed).length >= 2;
+
+  // 列のリーチの判定
+  const column = index % 3; // 列番号
+  const columnCells = [cells[column], cells[column + 3], cells[column + 6]];
+  const columnReach = columnCells.filter((cell) => cell.completed).length >= 2;
+
+  // 対角線のリーチの判定
+  const diagonal1 = index === 0 || index === 4 || index === 8; // 左上から右下の対角線
+  const diagonal2 = index === 2 || index === 4 || index === 6; // 右上から左下の対角線
+  const diagonalCells = diagonal1
+    ? [cells[0], cells[4], cells[8]]
+    : diagonal2
+    ? [cells[2], cells[4], cells[6]]
+    : [];
+
+  const diagonalReach =
+    diagonalCells.filter((cell) => cell.completed).length >= 2;
+
+  // どれか一つでもリーチ条件を満たしていれば true を返す
+  return rowReach || columnReach || diagonalReach;
+};
 </script>
 
 <style scoped lang="scss">
+.reach {
+  background: linear-gradient(-120deg, var(--c1), #ffffff, var(--c4)) fixed;
+  background-size: 800% 800%;
+  animation: 1s tada;
+  border-radius: 7px;
+}
+@keyframes tada {
+  0% {
+    -webkit-transform: scaleX(1);
+    transform: scaleX(1);
+  }
+  10%,
+  20% {
+    -webkit-transform: scale3d(0.9, 0.9, 0.9) rotate(-3deg);
+    transform: scale3d(0.9, 0.9, 0.9) rotate(-3deg);
+  }
+  30%,
+  50%,
+  70%,
+  90% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate(3deg);
+    transform: scale3d(1.1, 1.1, 1.1) rotate(3deg);
+  }
+  40%,
+  60%,
+  80% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate(-3deg);
+    transform: scale3d(1.1, 1.1, 1.1) rotate(-3deg);
+  }
+  to {
+    -webkit-transform: scaleX(1);
+    transform: scaleX(1);
+  }
+}
+
 .container {
   display: grid;
   grid-template-columns: repeat(3, minmax(80px, 1fr));
