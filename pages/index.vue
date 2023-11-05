@@ -3,9 +3,11 @@
     @clearIsFollowingSubject="clearIsFollowingSubject"
     @postBingoCellRequest="postBingoCellRequest"
     @postCheckFollowingSubject="postCheckFollowingSubject"
+    @getBingoCellDetail="getBingoCellDetail"
     :bingoCards="bingoCardDetails"
     :isFollowingSubject="isFollowingSubject"
     :currentUserUid="currentUser?.uid"
+    :selectedBingoCellDetail="bingoCellDetail"
   />
   <congratulations-complete
     v-if="congratulationsCompleteViewIsOpen"
@@ -19,9 +21,10 @@
 </template>
 
 <script setup lang="ts">
-import { BingoCardDetail } from "@/server/models/bingo/dto";
+import { BingoCardDetail, BingoCellDetail } from "@/server/models/bingo/dto";
 import {
   BingoCardsGetAllResponse,
+  BingoCellGetResponse,
   BingoCellPutResponse,
 } from "@/server/models/bingo/response";
 import { IsFollowingSubjectResponse } from "@/server/models/facades/visionai/imageDescription";
@@ -29,6 +32,7 @@ import { useCurrentUser } from "vuefire";
 
 const currentUser = useCurrentUser(); // TODO: 画面をリロードすると全てのビンゴカードが表示される不具合あり
 const bingoCardDetails = ref([] as BingoCardDetail[]);
+const bingoCellDetail = ref(null as BingoCellDetail | null);
 const isFollowingSubject = ref(null as IsFollowingSubjectResponse | null);
 const congratulationsCompleteViewIsOpen = ref(false);
 const congratulationsBingoViewIsOpen = ref(false);
@@ -116,6 +120,19 @@ const postBingoCellRequest = async (
 
   // 最新の状態を取得
   await getAllBingoCard();
+};
+
+// ビンゴセルの詳細情報を取得する
+const getBingoCellDetail = async (bingoCardId: string, bingoCellId: string) => {
+  const res = await fetch(
+    `/api/bingoCell/${bingoCardId}?bingoCellId=${bingoCellId}`,
+    {
+      headers: {},
+    }
+  );
+  const data = (await res.json()) as BingoCellGetResponse;
+  console.log(data);
+  bingoCellDetail.value = data.bingoCellDetail;
 };
 
 // ビンゴカードをコンプリートしたときのお祝い画面をひらく

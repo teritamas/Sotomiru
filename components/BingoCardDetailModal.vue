@@ -47,7 +47,7 @@
           <div v-if="registered">
             <div class="mt-8">
               <label class="block mb-2 text-sm font-medium text-gray-700"
-                >あなたが投稿した画像</label
+                >投稿された画像</label
               >
               <img :src="selectedBingoCell.imageUrl!" alt="" />
             </div>
@@ -55,7 +55,7 @@
               <label
                 for="message"
                 class="block mb-2 text-sm font-medium text-gray-700"
-                >あなたが投稿したコメント</label
+                >投稿されたコメント</label
               >
               <textarea
                 id="message"
@@ -64,6 +64,19 @@
                 :value="selectedBingoCell.comments!"
                 disabled
               ></textarea>
+            </div>
+
+            <div class="mt-8">
+              <label
+                for="message"
+                class="block mb-2 text-sm font-medium text-gray-700"
+                >投稿した人</label
+              >
+              <CreateUserBadge
+                :currentUserUid="currentUserUid"
+                :createdUid="answeredUserDetail?.uid"
+                :createdUserDetail="answeredUserDetail"
+              />
             </div>
           </div>
           <!-- 投稿済みでない場合 -->
@@ -219,6 +232,10 @@ import { BingoCell } from "@/server/models/bingo/dto";
 import { IsFollowingSubjectResponse } from "@/server/models/facades/visionai/imageDescription";
 
 const props = defineProps({
+  currentUserUid: {
+    type: Object as PropType<String | undefined>,
+    required: true,
+  },
   selectedBingoCell: {
     type: Object as PropType<BingoCell>,
     required: true,
@@ -231,8 +248,11 @@ const props = defineProps({
     type: Number,
     required: true,
   },
+  answeredUserDetail: {
+    type: Object as PropType<UserInfo | undefined>,
+    required: true,
+  },
 });
-
 const currentPosition = ref(props.selectedBingoCardCellNo); // 現在の位置、初期値はセンターのセル
 
 const canMove = (direction, index) => {

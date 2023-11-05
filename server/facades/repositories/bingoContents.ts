@@ -3,10 +3,12 @@ import {
   BingoCell,
   AppearBingoCompleteDto,
   BingoCardDetail,
+  BingoCellDetail,
 } from "@/server/models/bingo/dto";
 import { firestore } from "../firebase";
 import { checkBingoOrReachLines } from "~/server/utils/bingoCheck";
 import { Filter } from "firebase-admin/firestore";
+import { user } from "firebase-functions/v1/auth";
 
 /**
  * ビンゴカードの内容を取得する
@@ -21,6 +23,42 @@ export const getBingoCard = async (bingoCardId: string) => {
     return bingoCard;
   } catch (e) {
     console.error("[getBingoCard]", e);
+  }
+};
+
+/**
+ * ビンゴセルの詳細を取得する
+ */
+export const getBingoCellDetail = async (
+  bingoCardId: string,
+  bingoCellId: string
+): Promise<BingoCellDetail> => {
+  try {
+    const docRef = await firestore
+      .collection("bingoCard")
+      .doc(bingoCardId)
+      .get();
+    const bingoCard = docRef.data() as BingoCard;
+    const bingoCell = bingoCard.bingoCells.find(
+      (cell) => cell.id === bingoCellId
+    );
+
+    const bingoCardDetail = { ...bingoCell } as BingoCellDetail;
+
+    if (bingoCell?.completed) {
+      // ユーザの情報を付与する
+      const userDocRef = await firestore
+        .collection("users")
+        .doc(bingoCell?.answered_user!)
+        .get();
+      const userInfo = userDocRef.data() as UserInfo;
+      bingoCardDetail.answeredUserDetail = userInfo;
+    }
+
+    return bingoCardDetail;
+  } catch (e) {
+    console.error("[getBingoCellDetail]", e);
+    throw e;
   }
 };
 
