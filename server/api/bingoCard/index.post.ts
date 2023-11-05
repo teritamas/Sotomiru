@@ -65,6 +65,7 @@ function createBingoCard(
     name: body.title,
     theme: body.theme,
     imageColor: body.imageColor,
+    isPublic: body.isPublic,
     bingoCells: [],
     countOfBingoLine: 0, // ビンゴラインの数
     completed: false, // ビンゴカードが完成したかどうか

@@ -9,10 +9,14 @@ export interface BingoCell {
   // ユーザの回答に関する情報
   imageUrl: string | null; // ビンゴの画像のURL
   comments: string | null; // 投稿した画像に対するコメント(オプション)
-  answered_user: number | null; // 回答したユーザのID
+  answered_user: string | null; // 回答したユーザのID
   answered_at: Date | null; // 回答した日時
   geo_location: string | null; // 回答した場所の緯度経度
   completed: boolean; // 完了したかどうか
+}
+
+export interface BingoCellDetail extends BingoCell {
+  answeredUserDetail: UserInfo; // 回答したユーザの情報
 }
 
 export interface BingoCard {
@@ -20,6 +24,7 @@ export interface BingoCard {
   name: string;
   theme: string;
   imageColor: string;
+  isPublic: boolean;
   bingoCells: BingoCell[];
 
   countOfBingoLine?: number; // ビンゴラインの数
@@ -31,6 +36,8 @@ export interface BingoCard {
 }
 
 export interface BingoCardDetail extends BingoCard {
+  createdUserDetail: UserInfo; // ビンゴカードを作成したユーザの情報
+
   completeBingoLines: CompleteBingoLine[]; // ビンゴが成立したセルの行と列を格納する
   reachLines: ReachLine[]; // リーチの成立したセルの行と列を格納する
   // completeBingoLinesとreachLinesの例

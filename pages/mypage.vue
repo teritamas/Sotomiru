@@ -74,6 +74,7 @@ onBeforeMount(async () => {
     router.push(`/login`);
   } else {
     await getUser();
+    updateUser(); // バックグラウンドで実行するため、awaitしない
   }
 });
 
@@ -85,6 +86,23 @@ const getUser = async () => {
     headers: {
       Authorization: `Bearer ${await currentUser.value?.getIdToken()}`,
     },
+  });
+  const data = await res.json();
+  userInfo.value = data;
+};
+
+// ユーザ情報を更新
+const updateUser = async () => {
+  const res = await fetch("/api/user", {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${await currentUser.value?.getIdToken()}`,
+      ContentType: "application/json",
+    },
+    body: JSON.stringify({
+      displayName: currentUser.value?.displayName,
+      photoURL: currentUser.value?.photoURL,
+    } as UserPutRequest),
   });
   const data = await res.json();
   userInfo.value = data;
