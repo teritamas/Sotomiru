@@ -57,6 +57,7 @@
           <BingoCardView
             @openBingoCardDetailModal="openBingoCardDetailModal"
             :bingoCard="bingoCard"
+            :currentUserUid="props.currentUserUid"
           />
         </div>
       </div>
@@ -88,18 +89,24 @@
       @postBingoCellRequest="postBingoCellRequest"
       @postCheckFollowingSubject="postCheckFollowingSubject"
       @openNextBingoCardDetailModal="openNextBingoCardDetailModal"
+      :currentUserUid="props.currentUserUid"
       :selectedBingoCell="selectedBingoCardCell"
       :isFollowingSubject="isFollowingSubject"
       :selectedBingoCardCellNo="selectedBingoCardCellNo"
+      :answeredUserDetail="props.selectedBingoCellDetail?.answeredUserDetail"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { BingoCardDetail } from "@/server/models/bingo/dto";
+import { BingoCardDetail, BingoCellDetail } from "@/server/models/bingo/dto";
 import { IsFollowingSubjectResponse } from "@/server/models/facades/visionai/imageDescription";
 
 const props = defineProps({
+  currentUserUid: {
+    type: Object as PropType<String | undefined>,
+    required: true,
+  },
   bingoCards: {
     default: [],
     type: Array as PropType<BingoCardDetail[]>,
@@ -109,12 +116,18 @@ const props = defineProps({
     type: Object as PropType<IsFollowingSubjectResponse | null>,
     required: true,
   },
+  selectedBingoCellDetail: {
+    // モーダルで選択中のセルの詳細
+    type: Object as PropType<BingoCellDetail | null>,
+    required: false,
+  },
 });
 
 const emits = defineEmits([
   "postBingoCellRequest",
   "postCheckFollowingSubject",
   "clearIsFollowingSubject",
+  "getBingoCellDetail",
 ]);
 
 const bingoCellId = ref("");
@@ -212,6 +225,12 @@ const openNextBingoCardDetailModal = (index: number) => {
   openBingoCardDetailModal(selectedBingoCard.value.bingoCells[index].id);
 };
 const openBingoCardDetailModal = async (bingoCellIdByChild: string) => {
+  // ビンゴセルの詳細情報を取得する
+  await emits(
+    "getBingoCellDetail",
+    selectedBingoCardId.value,
+    bingoCellIdByChild
+  );
   bingoCellId.value = bingoCellIdByChild;
   modalIsOpen.value = true;
 };

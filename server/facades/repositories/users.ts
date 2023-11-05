@@ -36,6 +36,18 @@ export const addUserInfo = async (uid: string) => {
 };
 
 /**
+ * ユーザ情報を更新する
+ */
+export const updateUserInfo = async (uid: string, userInfo: UserPutRequest) => {
+  try {
+    const docRef = await firestore.collection("users").doc(uid);
+    await docRef.update({ ...userInfo }); // 既に存在する場合は更新
+  } catch (e) {
+    console.error("[updateUserInfo]", e);
+  }
+};
+
+/**
  * ユーザアカウントにウォレットを紐づける
  */
 export const updateUserWallet = async (

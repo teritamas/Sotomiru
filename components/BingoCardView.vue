@@ -29,11 +29,16 @@
     </div>
     <div class="pt-4 color text-sm flex justify-between">
       <span class="flex items-center">
-        <span class="text-xs">CREATED BY</span>
-        <CreateUserBadge :isAnonymousCard="isAnonymousCard" class="pl-2" />
+        <CreateUserBadge
+          :currentUserUid="props.currentUserUid"
+          :createdUid="bingoCard.createdUid"
+          :createdUserDetail="bingoCard.createdUserDetail"
+          class="pl-2"
+        />
+        <span class="text-xs">のビンゴカード</span>
       </span>
 
-      {{ CreatedAt }}
+      {{ createdAt }}
     </div>
   </div>
 </template>
@@ -48,6 +53,10 @@ const props = defineProps({
     type: Object as PropType<BingoCardDetail>,
     required: true,
   },
+  currentUserUid: {
+    type: Object as PropType<String | undefined>,
+    required: true,
+  },
 });
 
 const emits = defineEmits(["openBingoCardDetailModal"]);
@@ -55,13 +64,9 @@ const openBingoCardDetailModal = async (bingoCellId: string) => {
   await emits("openBingoCardDetailModal", bingoCellId);
 };
 // computed プロパティを作成
-const CreatedAt = computed(() => {
+const createdAt = computed(() => {
   const timestamp = props.bingoCard.createdAt.getTime as any;
   return dayjs(timestamp).locale("ja").format("YYYY/M/D HH:mm");
-});
-
-const isAnonymousCard = computed(() => {
-  return props.bingoCard.createdUid === "";
 });
 
 const isReach = (index: number) => {
