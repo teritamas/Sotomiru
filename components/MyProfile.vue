@@ -84,9 +84,9 @@ const walletAddress = computed(() => {
 <style lang="scss" scoped>
 /*** VARS ***/
 
-$main-col: #6a60fb;
+$main-col: #cbb9ff;
 //$main-col: rgb(251 191 36);
-$sec-col: lighten(#303f9f, 20%);
+$sec-col: lighten(#5168ff, 20%);
 $back-col: #c5cae9;
 
 .stats {
