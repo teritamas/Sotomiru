@@ -5,6 +5,7 @@
     @postCheckFollowingSubject="postCheckFollowingSubject"
     :bingoCards="bingoCardDetails"
     :isFollowingSubject="isFollowingSubject"
+    :currentUserUid="currentUser?.uid"
   />
   <congratulations-complete
     v-if="congratulationsCompleteViewIsOpen"

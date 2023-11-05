@@ -5,6 +5,8 @@ interface UserInfo {
   walletAddress: string;
   createdAt: Date;
   updatedAt: Date;
+  displayName: string;
+  photoURL: string;
 
   // ユーザの各種アクション
   bingoCreationCount?: number; // ビンゴカードを作成した数

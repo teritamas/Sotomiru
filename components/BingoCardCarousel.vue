@@ -57,6 +57,7 @@
           <BingoCardView
             @openBingoCardDetailModal="openBingoCardDetailModal"
             :bingoCard="bingoCard"
+            :currentUserUid="props.currentUserUid"
           />
         </div>
       </div>
@@ -100,6 +101,10 @@ import { BingoCardDetail } from "@/server/models/bingo/dto";
 import { IsFollowingSubjectResponse } from "@/server/models/facades/visionai/imageDescription";
 
 const props = defineProps({
+  currentUserUid: {
+    type: Object as PropType<String | undefined>,
+    required: true,
+  },
   bingoCards: {
     default: [],
     type: Array as PropType<BingoCardDetail[]>,

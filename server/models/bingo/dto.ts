@@ -32,6 +32,8 @@ export interface BingoCard {
 }
 
 export interface BingoCardDetail extends BingoCard {
+  createdUserDetail: UserInfo; // ビンゴカードを作成したユーザの情報
+
   completeBingoLines: CompleteBingoLine[]; // ビンゴが成立したセルの行と列を格納する
   reachLines: ReachLine[]; // リーチの成立したセルの行と列を格納する
   // completeBingoLinesとreachLinesの例

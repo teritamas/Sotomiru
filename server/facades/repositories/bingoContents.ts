@@ -2,6 +2,7 @@ import {
   BingoCard,
   BingoCell,
   AppearBingoCompleteDto,
+  BingoCardDetail,
 } from "@/server/models/bingo/dto";
 import { firestore } from "../firebase";
 import { checkBingoOrReachLines } from "~/server/utils/bingoCheck";
@@ -35,7 +36,7 @@ export const getAllBingoCardByUid = async (uid: string) => {
       .orderBy("updatedAt", "desc")
       .get();
     const bingoCard = querySnapshot.docs.map((doc) => doc.data() as BingoCard);
-    return bingoCard;
+    return addBingoCreateUser(bingoCard);
   } catch (e) {
     console.error("[getAllBingoCardByUid] uid: ", uid, e);
     return [];
@@ -60,12 +61,41 @@ export const getAnonymousBingoCard = async () => {
       .orderBy("updatedAt", "desc")
       .get();
     const bingoCard = querySnapshot.docs.map((doc) => doc.data() as BingoCard);
-    return bingoCard;
+    return addBingoCreateUser(bingoCard);
   } catch (e) {
     console.error("[getAllBingoCard]", e);
     return [];
   }
 };
+
+/**
+ * ビンゴカードに作成したユーザの情報を追加してBingoCardDetail型を返す
+ */
+async function addBingoCreateUser(
+  bingoCards: BingoCard[]
+): Promise<BingoCardDetail[]> {
+  // bingoCardsに含まれるUidを取得する
+  const uids = bingoCards.map((bingoCard) => bingoCard.createdUid);
+
+  // uidsのユーザ情報を取得する
+  const querySnapshot = await firestore
+    .collection("users")
+    .where("uid", "in", uids)
+    .get();
+
+  // bingoCardsのそれぞれのセルにユーザ情報を追加する
+  const bingoCardDetails = bingoCards.map((bingoCard) => {
+    const user = querySnapshot.docs
+      .map((doc) => doc.data())
+      .find((user) => user.uid === bingoCard.createdUid);
+    const bingoCardDetail = {
+      ...bingoCard,
+      createdUserDetail: user,
+    } as BingoCardDetail;
+    return bingoCardDetail;
+  });
+  return bingoCardDetails;
+}
 
 /**
  * ビンゴカードを新規作成する
