@@ -8,7 +8,7 @@
     <div class="carousel">
       <button
         class="nav left text-4xl"
-        v-if="state.currentNum > 0"
+        v-if="state.currentNum > 0 && !modalIsOpen"
         @click="activeDecrement"
       >
         <svg
@@ -53,7 +53,7 @@
           [Math.abs(state.currentNum - i) > maxVisibility ? 'none' : 'block']
         "
       >
-        <div class="card bg-white">
+        <div class="card bg-white rounded-lg">
           <BingoCardView
             @openBingoCardDetailModal="openBingoCardDetailModal"
             :bingoCard="bingoCard"
@@ -62,7 +62,7 @@
       </div>
       <button
         class="nav right text-4xl"
-        v-if="state.currentNum < props.bingoCards.length - 1"
+        v-if="state.currentNum < props.bingoCards.length - 1 && !modalIsOpen"
         @click="activeIncrement"
       >
         <svg
@@ -280,8 +280,9 @@ $card-size: 20rem; //スマホだとこっちのほうがよさそう
   top: 70%;
   z-index: 2;
   user-select: none;
-  background: unset;
+  background: white;
   border: unset;
+  border-radius: 5px;
 
   &.left {
     transform: translateX(-100%) translatey(-50%);

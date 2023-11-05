@@ -9,13 +9,13 @@
       <div class="relative border bg-white rounded-lg border-gray-700">
         <!-- Modal header -->
         <div class="flex items-center justify-between p-5 rounded-t">
-          <h3 class="text-lg font-extrabold text-gray-700 pl-2">
+          <h3 class="text-lg font-extrabold text-gray-00 pl-2">
             {{ selectedBingoCell.name }}
           </h3>
           <button
             @click="closeBingoCardDetailModal()"
             type="button"
-            class="text-gray-700 border border-gray-700 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-full text-sm w-8 h-8 ml-auto inline-flex justify-center items-center"
+            class="text-gray-700 border border-gray-300 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-full text-sm w-8 h-8 ml-auto inline-flex justify-center items-center"
           >
             <svg
               class="w-3 h-3"
@@ -38,9 +38,9 @@
         <!-- Modal body -->
         <div class="px-6">
           <p
-            class="text-base border border-gray-700 font-bold rounded-lg leading-relaxed text-gray-700 border p-5 bg-white"
+            class="text-base border border-gray-300 font-bold rounded-lg leading-relaxed text-gray-700 border p-5 bg-white"
           >
-            Mission<br />
+            <span class="color tracking-widest mission">Mission</span><br />
             {{ selectedBingoCell.description }}
           </p>
           <!-- 投稿済みの時 -->
@@ -143,68 +143,71 @@
           >
             保存する
           </button>
+          <button
+            class="nav down text-sm"
+            v-if="canMove('down', selectedBingoCardCellNo)"
+            @click="move('down', selectedBingoCardCellNo)"
+          >
+            <svg viewBox="0 0 512 512" class="cell-arrow">
+              <g>
+                <polygon
+                  points="256.008,275.876 173.562,193.446 132.928,234.081 256.008,357.161 379.072,234.081 338.438,193.446     "
+                />
+                <path
+                  d="M256.008,0C114.606,0.007,0.015,114.605,0,255.992C0.015,397.394,114.606,511.984,256.008,512   C397.394,511.984,511.984,397.394,512,255.992C511.984,114.605,397.394,0.007,256.008,0z M408.585,408.585   c-39.11,39.087-92.93,63.197-152.577,63.205c-59.655-0.008-113.483-24.118-152.594-63.205   c-39.086-39.119-63.196-92.938-63.204-152.593c0.008-59.647,24.118-113.467,63.204-152.585   c39.111-39.079,92.939-63.19,152.594-63.197c59.647,0.007,113.467,24.118,152.577,63.197   c39.087,39.118,63.197,92.938,63.205,152.585C471.782,315.647,447.664,369.466,408.585,408.585z"
+                />
+              </g>
+            </svg>
+          </button>
         </div>
       </div>
 
       <button
-        class="nav right text-4xl"
+        class="nav right text-sm"
         v-if="canMove('right', selectedBingoCardCellNo)"
         @click="move('right', selectedBingoCardCellNo)"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          height="1em"
-          viewBox="0 0 320 512"
-        >
-          <path
-            d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z"
-          />
+        <svg viewBox="0 0 512 512" class="cell-arrow">
+          <g>
+            <polygon
+              points="193.447,173.562 275.877,256 193.447,338.438 234.081,379.08 357.161,256 234.081,132.928  "
+            />
+            <path
+              d="M255.992,0C114.606,0.015,0.015,114.606,0,256c0.015,141.394,114.606,255.984,255.992,256   C397.394,511.984,511.985,397.394,512,256C511.985,114.606,397.394,0.015,255.992,0z M408.585,408.585   c-39.118,39.079-92.938,63.189-152.593,63.205c-59.647-0.016-113.467-24.126-152.577-63.205   C64.328,369.474,40.218,315.647,40.21,256c0.008-59.655,24.118-113.475,63.205-152.585c39.11-39.087,92.93-63.197,152.577-63.205   c59.655,0.008,113.476,24.118,152.593,63.205c39.087,39.11,63.197,92.93,63.205,152.585   C471.782,315.647,447.672,369.474,408.585,408.585z"
+            />
+          </g>
         </svg>
       </button>
       <button
-        class="nav up text-4xl"
+        class="nav up text-sm"
         v-if="canMove('up', selectedBingoCardCellNo)"
         @click="move('up', selectedBingoCardCellNo)"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          height="1em"
-          viewBox="0 0 512 512"
-        >
-          <path
-            d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"
-          />
+        <svg viewBox="0 0 512 512" class="cell-arrow">
+          <g>
+            <polygon
+              points="132.928,277.919 173.562,318.553 255.992,236.123 338.438,318.553 379.072,277.919 255.992,154.839     "
+            />
+            <path
+              d="M255.992,0C114.606,0.015,0.015,114.606,0,256.008C0.015,397.394,114.606,511.984,255.992,512   C397.394,511.984,511.985,397.394,512,256.008C511.985,114.606,397.394,0.015,255.992,0z M408.585,408.585   c-39.118,39.079-92.938,63.189-152.593,63.205c-59.647-0.016-113.467-24.126-152.577-63.205   c-39.087-39.111-63.197-92.93-63.205-152.577c0.008-59.655,24.118-113.483,63.205-152.593   c39.11-39.087,92.93-63.197,152.577-63.205c59.655,0.008,113.476,24.118,152.593,63.205c39.079,39.11,63.197,92.938,63.205,152.593   C471.782,315.655,447.672,369.474,408.585,408.585z"
+            />
+          </g>
         </svg>
       </button>
       <button
-        class="nav down text-4xl"
-        v-if="canMove('down', selectedBingoCardCellNo)"
-        @click="move('down', selectedBingoCardCellNo)"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          height="1em"
-          viewBox="0 0 448 512"
-        >
-          <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
-          <path
-            d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"
-          />
-        </svg>
-      </button>
-      <button
-        class="nav left text-4xl"
+        class="nav left text-sm"
         v-if="canMove('left', selectedBingoCardCellNo)"
         @click="move('left', selectedBingoCardCellNo)"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          height="1em"
-          viewBox="0 0 320 512"
-        >
-          <path
-            d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"
-          />
+        <svg viewBox="0 0 512 512" class="cell-arrow">
+          <g>
+            <polygon
+              points="277.919,132.921 154.839,256 277.919,379.072 318.552,338.438 236.122,256 318.552,173.562  "
+            />
+            <path
+              d="M256.008,0C114.605,0.016,0.016,114.606,0,256c0.015,141.394,114.605,255.984,256.008,256   C397.394,511.984,511.983,397.394,512,256C511.983,114.606,397.394,0.016,256.008,0z M408.585,408.585   c-39.11,39.079-92.93,63.189-152.577,63.205c-59.655-0.016-113.483-24.126-152.594-63.205C64.328,369.475,40.217,315.647,40.21,256   c0.007-59.654,24.118-113.474,63.204-152.585c39.111-39.086,92.939-63.197,152.594-63.205   c59.646,0.008,113.466,24.119,152.577,63.205c39.079,39.11,63.197,92.93,63.205,152.585   C471.782,315.647,447.664,369.475,408.585,408.585z"
+            />
+          </g>
         </svg>
       </button>
     </div>
@@ -345,35 +348,50 @@ const postBingoCellRequest = async () => {
 </script>
 
 <style scoped>
+.mission {
+  font: 700 1rem var(--font);
+  text-transform: uppercase;
+}
+.cell-arrow {
+  width: 30px;
+  height: 30px;
+  opacity: 1;
+  background-image: linear-gradient(to right, var(--c1), var(--c4));
+  border-radius: 100%;
+  fill: white;
+}
+
 .nav {
   position: absolute;
-  padding: 0.5rem;
-  fill: gray;
+  border-radius: 10px;
+  fill: white;
 }
 
 .nav:hover {
-  background: lightgray;
-  border-radius: 6px;
-  fill: rgb(75 85 99 / 1);
+  color: var(--c5);
 }
 
 .up {
-  top: -4%;
-  left: 42%;
+  top: -2%;
+  left: 37%;
+  padding: 0 35px;
 }
 
 .left {
-  top: 43%;
-  right: -4%;
+  top: 37%;
+  left: -3%;
+  padding: 35px 0;
 }
 
 .right {
-  top: 43%;
-  left: -4%;
+  top: 37%;
+  right: -3%;
+  padding: 35px 0;
 }
 
 .down {
-  bottom: -4%;
-  left: 42%;
+  bottom: -2%;
+  left: 37%;
+  padding: 0 35px;
 }
 </style>
