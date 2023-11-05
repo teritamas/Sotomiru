@@ -1,15 +1,17 @@
 <template>
-  <div class="block border border-gray-700 bingo-card-frame rounded-lg">
+  <div class="block bingo-card-frame rounded-lg">
     <!--:style="{ backgroundColor: imageColor }"-->
-    <CreateUserBadge :isAnonymousCard="isAnonymousCard" />
     <h1
       class="text-center tracking-wider mb-7 font-normal text-xl text-gray-700"
     >
-      {{ bingoCard.name }}
+      <BingoCardCategoryIcon :bingoCardTheme="bingoCard.theme" />
+      <div class="inline">
+        {{ bingoCard.name }}
+      </div>
     </h1>
     <div class="container">
       <div
-        class="card bingo-cell-image rounded-lg border border-gray-700 bg-white"
+        class="card bingo-cell-image rounded-lg border border-gray-300 bg-white"
         v-for="bingoCell in bingoCard.bingoCells"
         :key="bingoCell.id"
         :style="{ '--bg-url': `url(${bingoCell.imageUrl})` }"
@@ -18,15 +20,19 @@
           class="content hover:cursor-pointer block text-center flex justify-center items-center p-1"
           @click="openBingoCardDetailModal(bingoCell.id)"
         >
-          <h3 class="text-lg font-semibold text-gray-900">
+          <h3 class="text-xs text-gray-900">
             {{ bingoCell.name }}
           </h3>
         </a>
       </div>
     </div>
-    <div class="pt-4">
+    <div class="pt-4 color text-sm flex justify-between">
+      <span class="flex items-center">
+        <span class="text-xs">CREATED BY</span>
+        <CreateUserBadge :isAnonymousCard="isAnonymousCard" class="pl-2" />
+      </span>
+
       {{ CreatedAt }}
-      {{ bingoCard.theme }}
     </div>
   </div>
 </template>
@@ -50,7 +56,7 @@ const openBingoCardDetailModal = async (bingoCellId: string) => {
 // computed プロパティを作成
 const CreatedAt = computed(() => {
   const timestamp = props.bingoCard.createdAt.getTime as any;
-  return dayjs(timestamp).locale("ja").format("YYYY年M月D日 HH:mm:ss");
+  return dayjs(timestamp).locale("ja").format("YYYY/M/D HH:mm");
 });
 
 const isAnonymousCard = computed(() => {

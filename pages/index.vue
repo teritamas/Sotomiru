@@ -105,6 +105,8 @@ const postBingoCellRequest = async (
   });
   const data = (await res.json()) as BingoCellPutResponse;
 
+  console.log(data);
+
   if (data.appearBingoCardComplete) {
     // ビンゴカードが完了したかどうか
     openCongratulationsCompleteView();

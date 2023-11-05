@@ -2,7 +2,7 @@
   <footer class="fixed bottom" v-if="isBingoCardCreatable">
     <router-link
       data-tooltip-target="tooltip-default"
-      class="block text-gray-500 border rounded-full border-gray-700 hover:bg-gray-200"
+      class="block text-gray-500 border rounded-full bg-white border-gray-700 btn-bingo-create"
       to="/create"
     >
       <div class="p-3">
@@ -70,6 +70,9 @@ const isBingoCardCreatable = computed(() => {
 </script>
 
 <style scoped>
+.btn-bingo-create:hover {
+  background: var(--c2);
+}
 footer {
   border-radius: 100%;
   margin: 1rem;

@@ -1,7 +1,7 @@
 <template>
   <loading v-show="isLoading" LoadingText="ビンゴカードを作成しています" />
   <div
-    class="block border border-gray-700 p-5 m-3 md:max-w-[600px] md:m-auto md:mt-6 pb-10"
+    class="block border border-gray-300 p-5 m-3 md:max-w-[600px] md:m-auto md:mt-6 pb-10 bg-white"
   >
     <h1
       class="text-center tracking-wider mb-5 mt-5 font-normal text-xl text-gray-700"
