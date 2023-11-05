@@ -20,6 +20,7 @@ export interface BingoCard {
   name: string;
   theme: string;
   imageColor: string;
+  isPublic: boolean;
   bingoCells: BingoCell[];
 
   countOfBingoLine?: number; // ビンゴラインの数

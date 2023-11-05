@@ -5,6 +5,7 @@ import {
 } from "@/server/models/bingo/dto";
 import { firestore } from "../firebase";
 import { checkBingoOrReachLines } from "~/server/utils/bingoCheck";
+import { Filter } from "firebase-admin/firestore";
 
 /**
  * ビンゴカードの内容を取得する
@@ -49,7 +50,13 @@ export const getAnonymousBingoCard = async () => {
     // createdUidのカラムが存在しないものを取得する
     const querySnapshot = await firestore
       .collection("bingoCard")
-      .where("createdUid", "==", "")
+      // uidがないものを取得するか、isPublicがtrueのものを取得する
+      .where(
+        Filter.or(
+          Filter.where("createdUid", "==", ""),
+          Filter.where("isPublic", "==", true)
+        )
+      )
       .orderBy("updatedAt", "desc")
       .get();
     const bingoCard = querySnapshot.docs.map((doc) => doc.data() as BingoCard);
