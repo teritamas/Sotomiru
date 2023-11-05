@@ -20,12 +20,8 @@
           :class="isReach(index) && !bingoCell.completed ? 'reach' : ''"
           @click="openBingoCardDetailModal(bingoCell.id)"
         >
-          <h3 class="text-xs text-gray-900">
-            <span
-              v-if="isReach(index) && !bingoCell.completed"
-              class="block color"
-              >リーチ！</span
-            >
+          <h3 class="text-xs text-gray-900" v-if="!bingoCell.completed">
+            <span v-if="isReach(index)" class="block color">リーチ！</span>
             {{ bingoCell.name }}
           </h3>
         </a>
@@ -143,7 +139,6 @@ const isReach = (index: number) => {
   color: #fff;
 }
 .card {
-  /* This will come in handy later to center the contents */
   position: relative;
 }
 
@@ -162,11 +157,7 @@ const isReach = (index: number) => {
 }
 
 .bingo-cell-image {
-  background: linear-gradient(
-      rgba(255, 255, 255, 0.5),
-      rgba(255, 255, 255, 0.5)
-    ),
-    var(--bg-url);
+  background: var(--bg-url);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
