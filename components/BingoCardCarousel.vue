@@ -208,7 +208,7 @@ const selectedBingoCardCellNo = computed(() => {
  */
 // ビンゴカード詳細モーダルを開く
 const modalIsOpen = ref(false);
-const openNextBingoCardDetailModal = (index) => {
+const openNextBingoCardDetailModal = (index: number) => {
   openBingoCardDetailModal(selectedBingoCard.value.bingoCells[index].id);
 };
 const openBingoCardDetailModal = async (bingoCellIdByChild: string) => {
