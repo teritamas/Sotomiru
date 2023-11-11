@@ -71,9 +71,15 @@ export const getAllBingoCardByUid = async (uid: string) => {
     const querySnapshot = await firestore
       .collection("bingoCard")
       .where("createdUid", "==", uid)
-      .orderBy("updatedAt", "desc")
+      .orderBy("createdAt", "desc")
       .get();
-    const bingoCard = querySnapshot.docs.map((doc) => doc.data() as BingoCard);
+    const bingoCard = querySnapshot.docs.map((doc) => {
+      return {
+        ...doc.data(),
+        createdAt: doc.data().createdAt.toDate(),
+        updatedAt: doc.data().updatedAt.toDate(),
+      } as BingoCard;
+    });
     return addBingoCreateUser(bingoCard);
   } catch (e) {
     console.error("[getAllBingoCardByUid] uid: ", uid, e);
@@ -96,9 +102,15 @@ export const getAnonymousBingoCard = async () => {
           Filter.where("isPublic", "==", true)
         )
       )
-      .orderBy("updatedAt", "desc")
+      .orderBy("createdAt", "desc")
       .get();
-    const bingoCard = querySnapshot.docs.map((doc) => doc.data() as BingoCard);
+    const bingoCard = querySnapshot.docs.map((doc) => {
+      return {
+        ...doc.data(),
+        createdAt: doc.data().createdAt.toDate(),
+        updatedAt: doc.data().updatedAt.toDate(),
+      } as BingoCard;
+    });
     return addBingoCreateUser(bingoCard);
   } catch (e) {
     console.error("[getAllBingoCard]", e);

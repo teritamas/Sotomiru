@@ -70,8 +70,7 @@ const openBingoCardDetailModal = async (bingoCellId: string) => {
 };
 // computed プロパティを作成
 const createdAt = computed(() => {
-  const timestamp = props.bingoCard.createdAt.getTime as any;
-  return dayjs(timestamp).locale("ja").format("YYYY/M/D HH:mm");
+  return dayjs(props.bingoCard.createdAt).locale("ja").format("YYYY/M/D HH:mm");
 });
 
 const isReach = (index: number) => {
