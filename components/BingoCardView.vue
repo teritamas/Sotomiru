@@ -1,5 +1,10 @@
 <template>
   <div class="block bingo-card-frame rounded-lg">
+    <!-- 動画へのリンク -->
+
+    <a v-if="bingoCard.clearMovieUrl" :href="bingoCard.clearMovieUrl"
+      >動画へのリンク</a
+    >
     <h1
       class="text-center tracking-wider mb-7 font-normal text-xl text-gray-700"
     >
