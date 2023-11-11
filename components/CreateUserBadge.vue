@@ -1,13 +1,10 @@
 <template>
   <div
-    class="bingo-owner-badge-object font-bold"
+    class="bingo-owner-badge-object font-bold text-center"
     :class="
       isAnonymousCard ? 'bingo-owner-badge-anonymous' : 'bingo-owner-badge-own'
     "
   >
-    <!-- 自分のカードの場合「あなた」と表示 -->
-    <span>{{ message }}</span>
-
     <!-- ログインしないユーザが作成したビンゴカードの場合は、匿名ユーザとして表示する。 -->
     <svg
       v-if="isAnonymousCard || !hasPhotoURL"
@@ -26,6 +23,8 @@
       alt=""
       class="rounded-full w-7"
     />
+    <!-- 自分のカードの場合「あなた」と表示 -->
+    <span class="text-xs">{{ message }}</span>
   </div>
   <div class="hidden group-hover:block absolute bg-white p-5 shadow-lg rounded">
     Detail Information Here.
