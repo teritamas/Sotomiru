@@ -8,8 +8,7 @@
 </template>
 
 <style lang="scss">
-@import url("https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Kiwi+Maru:wght@300&family=Mochiy+Pop+P+One&family=Open+Sans:wght@300;400&display=swap");
-
+@import url("https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Kaisei+Opti:wght@700&family=Kiwi+Maru:wght@300&family=Lato:wght@900&family=Mochiy+Pop+P+One&family=Open+Sans:wght@300;400&display=swap");
 :root {
   --bg1: #ddd;
   --bg2: #ededed;

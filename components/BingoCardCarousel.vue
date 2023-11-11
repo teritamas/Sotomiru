@@ -58,6 +58,7 @@
             @openBingoCardDetailModal="openBingoCardDetailModal"
             :bingoCard="bingoCard"
             :currentUserUid="props.currentUserUid"
+            :isDisplayCenter="state.currentNum == i"
           />
         </div>
       </div>
@@ -297,7 +298,6 @@ $card-size: 20rem; //スマホだとこっちのほうがよさそう
   align-items: center;
   justify-content: center;
   top: 70%;
-  z-index: 2;
   user-select: none;
   background: white;
   border: unset;
