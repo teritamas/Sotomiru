@@ -1,3 +1,4 @@
+import os
 from create_complete_movie import config
 from create_complete_movie.models.bingo_card import BingoCardCell
 import cv2
@@ -35,7 +36,13 @@ class BingoCompleteMovie:
         )  # フェードする時に利用するマスク
 
         # 背景動画
-        self.org = cv2.VideoCapture(src_movie_path)
+        # ファイルが存在すするか確認する
+        if not os.path.exists(src_movie_path):
+            raise FileNotFoundError(f"{src_movie_path}が見つかりません。")
+        self.org = cv2.VideoCapture(src_movie_path, cv2.CAP_FFMPEG)
+        # 動画を読み込めたことを確認する
+        if not self.org.isOpened():
+            raise FileNotFoundError(f"{src_movie_path}にエラーが発生しました。")
 
     def get_path(self):
         return self.video_path
