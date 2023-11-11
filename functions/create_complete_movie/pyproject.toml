@@ -7,12 +7,11 @@ readme = "README.md"
 packages = [{include = "create_complete_movie"}]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.11"
 python-dotenv = "^1.0.0"
 google-cloud-storage = "^2.13.0"
 firebase-admin = "^6.2.0"
 pydantic = "^2.4.2"
-opencv-python = "^4.8.1.78"
 pillow = "^10.1.0"
 firebase-functions = ">=0.1.0,<0.2.0"
 
@@ -20,6 +19,7 @@ firebase-functions = ">=0.1.0,<0.2.0"
 [tool.poetry.group.dev.dependencies]
 black = "^23.11.0"
 flake8 = "^6.1.0"
+opencv-python = "^4.8.1.78" # docker上ではimageのopencvを使うため、不要
 
 [build-system]
 requires = ["poetry-core"]
