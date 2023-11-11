@@ -1,5 +1,10 @@
 <template>
   <div class="block bingo-card-frame rounded-lg">
+    <!-- 動画へのリンク -->
+
+    <a v-if="bingoCard.clearMovieUrl" :href="bingoCard.clearMovieUrl"
+      >動画へのリンク</a
+    >
     <h1
       class="text-center tracking-wider font-normal text-xl text-gray-700"
       :class="bingoCard.name.length > 12 ? 'mb-2' : 'mb-7'"
@@ -67,8 +72,7 @@ const openBingoCardDetailModal = async (bingoCellId: string) => {
 };
 // computed プロパティを作成
 const createdAt = computed(() => {
-  const timestamp = props.bingoCard.createdAt.getTime as any;
-  return dayjs(timestamp).locale("ja").format("YYYY/M/D HH:mm");
+  return dayjs(props.bingoCard.createdAt).locale("ja").format("YYYY/M/D HH:mm");
 });
 
 const isReach = (index: number) => {
