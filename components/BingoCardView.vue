@@ -1,7 +1,8 @@
 <template>
   <div class="block bingo-card-frame rounded-lg">
     <h1
-      class="text-center tracking-wider mb-7 font-normal text-xl text-gray-700"
+      class="text-center tracking-wider font-normal text-xl text-gray-700"
+      :class="bingoCard.name.length > 12 ? 'mb-2' : 'mb-7'"
     >
       <BingoCardCategoryIcon :bingoCardTheme="bingoCard.theme" />
       <div class="inline">
@@ -27,18 +28,19 @@
         </a>
       </div>
     </div>
-    <div class="pt-4 color text-sm flex justify-between">
-      <span class="flex items-center">
+    <div class="pt-2 color text-sm flex justify-between">
+      <span class="flex items-center ml-2">
         <CreateUserBadge
           :currentUserUid="props.currentUserUid"
           :createdUid="bingoCard.createdUid"
           :createdUserDetail="bingoCard.createdUserDetail"
           class="pl-2"
         />
-        <span class="text-xs">のビンゴカード</span>
+        <span class="text-xs ml-2">のビンゴカード</span>
       </span>
-
-      {{ createdAt }}
+      <span class="mt-3">
+        {{ createdAt }}
+      </span>
     </div>
   </div>
 </template>
