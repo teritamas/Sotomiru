@@ -1,3 +1,4 @@
+from create_complete_movie import config
 from create_complete_movie.models.bingo_card import BingoCardCell
 import cv2
 from PIL import Image, ImageDraw, ImageFont
@@ -9,7 +10,7 @@ class BingoCompleteMovie:
     def __init__(
         self,
         dir_path: str,
-        src_movie_path: str = "./asset/src.mov",
+        src_movie_path: str = "./assets/src.mov",
         frame=24,
         fade_frame_ratio: float = 0.5,  # フェードイン、フェードアウトのフレーム数の比率
     ):
@@ -199,7 +200,7 @@ class BingoCompleteMovie:
         )
 
         # フォントを読み込む
-        font = ImageFont.truetype("Arial Unicode", font_size)
+        font = ImageFont.truetype(config.FONT_NAME, font_size)
 
         # 描画するオブジェクトを作成
         draw = ImageDraw.Draw(image_pil)

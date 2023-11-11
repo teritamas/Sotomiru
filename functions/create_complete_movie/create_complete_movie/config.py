@@ -10,3 +10,4 @@ CRED_PATH = environ.get(
 GOOGLE_CLOUD_STORAGE_BUCKET_NAME = environ.get(
     "GOOGLE_CLOUD_STORAGE_BUCKET_NAME", "key3-global-hackathon.appspot.com"
 )
+FONT_NAME = environ.get("FONT_NAME", "Arial Unicode")
