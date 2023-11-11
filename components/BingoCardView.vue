@@ -142,7 +142,7 @@ const isReach = (index: number) => {
  * モーダルの処理
  */
 // ムービーモーダルを開く
-const movieModalIsOpen = ref(true);
+const movieModalIsOpen = ref(false);
 const openMovieModal = () => {
   movieModalIsOpen.value = true;
 };
