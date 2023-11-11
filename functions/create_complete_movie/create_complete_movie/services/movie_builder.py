@@ -9,7 +9,7 @@ class BingoCompleteMovie:
     def __init__(
         self,
         dir_path: str,
-        src_movie_path: str = "create_complete_movie/asset/src.mov",
+        src_movie_path: str = "./asset/src.mov",
         frame=24,
         fade_frame_ratio: float = 0.5,  # フェードイン、フェードアウトのフレーム数の比率
     ):

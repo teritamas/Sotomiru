@@ -11,9 +11,6 @@ from create_complete_movie.facades.storage.firestore import (
 )
 from create_complete_movie.services.create_movie_service import create_movie
 
-from firebase_functions import https_fn
-from firebase_admin import initialize_app
-
 URL_PREFIX = (
     "https://firebasestorage.googleapis.com/v0/b"
     "/key3-global-hackathon.appspot.com"
@@ -21,13 +18,6 @@ URL_PREFIX = (
 )
 URL_SUFFIX = "?alt=media"
 FOLDER_NAME = "_temp/bingoCellImage"
-
-initialize_app()
-
-
-@https_fn.on_request()
-def on_request_create_movie(req: https_fn.Request) -> https_fn.Response:
-    main()
 
 
 def main():
