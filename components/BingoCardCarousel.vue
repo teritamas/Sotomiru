@@ -58,6 +58,7 @@
             @openBingoCardDetailModal="openBingoCardDetailModal"
             :bingoCard="bingoCard"
             :currentUserUid="props.currentUserUid"
+            :isDisplayCenter="state.currentNum == i"
           />
         </div>
       </div>

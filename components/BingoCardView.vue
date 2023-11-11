@@ -1,5 +1,11 @@
 <template>
-  <div class="block bingo-card-frame rounded-lg">
+  <div
+    class="block bingo-card-frame rounded-lg"
+    :class="bingoCard.completed ? 'bingo-card' : ''"
+  >
+    <div class="title color-bg" v-if="isDisplayCenter && bingoCard.completed">
+      Bingo!
+    </div>
     <h1
       class="text-center tracking-wider font-normal text-xl text-gray-700"
       :class="bingoCard.name.length > 12 ? 'mb-2' : 'mb-7'"
@@ -9,6 +15,24 @@
         {{ bingoCard.name }}
       </div>
     </h1>
+    <div
+      class="movie-button text-center"
+      v-if="isDisplayCenter && bingoCard.completed"
+    >
+      <span class="text-xs font-bold"> \ Click Me /</span>
+      <svg viewBox="0 0 512 512" class="movie-icon">
+        <g>
+          <path
+            d="M485.234,69.25H26.766C11.984,69.25,0,81.234,0,96v319.984c0,14.797,11.984,26.766,26.766,26.766h458.469   c14.781,0,26.766-11.969,26.766-26.766V96C512,81.234,500.016,69.25,485.234,69.25z M383.594,373.828   c0,8.5-6.906,15.422-15.422,15.422H66.844c-8.531,0-15.438-6.922-15.438-15.422V144.469c0-8.516,6.906-15.422,15.438-15.422   h301.328c8.516,0,15.422,6.906,15.422,15.422V373.828z M473.188,286.438h-45.125v-45.125h45.125V286.438z M449.047,186.766   c-13.906,0-25.172-11.281-25.172-25.188c0-13.922,11.266-25.188,25.172-25.188s25.172,11.266,25.172,25.188   C474.219,175.484,462.953,186.766,449.047,186.766z"
+          />
+          <path
+            d="M171.578,201.078c-0.672-0.406-1.531-0.422-2.234-0.031c-0.672,0.391-1.094,1.125-1.094,1.922v56.172v56.188   c0,0.797,0.422,1.531,1.094,1.922c0.703,0.391,1.563,0.375,2.234-0.031l94.109-56.172c0.672-0.391,1.078-1.125,1.078-1.906   c0-0.766-0.406-1.5-1.078-1.891L171.578,201.078z"
+          />
+        </g>
+      </svg>
+      <span class="text-xs font-bold"> 動画を見る </span>
+    </div>
+
     <div class="container">
       <div
         class="card bingo-cell-image rounded-lg border border-gray-300 bg-white"
@@ -43,6 +67,12 @@
       </span>
     </div>
   </div>
+  <div class="relative">
+    <div class="bingo-icon" v-if="isDisplayCenter && bingoCard.completed">
+      🎉
+    </div>
+  </div>
+  <MovieModal v-if="movieModalIsOpen" @closeMovieModal="closeMovieModal" />
 </template>
 
 <script setup lang="ts">
@@ -59,6 +89,9 @@ const props = defineProps({
     type: Object as PropType<String | undefined>,
     required: true,
   },
+  isDisplayCenter: {
+    type: Boolean,
+  },
 });
 
 const emits = defineEmits(["openBingoCardDetailModal"]);
@@ -70,7 +103,6 @@ const createdAt = computed(() => {
   const timestamp = props.bingoCard.createdAt.getTime as any;
   return dayjs(timestamp).locale("ja").format("YYYY/M/D HH:mm");
 });
-
 const isReach = (index: number) => {
   let cells = props.bingoCard.bingoCells;
   // 各行のビンゴマスのcompletedステータスをチェックし、すべてがtrueの場合にtrueを返す
@@ -100,6 +132,29 @@ const isReach = (index: number) => {
 
   // どれか一つでもリーチ条件を満たしていれば true を返す
   return rowReach || columnReach || diagonalReach;
+};
+
+/**
+ * モーダルの処理
+ */
+// ムービーモーダルを開く
+const movieModalIsOpen = ref(true);
+const openNextBingoCardDetailModal = (index: number) => {
+  openMovieModal(selectedBingoCard.value.bingoCells[index].id);
+};
+const openMovieModal = async (bingoCellIdByChild: string) => {
+  // ビンゴセルの詳細情報を取得する
+  await emits(
+    "getBingoCellDetail",
+    selectedBingoCardId.value,
+    bingoCellIdByChild
+  );
+  bingoCellId.value = bingoCellIdByChild;
+  movieModalIsOpen.value = true;
+};
+// ビンゴカード詳細モーダルを閉じる
+const closeMovieModal = async () => {
+  movieModalIsOpen.value = false;
 };
 </script>
 
@@ -167,5 +222,116 @@ const isReach = (index: number) => {
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+}
+
+.bingo-card {
+  --angle: 0deg;
+  --gradient: linear-gradient(var(--angle), var(--c5), var(--c4));
+  appearance: none;
+  border: 1px solid;
+  -o-border-image: var(--gradient) 1;
+  border-image: var(--gradient) 1;
+  animation: 3s gradientRotate linear infinite;
+  border-radius: 0.5rem;
+}
+@-webkit-keyframes gradientRotate {
+  to {
+    --angle: 360deg;
+  }
+}
+
+@keyframes gradientRotate {
+  to {
+    --angle: 360deg;
+  }
+}
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.title {
+  font-family: "Lato", serif;
+  font-weight: bold;
+  font-size: 3.5rem;
+  position: absolute;
+  top: -5%;
+  left: -8%;
+  text-transform: uppercase;
+  font-weight: bold;
+  transform: rotate(-15deg);
+}
+
+.color-bg {
+  background: linear-gradient(-120deg, var(--c1), #ffffff, var(--c6)) fixed;
+  background-size: 800% 800%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.bingo-icon {
+  position: absolute;
+  font-size: 3.5rem;
+  bottom: -20%;
+  right: -10%;
+  animation: tada 3s infinite;
+}
+
+.movie-button {
+  position: absolute;
+  top: -1%;
+  right: 0px;
+  z-index: 2;
+  cursor: pointer;
+}
+
+.movie-button::before {
+  position: absolute;
+  content: "";
+  background: linear-gradient(217deg, #fae3f2, var(--c4));
+  //background: linear-gradient(217deg, #448ad5, #b8eaf9);
+  width: 70px;
+  height: 70px;
+  display: block;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 6px 20px 0 rgba(179, 107, 221, 0.3);
+  animation: border-transform 6s linear infinite;
+  z-index: -1;
+}
+
+.movie-icon {
+  width: 36px;
+  margin: -5px auto;
+}
+
+.movie-icon path {
+  fill: gray;
+}
+@keyframes border-transform {
+  0%,
+  100% {
+    border-radius: 63% 37% 54% 46% / 55% 48% 52% 45%;
+  }
+  14% {
+    border-radius: 40% 60% 54% 46% / 49% 60% 40% 51%;
+  }
+  28% {
+    border-radius: 54% 46% 38% 62% / 49% 70% 30% 51%;
+  }
+  42% {
+    border-radius: 61% 39% 55% 45% / 61% 38% 62% 39%;
+  }
+  56% {
+    border-radius: 61% 39% 67% 33% / 70% 50% 50% 30%;
+  }
+  70% {
+    border-radius: 50% 50% 34% 66% / 56% 68% 32% 44%;
+  }
+  84% {
+    border-radius: 46% 54% 50% 50% / 35% 61% 39% 65%;
+  }
 }
 </style>
