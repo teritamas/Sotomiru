@@ -29,6 +29,7 @@ export interface BingoCard {
 
   countOfBingoLine?: number; // ビンゴラインの数
   completed?: boolean; // ビンゴカードが完成したかどうか
+  clearMovieUrl: string; // クリアした時の動画のURL
 
   createdUid: string;
   createdAt: Date;

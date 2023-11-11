@@ -1,5 +1,5 @@
 <template>
-  <loading v-show="true" LoadingText="AIが画像を確認しています" />
+  <loading v-show="isCheckProcessing" LoadingText="AIが画像を確認しています" />
   <!-- Extra Large Modal -->
   <div
     class="bingo-card-frame fixed top-0 left-0 right-0 z-50 w-full py-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)]"

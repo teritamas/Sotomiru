@@ -72,6 +72,7 @@ function createBingoCard(
     createdUid: uid,
     createdAt: new Date(),
     updatedAt: new Date(),
+    clearMovieUrl: "",
   } as BingoCard;
 
   // GPTが正しくお題を作成できていない場合は、サンプルのお題を使用する

@@ -18,6 +18,7 @@
     <div
       class="movie-button text-center"
       v-if="isDisplayCenter && bingoCard.completed"
+      @click="openMovieModal()"
     >
       <span class="text-xs font-bold"> \ Click Me /</span>
       <svg viewBox="0 0 512 512" class="movie-icon">
@@ -72,7 +73,11 @@
       🎉
     </div>
   </div>
-  <MovieModal v-if="movieModalIsOpen" @closeMovieModal="closeMovieModal" />
+  <MovieModal
+    v-if="movieModalIsOpen && bingoCard.clearMovieUrl"
+    :clearMovieUrl="bingoCard.clearMovieUrl"
+    @closeMovieModal="closeMovieModal"
+  />
 </template>
 
 <script setup lang="ts">
@@ -100,8 +105,7 @@ const openBingoCardDetailModal = async (bingoCellId: string) => {
 };
 // computed プロパティを作成
 const createdAt = computed(() => {
-  const timestamp = props.bingoCard.createdAt.getTime as any;
-  return dayjs(timestamp).locale("ja").format("YYYY/M/D HH:mm");
+  return dayjs(props.bingoCard.createdAt).locale("ja").format("YYYY/M/D HH:mm");
 });
 const isReach = (index: number) => {
   let cells = props.bingoCard.bingoCells;
@@ -139,17 +143,7 @@ const isReach = (index: number) => {
  */
 // ムービーモーダルを開く
 const movieModalIsOpen = ref(true);
-const openNextBingoCardDetailModal = (index: number) => {
-  openMovieModal(selectedBingoCard.value.bingoCells[index].id);
-};
-const openMovieModal = async (bingoCellIdByChild: string) => {
-  // ビンゴセルの詳細情報を取得する
-  await emits(
-    "getBingoCellDetail",
-    selectedBingoCardId.value,
-    bingoCellIdByChild
-  );
-  bingoCellId.value = bingoCellIdByChild;
+const openMovieModal = () => {
   movieModalIsOpen.value = true;
 };
 // ビンゴカード詳細モーダルを閉じる
@@ -254,13 +248,12 @@ const closeMovieModal = async () => {
 .title {
   font-family: "Lato", serif;
   font-weight: bold;
-  font-size: 3.5rem;
+  font-size: 1.5rem;
   position: absolute;
-  top: -5%;
-  left: -8%;
+  top: 5%;
+  left: 3%;
   text-transform: uppercase;
   font-weight: bold;
-  transform: rotate(-15deg);
 }
 
 .color-bg {
@@ -333,5 +326,10 @@ const closeMovieModal = async () => {
   84% {
     border-radius: 46% 54% 50% 50% / 35% 61% 39% 65%;
   }
+}
+
+.contents {
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
 }
 </style>

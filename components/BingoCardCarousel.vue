@@ -135,7 +135,7 @@ const bingoCellId = ref("");
 const moveThreshold = 30;
 const maxVisibility = 3; // 画面に描画されるビンゴカードの数
 const state = reactive({
-  currentNum: 1, // 少ないと変な感じになるので1
+  currentNum: 0, // 少ないと変な感じになるので1
   isSwiping: false,
   startX: null,
   diffX: 0,
@@ -298,7 +298,6 @@ $card-size: 20rem; //スマホだとこっちのほうがよさそう
   align-items: center;
   justify-content: center;
   top: 70%;
-  z-index: 2;
   user-select: none;
   background: white;
   border: unset;
