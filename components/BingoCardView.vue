@@ -107,35 +107,34 @@ const isReach = (index: number) => {
 .reach {
   background: linear-gradient(-120deg, var(--c1), #ffffff, var(--c4)) fixed;
   background-size: 800% 800%;
-  animation: 1s tada;
+  animation: tada 3s infinite;
   border-radius: 7px;
 }
+
 @keyframes tada {
-  0% {
+  0%,
+  50%,
+  100% {
     -webkit-transform: scaleX(1);
     transform: scaleX(1);
   }
-  10%,
-  20% {
+  5%,
+  10% {
     -webkit-transform: scale3d(0.9, 0.9, 0.9) rotate(-3deg);
     transform: scale3d(0.9, 0.9, 0.9) rotate(-3deg);
   }
-  30%,
-  50%,
-  70%,
-  90% {
+  15%,
+  25%,
+  35%,
+  45% {
     -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate(3deg);
     transform: scale3d(1.1, 1.1, 1.1) rotate(3deg);
   }
-  40%,
-  60%,
-  80% {
+  20%,
+  30%,
+  40% {
     -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate(-3deg);
     transform: scale3d(1.1, 1.1, 1.1) rotate(-3deg);
-  }
-  to {
-    -webkit-transform: scaleX(1);
-    transform: scaleX(1);
   }
 }
 
