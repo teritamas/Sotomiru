@@ -9,6 +9,8 @@ export interface BingoCell {
   // ユーザの回答に関する情報
   imageUrl: string | null; // ビンゴの画像のURL
   comments: string | null; // 投稿した画像に対するコメント(オプション)
+  imageAiCheckScore: number; // 画像のAI判定のスコア[0-1]
+  imageAiCheckReason: string; // imageAiCheckScoreの理由
   answered_user: string | null; // 回答したユーザのID
   answered_at: Date | null; // 回答した日時
   geo_location: string | null; // 回答した場所の緯度経度

@@ -108,6 +108,8 @@ const postBingoCellRequest = async (
     "request",
     JSON.stringify({
       bingoCellId: bingoCellId,
+      imageAiCheckScore: isFollowingSubject.value?.score ?? 0,
+      imageAiCheckReason: isFollowingSubject.value?.reason ?? "なし",
       ...form,
     } as BingoCellPostRequest)
   );
