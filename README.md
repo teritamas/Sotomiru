@@ -1,6 +1,6 @@
 [![Deploy to Firebase Hosting/Function on merge](https://github.com/teritamas/key3-global-hackathon/actions/workflows/firebase-hosting-merge.yml/badge.svg?branch=main)](https://github.com/teritamas/key3-global-hackathon/actions/workflows/firebase-hosting-merge.yml)
 
-# Web3 Global Hackathon
+# Sotomiru
 
 - [デモページ](https://key3-global-hackathon.web.app/)
 
@@ -10,10 +10,12 @@
 
 はじめに下記のサービスにアクセスし、利用に必要な情報を取得する。API キーやアカウントが存在しない場合は作成する。
 
-| サービス名   | URL                               | 必要な情報                         |
-| ------------ | --------------------------------- | ---------------------------------- |
-| OpenAI       | https://beta.openai.com/          | API キー                           |
-| Google Cloud | https://console.cloud.google.com/ | サービスアカウントキー, バケット名 |
+| サービス名     | URL                               | 必要な情報                                                                                                                                                                                               |
+| -------------- | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| OpenAI         | https://beta.openai.com/          | API キー                                                                                                                                                                                                 |
+| Google Cloud   | https://console.cloud.google.com/ | サービスアカウントキー, バケット名                                                                                                                                                                       |
+| Wallet Connect | https://walletconnect.org/        | プロジェクトを新規作成する。その後プロジェクト ID を取得                                                                                                                                                 |
+| ThirdWeb       | https://thirdweb.net/             | API キーを発行し、クライアント ID と API キーを取得。その後 ERC1155 のコントラクトをデプロイし、そのコントラクトアドレスを取得。上記のコントラクトをデプロイする時に利用したウォレットの秘密鍵を取得する |
 
 #### 1-1. `.env`の作成
 
@@ -34,6 +36,12 @@ FIREBASE_PROJECT_ID=${firebaseのプロジェクトID}
 FIREBASE_MESSAGING_SENDER_ID=${firebaseのメッセージング送信者ID}
 FIREBASE_APP_ID=${firebaseのアプリID}
 FIREBASE_MEASUREMENT_ID=${firebaseの測定ID}
+
+# thirdwebの設定
+THIRD_WEB_CLIENT_ID=${Third WebのAPIクライアントID}
+THIRDWEB_API_KEY=${Third WebのAPIキー}
+ERC1155_CONTRACT_ADDRESS=${利用するコントラクト}
+THIRDWEB_SIGNER_PRIVATEKEY=${上記のコントラクトをデプロイしたクライアントの秘密鍵}
 ```
 
 ### 2. サーバの起動
