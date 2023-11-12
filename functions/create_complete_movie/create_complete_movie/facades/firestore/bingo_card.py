@@ -20,6 +20,38 @@ def fetch_bingo_cell(bingo_card_id: str) -> Union[list[BingoCardCell], None]:
     return [BingoCardCell(**cell) for cell in bingo_cells]
 
 
+def fetch_bingo_card_answer_users(
+    bingo_card_id: str,
+) -> Union[list[str], None]:
+    """ビンゴカードに紐づく回答者の一覧を取得する
+
+    Args:
+        bingo_card_id (str): _description_
+
+    Returns:
+        Union[list[str], None]: _description_
+    """
+    bingo_card = db.fetch(collection=COLLECTION_PREFIX, id=bingo_card_id)
+    bingo_cells = bingo_card.get("bingoCells")
+
+    answered_user_uids = [
+        bingo_cell.get("answered_user") for bingo_cell in bingo_cells
+    ]
+
+    answered_user_list = (
+        db()
+        .collection("users")
+        .where(filter=FieldFilter("uid", "in", answered_user_uids))
+        .stream()
+    )
+
+    return [
+        answered_user.to_dict().get("walletAddress")
+        for answered_user in answered_user_list
+        if answered_user.to_dict().get("walletAddress") is not None
+    ]
+
+
 def fetch_clear_and_no_video_bingo_cards() -> Union[list[str], None]:
     """ビンゴカードがクリアしているが、動画が作成されていないビンゴカードのIDの一覧を取得する
 
