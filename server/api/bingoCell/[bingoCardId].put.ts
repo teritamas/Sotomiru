@@ -41,7 +41,6 @@ export default defineEventHandler(async (event) => {
         requestBody = {
           ...JSON.parse(d.data.toString()),
         };
-        console.log(requestBody);
       } else if (d.name === "file") {
         file = d.data;
       }
@@ -96,8 +95,6 @@ export default defineEventHandler(async (event) => {
  * file画像を変換してstorageにアップロードする
  */
 async function uploadImage(file: Buffer, fileId: string) {
-  console.log("[uploadImage]aaa", file);
-
   // fs.writeFileSync("temp.png", file); // デバッグ様にローカルに保存
   return await uploadBingoCellImage(file, fileId);
 }

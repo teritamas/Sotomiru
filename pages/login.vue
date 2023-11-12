@@ -27,7 +27,6 @@ const config = {
   signInSuccessUrl: "/",
   callbacks: {
     signInSuccessWithAuthResult() {
-      console.log("Successfully signed in");
       // ログイン後マイページに遷移
       router.push(`/mypage`);
     },

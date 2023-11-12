@@ -149,7 +149,6 @@ const getBingoCellDetail = async (bingoCardId: string, bingoCellId: string) => {
     }
   );
   const data = (await res.json()) as BingoCellGetResponse;
-  console.log(data);
   bingoCellDetail.value = data.bingoCellDetail;
 };
 

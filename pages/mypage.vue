@@ -74,7 +74,6 @@ const isLoading = ref(false);
 // ログインしていない場合はログイン画面にリダイレクト
 onBeforeMount(async () => {
   if (!currentUser.value) {
-    console.log("Not logged in");
     router.push(`/login`);
   } else {
     await getUser();
