@@ -36,9 +36,12 @@
         </v-icon>
       </div>
     </div>
+    <!-- NFTギャラリー -->
+    <NftGalley class="card card-one" :nfts="ownNfts" />
   </div>
 </template>
 <script lang="ts" setup>
+import { NFT } from "@thirdweb-dev/sdk/dist/declarations/src/core/schema/nft";
 const props = defineProps({
   avatarImageUrl: {
     type: String as PropType<string | null>,
@@ -78,6 +81,16 @@ const walletAddress = computed(() => {
     props.walletAccount?.address ??
     "接続されていません。ウォレットと接続してください"
   );
+});
+
+// NFTの一覧取得
+const ownNfts = ref<NFT[]>([]);
+const { $contract } = useNuxtApp();
+onMounted(async () => {
+  if (!props.walletAccount?.address) return;
+  const nfts = await $contract.erc1155.getOwned(props.walletAccount?.address);
+  // 新しいものから先にする
+  ownNfts.value = nfts.reverse();
 });
 </script>
 
