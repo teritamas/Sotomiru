@@ -48,6 +48,7 @@ const getAllBingoCard = async () => {
 };
 
 // 投稿画像に対するチェック処理
+const imageAiCheckScore = ref(0);
 // アップロードした画像がテーマに沿っているかを確認する。
 const postCheckFollowingSubject = async (
   bingoCardId: string,
@@ -73,6 +74,7 @@ const postCheckFollowingSubject = async (
     }
   );
   isFollowingSubject.value = await res.json();
+  imageAiCheckScore.value = isFollowingSubject.value!.score ?? 0;
 };
 // チェック処理の結果をクリア
 const clearIsFollowingSubject = async () => {
