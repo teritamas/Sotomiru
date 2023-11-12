@@ -104,8 +104,6 @@ const updateUser = async () => {
       photoURL: currentUser.value?.photoURL,
     } as UserPutRequest),
   });
-  const data = await res.json();
-  userInfo.value = data;
 };
 
 // サインアウトボタン
