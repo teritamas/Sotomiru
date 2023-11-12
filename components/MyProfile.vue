@@ -59,6 +59,10 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  ownNfts: {
+    type: Array as PropType<NFT[]>,
+    required: true,
+  },
 });
 
 // プロフィール画像が設定されていない場合のデフォルト画像
@@ -81,18 +85,6 @@ const walletAddress = computed(() => {
     props.walletAccount?.address ??
     "接続されていません。ウォレットと接続してください"
   );
-});
-
-// NFTの一覧取得
-const ownNfts = ref<NFT[]>([]);
-const { $contract } = useNuxtApp();
-watchEffect(async () => {
-  // ウォレットアドレスが取得できていない場合は何もしない
-  if (!props.walletAccount?.address) return;
-  const nfts = await $contract.erc1155.getOwned(props.walletAccount?.address);
-  // 新しいものから先にする
-  ownNfts.value = nfts.reverse();
-  console.log(ownNfts.value);
 });
 </script>
 
