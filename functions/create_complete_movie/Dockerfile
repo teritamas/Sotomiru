@@ -1,10 +1,10 @@
-FROM python:3.11-slim as builder
+FROM python:3.10-slim as builder
 WORKDIR /usr/src/app
 RUN pip install poetry
 COPY pyproject.toml poetry.lock ./
 RUN poetry export -f requirements.txt > requirements.txt
 
-FROM python:3.11-alpine
+FROM python:3.10-alpine
 
 # フォントをインストール
 RUN apk add --no-cache curl fontconfig &&\
@@ -78,11 +78,11 @@ RUN set -ex \
   -D INSTALL_C_EXAMPLES=OFF \
   -D INSTALL_TESTS=OFF \
   -D PYTHON3_EXECUTABLE=/usr/local/bin/python \
-  -D PYTHON3_INCLUDE_DIR=/usr/local/include/python3.11/ \
+  -D PYTHON3_INCLUDE_DIR=/usr/local/include/python3.10/ \
   -D PYTHON3_LIBRARY=/usr/local/lib/libpython3.so \
   -D PYTHON_LIBRARY=/usr/local/lib/libpython3.so \
-  -D PYTHON3_PACKAGES_PATH=/usr/local/lib/python3.11/site-packages/ \
-  -D PYTHON3_NUMPY_INCLUDE_DIRS=/usr/local/lib/python3.11/site-packages/numpy/core/include/ \
+  -D PYTHON3_PACKAGES_PATH=/usr/local/lib/python3.10/site-packages/ \
+  -D PYTHON3_NUMPY_INCLUDE_DIRS=/usr/local/lib/python3.10/site-packages/numpy/core/include/ \
   /opt/opencv-${OPENCV_VERSION} \
   && make -j$(nproc) \
   && make install \
