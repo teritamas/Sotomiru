@@ -39,13 +39,14 @@ const congratulationsBingoViewIsOpen = ref(false);
 
 // 全てのビンゴカードを取得
 onMounted(async () => {
-  await getAllBingoCard();
+  const token = await currentUser.value?.getIdToken();
+  await getAllBingoCard(token);
 });
 // ビンゴカードの情報取得
-const getAllBingoCard = async () => {
+const getAllBingoCard = async (token: string | undefined) => {
   const res = await fetch(`api/bingoCard`, {
     headers: {
-      Authorization: `Bearer ${await currentUser.value?.getIdToken()}`,
+      Authorization: `Bearer ${token}`,
     },
   });
   const data = (await res.json()) as BingoCardsGetAllResponse;
