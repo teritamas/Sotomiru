@@ -51,6 +51,7 @@
               >
               <img :src="selectedBingoCell.imageUrl!" alt="" />
             </div>
+            <!-- AIの検出結果 -->
             <div class="mt-3">
               <label
                 for="message"
@@ -65,6 +66,13 @@
                 disabled
               ></textarea>
             </div>
+
+            <!-- AIの検出結果 -->
+            <CellImageAIInspectionResultArea
+              v-if="selectedBingoCell.imageAiCheckScore"
+              :score="selectedBingoCell.imageAiCheckScore"
+              :reason="selectedBingoCell.imageAiCheckReason"
+            />
 
             <div class="mt-8">
               <label
@@ -97,29 +105,12 @@
               <div v-if="fileUrl" class="border border-gray-200 my-2 shadow-md">
                 <img :src="fileUrl" alt="アップロードした写真" />
               </div>
-              <div
+              <CellImageAIInspectionResultArea
                 v-if="isFollowingSubject"
-                class="p-4 my-8 bg-white border border-gray-200 rounded-lg shadow-md sm:p-6 lg:p-8"
-              >
-                <div class="flex items-center mb-5">
-                  <p
-                    v-if="checkResultMessage == 'NG'"
-                    class="bg-red-100 text-red-800 text-sm font-semibold inline-flex items-center p-1.5 rounded"
-                  >
-                    {{ isFollowingSubject.score }}
-                  </p>
-                  <p
-                    v-if="checkResultMessage != 'NG'"
-                    class="bg-blue-100 text-blue-800 text-sm font-semibold inline-flex items-center p-1.5 rounded"
-                  >
-                    {{ isFollowingSubject.score }}
-                  </p>
-                  <p class="ml-2 font-medium text-gray-900 dark:text-white">
-                    {{ checkResultMessage }}
-                  </p>
-                </div>
-                <p>理由: {{ isFollowingSubject.reason }}</p>
-              </div>
+                :score="isFollowingSubject.score"
+                :reason="isFollowingSubject.reason"
+                :isFollowingSubject="isFollowingSubject.isFollowingSubject"
+              />
             </div>
             <div class="mt-3">
               <label
@@ -344,10 +335,6 @@ const onFileChange = async (e: any) => {
 // 検証プロセスが実行中の場合: True
 const isCheckProcessing = computed(() => {
   return selectedFile.value !== null && props.isFollowingSubject === null;
-});
-// 検証結果のBooleanを文字列に変換
-const checkResultMessage = computed(() => {
-  return props.isFollowingSubject?.isFollowingSubject ? "OK" : "NG";
 });
 
 /*

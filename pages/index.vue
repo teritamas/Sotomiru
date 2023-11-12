@@ -60,6 +60,7 @@ const getAllBingoCard = async (token: string | undefined) => {
 };
 
 // 投稿画像に対するチェック処理
+const imageAiCheckScore = ref(0);
 // アップロードした画像がテーマに沿っているかを確認する。
 const postCheckFollowingSubject = async (
   bingoCardId: string,
@@ -85,6 +86,7 @@ const postCheckFollowingSubject = async (
     }
   );
   isFollowingSubject.value = await res.json();
+  imageAiCheckScore.value = isFollowingSubject.value!.score ?? 0;
 };
 // チェック処理の結果をクリア
 const clearIsFollowingSubject = async () => {
@@ -106,6 +108,8 @@ const postBingoCellRequest = async (
     "request",
     JSON.stringify({
       bingoCellId: bingoCellId,
+      imageAiCheckScore: isFollowingSubject.value?.score ?? 0,
+      imageAiCheckReason: isFollowingSubject.value?.reason ?? "なし",
       ...form,
     } as BingoCellPostRequest)
   );
@@ -133,6 +137,7 @@ const postBingoCellRequest = async (
   // 最新の状態を取得
   const token = await currentUser.value?.getIdToken();
   await getAllBingoCard(token);
+  clearIsFollowingSubject(); // AIの検出結果のキャッシュをクリア
 };
 
 // ビンゴセルの詳細情報を取得する
@@ -144,7 +149,6 @@ const getBingoCellDetail = async (bingoCardId: string, bingoCellId: string) => {
     }
   );
   const data = (await res.json()) as BingoCellGetResponse;
-  console.log(data);
   bingoCellDetail.value = data.bingoCellDetail;
 };
 
