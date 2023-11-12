@@ -31,7 +31,6 @@ export default defineEventHandler(async (event) => {
             d.data.toString()
           ) as CheckFollowingSubjectPostRequest),
         };
-        console.log(requestBody);
       } else if (d.name === "file") {
         file = d.data;
       }
