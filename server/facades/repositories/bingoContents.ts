@@ -2,9 +2,13 @@ import {
   BingoCard,
   BingoCell,
   AppearBingoCompleteDto,
+  BingoCardDetail,
+  BingoCellDetail,
 } from "@/server/models/bingo/dto";
 import { firestore } from "../firebase";
 import { checkBingoOrReachLines } from "~/server/utils/bingoCheck";
+import { Filter } from "firebase-admin/firestore";
+import { user } from "firebase-functions/v1/auth";
 
 /**
  * ビンゴカードの内容を取得する
@@ -23,6 +27,42 @@ export const getBingoCard = async (bingoCardId: string) => {
 };
 
 /**
+ * ビンゴセルの詳細を取得する
+ */
+export const getBingoCellDetail = async (
+  bingoCardId: string,
+  bingoCellId: string
+): Promise<BingoCellDetail> => {
+  try {
+    const docRef = await firestore
+      .collection("bingoCard")
+      .doc(bingoCardId)
+      .get();
+    const bingoCard = docRef.data() as BingoCard;
+    const bingoCell = bingoCard.bingoCells.find(
+      (cell) => cell.id === bingoCellId
+    );
+
+    const bingoCardDetail = { ...bingoCell } as BingoCellDetail;
+
+    if (bingoCell?.completed) {
+      // ユーザの情報を付与する
+      const userDocRef = await firestore
+        .collection("users")
+        .doc(bingoCell?.answered_user!)
+        .get();
+      const userInfo = userDocRef.data() as UserInfo;
+      bingoCardDetail.answeredUserDetail = userInfo;
+    }
+
+    return bingoCardDetail;
+  } catch (e) {
+    console.error("[getBingoCellDetail]", e);
+    throw e;
+  }
+};
+
+/**
  * Uidでフィルタして全件取得
  */
 export const getAllBingoCardByUid = async (uid: string) => {
@@ -31,10 +71,16 @@ export const getAllBingoCardByUid = async (uid: string) => {
     const querySnapshot = await firestore
       .collection("bingoCard")
       .where("createdUid", "==", uid)
-      .orderBy("updatedAt", "desc")
+      .orderBy("createdAt", "desc")
       .get();
-    const bingoCard = querySnapshot.docs.map((doc) => doc.data() as BingoCard);
-    return bingoCard;
+    const bingoCard = querySnapshot.docs.map((doc) => {
+      return {
+        ...doc.data(),
+        createdAt: doc.data().createdAt.toDate(),
+        updatedAt: doc.data().updatedAt.toDate(),
+      } as BingoCard;
+    });
+    return addBingoCreateUser(bingoCard);
   } catch (e) {
     console.error("[getAllBingoCardByUid] uid: ", uid, e);
     return [];
@@ -49,16 +95,57 @@ export const getAnonymousBingoCard = async () => {
     // createdUidのカラムが存在しないものを取得する
     const querySnapshot = await firestore
       .collection("bingoCard")
-      .where("createdUid", "==", "")
-      .orderBy("updatedAt", "desc")
+      // uidがないものを取得するか、isPublicがtrueのものを取得する
+      .where(
+        Filter.or(
+          Filter.where("createdUid", "==", ""),
+          Filter.where("isPublic", "==", true)
+        )
+      )
+      .orderBy("createdAt", "desc")
       .get();
-    const bingoCard = querySnapshot.docs.map((doc) => doc.data() as BingoCard);
-    return bingoCard;
+    const bingoCard = querySnapshot.docs.map((doc) => {
+      return {
+        ...doc.data(),
+        createdAt: doc.data().createdAt.toDate(),
+        updatedAt: doc.data().updatedAt.toDate(),
+      } as BingoCard;
+    });
+    return addBingoCreateUser(bingoCard);
   } catch (e) {
     console.error("[getAllBingoCard]", e);
     return [];
   }
 };
+
+/**
+ * ビンゴカードに作成したユーザの情報を追加してBingoCardDetail型を返す
+ */
+async function addBingoCreateUser(
+  bingoCards: BingoCard[]
+): Promise<BingoCardDetail[]> {
+  // bingoCardsに含まれるUidを取得する
+  const uids = bingoCards.map((bingoCard) => bingoCard.createdUid);
+
+  // uidsのユーザ情報を取得する
+  const querySnapshot = await firestore
+    .collection("users")
+    .where("uid", "in", uids)
+    .get();
+
+  // bingoCardsのそれぞれのセルにユーザ情報を追加する
+  const bingoCardDetails = bingoCards.map((bingoCard) => {
+    const user = querySnapshot.docs
+      .map((doc) => doc.data())
+      .find((user) => user.uid === bingoCard.createdUid);
+    const bingoCardDetail = {
+      ...bingoCard,
+      createdUserDetail: user,
+    } as BingoCardDetail;
+    return bingoCardDetail;
+  });
+  return bingoCardDetails;
+}
 
 /**
  * ビンゴカードを新規作成する

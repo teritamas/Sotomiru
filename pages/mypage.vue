@@ -1,10 +1,12 @@
 <template>
+  <loading v-show="isLoading" LoadingText="獲得したNFT一覧を取得しています" />
   <MyProfile
     v-if="currentUser"
     :avatarImageUrl="currentUser.photoURL"
     :displayName="currentUser.displayName"
     :userInfo="userInfo"
     :walletAccount="walletAccount"
+    :ownNfts="ownNfts"
   />
 
   <div class="flex flex-col justify-center text-center mt-5">
@@ -63,9 +65,11 @@ import { Web3Modal } from "@web3modal/html";
 import { configureChains, createConfig } from "@wagmi/core";
 import { goerli } from "@wagmi/chains";
 import { getAccount, GetAccountResult, PublicClient } from "@wagmi/core";
+import { NFT } from "@thirdweb-dev/sdk/dist/declarations/src/core/schema/nft";
 
 const currentUser = useCurrentUser();
 const router = useRouter();
+const isLoading = ref(false);
 
 // ログインしていない場合はログイン画面にリダイレクト
 onBeforeMount(async () => {
@@ -74,6 +78,7 @@ onBeforeMount(async () => {
     router.push(`/login`);
   } else {
     await getUser();
+    updateUser(); // バックグラウンドで実行するため、awaitしない
   }
 });
 
@@ -88,6 +93,21 @@ const getUser = async () => {
   });
   const data = await res.json();
   userInfo.value = data;
+};
+
+// ユーザ情報を更新
+const updateUser = async () => {
+  const res = await fetch("/api/user", {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${await currentUser.value?.getIdToken()}`,
+      ContentType: "application/json",
+    },
+    body: JSON.stringify({
+      displayName: currentUser.value?.displayName,
+      photoURL: currentUser.value?.photoURL,
+    } as UserPutRequest),
+  });
 };
 
 // サインアウトボタン
@@ -149,4 +169,18 @@ const registerWallet = async () => {
     } as UserWalletPutRequest),
   });
 };
+
+// NFTの一覧取得
+const ownNfts = ref<NFT[]>([]);
+const { $contract } = useNuxtApp();
+watchEffect(async () => {
+  // ウォレットアドレスが取得できていない場合は何もしない
+  if (walletAccount.value.address) {
+    isLoading.value = true;
+    const nfts = await $contract.erc1155.getOwned(walletAccount.value.address);
+    // 新しいものから先にする
+    ownNfts.value = nfts.reverse();
+    isLoading.value = false;
+  }
+});
 </script>

@@ -65,12 +65,14 @@ function createBingoCard(
     name: body.title,
     theme: body.theme,
     imageColor: body.imageColor,
+    isPublic: body.isPublic,
     bingoCells: [],
     countOfBingoLine: 0, // ビンゴラインの数
     completed: false, // ビンゴカードが完成したかどうか
     createdUid: uid,
     createdAt: new Date(),
     updatedAt: new Date(),
+    clearMovieUrl: "",
   } as BingoCard;
 
   // GPTが正しくお題を作成できていない場合は、サンプルのお題を使用する

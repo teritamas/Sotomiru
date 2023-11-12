@@ -1,0 +1,20 @@
+# Compiled python test files
+__pycache__
+*.pyo
+*.pyc
+
+# Setuptools distribution folder
+/dist/
+
+# Pipenv
+Pipfile.lock
+.pipenv
+
+# Pytest cache
+.pytest_cache
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints
+
+# VS Code settings
+.vscode

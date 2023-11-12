@@ -1,14 +1,14 @@
 <template>
   <div
     id="vue-carousel"
-    style="height: 31rem; width: 100vw; overflow: hidden"
-    @touchstart="onTouchStart"
-    @mousedown="onTouchStart"
+    style="height: 32rem; width: 100vw; overflow: hidden"
+    @touchstart="onTouchStartCard"
+    @mousedown="onTouchStartCard"
   >
     <div class="carousel">
       <button
         class="nav left text-4xl"
-        v-if="state.currentNum > 0"
+        v-if="state.currentNum > 0 && !modalIsOpen"
         @click="activeDecrement"
       >
         <svg
@@ -53,16 +53,18 @@
           [Math.abs(state.currentNum - i) > maxVisibility ? 'none' : 'block']
         "
       >
-        <div class="card bg-white">
+        <div class="card bg-white rounded-lg">
           <BingoCardView
             @openBingoCardDetailModal="openBingoCardDetailModal"
             :bingoCard="bingoCard"
+            :currentUserUid="props.currentUserUid"
+            :isDisplayCenter="state.currentNum == i"
           />
         </div>
       </div>
       <button
         class="nav right text-4xl"
-        v-if="state.currentNum < props.bingoCards.length - 1"
+        v-if="state.currentNum < props.bingoCards.length - 1 && !modalIsOpen"
         @click="activeIncrement"
       >
         <svg
@@ -87,17 +89,25 @@
       @closeBingoCardDetailModal="closeBingoCardDetailModal"
       @postBingoCellRequest="postBingoCellRequest"
       @postCheckFollowingSubject="postCheckFollowingSubject"
+      @openNextBingoCardDetailModal="openNextBingoCardDetailModal"
+      :currentUserUid="props.currentUserUid"
       :selectedBingoCell="selectedBingoCardCell"
       :isFollowingSubject="isFollowingSubject"
+      :selectedBingoCardCellNo="selectedBingoCardCellNo"
+      :answeredUserDetail="props.selectedBingoCellDetail?.answeredUserDetail"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { BingoCardDetail } from "@/server/models/bingo/dto";
+import { BingoCardDetail, BingoCellDetail } from "@/server/models/bingo/dto";
 import { IsFollowingSubjectResponse } from "@/server/models/facades/visionai/imageDescription";
 
 const props = defineProps({
+  currentUserUid: {
+    type: Object as PropType<String | undefined>,
+    required: true,
+  },
   bingoCards: {
     default: [],
     type: Array as PropType<BingoCardDetail[]>,
@@ -107,19 +117,25 @@ const props = defineProps({
     type: Object as PropType<IsFollowingSubjectResponse | null>,
     required: true,
   },
+  selectedBingoCellDetail: {
+    // モーダルで選択中のセルの詳細
+    type: Object as PropType<BingoCellDetail | null>,
+    required: false,
+  },
 });
 
 const emits = defineEmits([
   "postBingoCellRequest",
   "postCheckFollowingSubject",
   "clearIsFollowingSubject",
+  "getBingoCellDetail",
 ]);
 
 const bingoCellId = ref("");
 const moveThreshold = 30;
 const maxVisibility = 3; // 画面に描画されるビンゴカードの数
 const state = reactive({
-  currentNum: 1, // 少ないと変な感じになるので1
+  currentNum: 0, // 少ないと変な感じになるので1
   isSwiping: false,
   startX: null,
   diffX: 0,
@@ -128,7 +144,7 @@ const state = reactive({
 /**
  *  ビンゴカード一覧のスワイプ処理
  */
-const onTouchMove = (event: any) => {
+const onTouchMoveCard = (event: any) => {
   if (state.startX == null) {
     return;
   }
@@ -142,7 +158,7 @@ const canMove = (index: any) => {
   return props.bingoCards[index] != null;
 };
 
-const onTouchEnd = () => {
+const onTouchEndCard = () => {
   if (state.startX == null) {
     return;
   }
@@ -157,23 +173,23 @@ const onTouchEnd = () => {
 };
 
 onMounted(() => {
-  window.addEventListener("mousemove", onTouchMove);
-  window.addEventListener("touchmove", onTouchMove);
-  window.addEventListener("mouseup", onTouchEnd);
-  window.addEventListener("touchend", onTouchEnd);
+  window.addEventListener("mousemove", onTouchMoveCard);
+  window.addEventListener("touchmove", onTouchMoveCard);
+  window.addEventListener("mouseup", onTouchEndCard);
+  window.addEventListener("touchend", onTouchEndCard);
 });
 
 onBeforeUnmount(() => {
-  window.removeEventListener("mousemove", onTouchMove);
-  window.removeEventListener("touchmove", onTouchMove);
-  window.removeEventListener("mouseup", onTouchEnd);
-  window.removeEventListener("touchend", onTouchEnd);
+  window.removeEventListener("mousemove", onTouchMoveCard);
+  window.removeEventListener("touchmove", onTouchMoveCard);
+  window.removeEventListener("mouseup", onTouchEndCard);
+  window.removeEventListener("touchend", onTouchEndCard);
 });
 
 const activeIncrement = () => state.currentNum++;
 const activeDecrement = () => state.currentNum--;
 
-const onTouchStart = (event: any) => {
+const onTouchStartCard = (event: any) => {
   if (modalIsOpen.value) return false;
   state.isSwiping = true;
   state.startX = "touches" in event ? event.touches[0].clientX : event.clientX;
@@ -194,13 +210,28 @@ const selectedBingoCardCell = computed(() => {
     (value) => value.id === bingoCellId.value
   )[0];
 });
+// モーダルに表示するビンゴのセル
+const selectedBingoCardCellNo = computed(() => {
+  return selectedBingoCard.value.bingoCells.findIndex(
+    (value) => value.id === bingoCellId.value
+  );
+});
 
 /**
  * モーダルの処理
  */
 // ビンゴカード詳細モーダルを開く
 const modalIsOpen = ref(false);
+const openNextBingoCardDetailModal = (index: number) => {
+  openBingoCardDetailModal(selectedBingoCard.value.bingoCells[index].id);
+};
 const openBingoCardDetailModal = async (bingoCellIdByChild: string) => {
+  // ビンゴセルの詳細情報を取得する
+  await emits(
+    "getBingoCellDetail",
+    selectedBingoCardId.value,
+    bingoCellIdByChild
+  );
   bingoCellId.value = bingoCellIdByChild;
   modalIsOpen.value = true;
 };
@@ -267,10 +298,10 @@ $card-size: 20rem; //スマホだとこっちのほうがよさそう
   align-items: center;
   justify-content: center;
   top: 70%;
-  z-index: 2;
   user-select: none;
-  background: unset;
+  background: white;
   border: unset;
+  border-radius: 5px;
 
   &.left {
     transform: translateX(-100%) translatey(-50%);

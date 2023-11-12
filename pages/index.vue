@@ -1,10 +1,14 @@
 <template>
+  <loading v-show="isLoading" :LoadingText="loadingMessage" />
   <BingoCardCarousel
     @clearIsFollowingSubject="clearIsFollowingSubject"
     @postBingoCellRequest="postBingoCellRequest"
     @postCheckFollowingSubject="postCheckFollowingSubject"
+    @getBingoCellDetail="getBingoCellDetail"
     :bingoCards="bingoCardDetails"
     :isFollowingSubject="isFollowingSubject"
+    :currentUserUid="currentUser?.uid"
+    :selectedBingoCellDetail="bingoCellDetail"
   />
   <congratulations-complete
     v-if="congratulationsCompleteViewIsOpen"
@@ -18,9 +22,10 @@
 </template>
 
 <script setup lang="ts">
-import { BingoCardDetail } from "@/server/models/bingo/dto";
+import { BingoCardDetail, BingoCellDetail } from "@/server/models/bingo/dto";
 import {
   BingoCardsGetAllResponse,
+  BingoCellGetResponse,
   BingoCellPutResponse,
 } from "@/server/models/bingo/response";
 import { IsFollowingSubjectResponse } from "@/server/models/facades/visionai/imageDescription";
@@ -28,19 +33,26 @@ import { useCurrentUser } from "vuefire";
 
 const currentUser = useCurrentUser(); // TODO: 画面をリロードすると全てのビンゴカードが表示される不具合あり
 const bingoCardDetails = ref([] as BingoCardDetail[]);
+const bingoCellDetail = ref(null as BingoCellDetail | null);
 const isFollowingSubject = ref(null as IsFollowingSubjectResponse | null);
 const congratulationsCompleteViewIsOpen = ref(false);
 const congratulationsBingoViewIsOpen = ref(false);
+const isLoading = ref(false);
+const loadingMessage = ref("");
 
 // 全てのビンゴカードを取得
 onMounted(async () => {
-  await getAllBingoCard();
+  loadingMessage.value = "ビンゴカードを読み込んでいます";
+  isLoading.value = true;
+  const token = await currentUser.value?.getIdToken();
+  await getAllBingoCard(token);
+  isLoading.value = false;
 });
 // ビンゴカードの情報取得
-const getAllBingoCard = async () => {
+const getAllBingoCard = async (token: string | undefined) => {
   const res = await fetch(`api/bingoCard`, {
     headers: {
-      Authorization: `Bearer ${await currentUser.value?.getIdToken()}`,
+      Authorization: `Bearer ${token}`,
     },
   });
   const data = (await res.json()) as BingoCardsGetAllResponse;
@@ -89,6 +101,8 @@ const postBingoCellRequest = async (
   form: { comments: string },
   file: any
 ) => {
+  loadingMessage.value = "ビンゴセルに画像を投稿中です";
+  isLoading.value = true;
   const formData = new FormData();
   formData.append(
     "request",
@@ -107,6 +121,9 @@ const postBingoCellRequest = async (
   });
   const data = (await res.json()) as BingoCellPutResponse;
 
+  // 一度ローディング画面をクローズ
+  isLoading.value = false;
+
   if (data.appearBingoCardComplete) {
     // ビンゴカードが完了したかどうか
     openCongratulationsCompleteView();
@@ -116,7 +133,21 @@ const postBingoCellRequest = async (
   }
 
   // 最新の状態を取得
-  await getAllBingoCard();
+  const token = await currentUser.value?.getIdToken();
+  await getAllBingoCard(token);
+};
+
+// ビンゴセルの詳細情報を取得する
+const getBingoCellDetail = async (bingoCardId: string, bingoCellId: string) => {
+  const res = await fetch(
+    `/api/bingoCell/${bingoCardId}?bingoCellId=${bingoCellId}`,
+    {
+      headers: {},
+    }
+  );
+  const data = (await res.json()) as BingoCellGetResponse;
+  console.log(data);
+  bingoCellDetail.value = data.bingoCellDetail;
 };
 
 // ビンゴカードをコンプリートしたときのお祝い画面をひらく
