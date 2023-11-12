@@ -137,6 +137,7 @@ const postBingoCellRequest = async (
   // 最新の状態を取得
   const token = await currentUser.value?.getIdToken();
   await getAllBingoCard(token);
+  clearIsFollowingSubject(); // AIの検出結果のキャッシュをクリア
 };
 
 // ビンゴセルの詳細情報を取得する
