@@ -86,11 +86,13 @@ const walletAddress = computed(() => {
 // NFTの一覧取得
 const ownNfts = ref<NFT[]>([]);
 const { $contract } = useNuxtApp();
-onMounted(async () => {
+watchEffect(async () => {
+  // ウォレットアドレスが取得できていない場合は何もしない
   if (!props.walletAccount?.address) return;
   const nfts = await $contract.erc1155.getOwned(props.walletAccount?.address);
   // 新しいものから先にする
   ownNfts.value = nfts.reverse();
+  console.log(ownNfts.value);
 });
 </script>
 
