@@ -1,5 +1,5 @@
 <template>
-  <loading v-show="isLoading" LoadingText="ビンゴカードを読み込んでいます" />
+  <loading v-show="isLoading" :LoadingText="loadingMessage" />
   <BingoCardCarousel
     @clearIsFollowingSubject="clearIsFollowingSubject"
     @postBingoCellRequest="postBingoCellRequest"
@@ -38,9 +38,11 @@ const isFollowingSubject = ref(null as IsFollowingSubjectResponse | null);
 const congratulationsCompleteViewIsOpen = ref(false);
 const congratulationsBingoViewIsOpen = ref(false);
 const isLoading = ref(false);
+const loadingMessage = ref("");
 
 // 全てのビンゴカードを取得
 onMounted(async () => {
+  loadingMessage.value = "ビンゴカードを読み込んでいます";
   isLoading.value = true;
   const token = await currentUser.value?.getIdToken();
   await getAllBingoCard(token);
@@ -97,6 +99,7 @@ const postBingoCellRequest = async (
   form: { comments: string },
   file: any
 ) => {
+  loadingMessage.value = "ビンゴセルに画像を投稿中です";
   isLoading.value = true;
   const formData = new FormData();
   formData.append(
@@ -116,6 +119,9 @@ const postBingoCellRequest = async (
   });
   const data = (await res.json()) as BingoCellPutResponse;
 
+  // 一度ローディング画面をクローズ
+  isLoading.value = false;
+
   if (data.appearBingoCardComplete) {
     // ビンゴカードが完了したかどうか
     openCongratulationsCompleteView();
@@ -127,7 +133,6 @@ const postBingoCellRequest = async (
   // 最新の状態を取得
   const token = await currentUser.value?.getIdToken();
   await getAllBingoCard(token);
-  isLoading.value = false;
 };
 
 // ビンゴセルの詳細情報を取得する
