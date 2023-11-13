@@ -90,7 +90,7 @@ export default defineEventHandler(async (event) => {
     // トークンを発行
     const user = await getUserInfo(uid);
     const request = {
-      supply: requestBody.imageAiCheckScore,
+      supply: Math.floor(requestBody.imageAiCheckScore * 10), // index.vueに表示される値と同じ
       wallet_address: user?.walletAddress,
     } as MintBingoTokenPutRequest;
     await mintBingoToken(bingoCardId, requestBody.bingoCellId, request);
