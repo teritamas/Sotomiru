@@ -17,10 +17,7 @@ services:
       context: ./functions/contract_proxy
       dockerfile: Dockerfile
     container_name: contract_proxy_server
-    environment:
-      - CRED_PATH=/contract_proxy/key.json
     volumes:
-      - ./key.json:/contract_proxy/key.json:ro
       - ./.env:/contract_proxy/.env:ro
     ports:
       - "8080:8080"

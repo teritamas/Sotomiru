@@ -10,8 +10,6 @@ packages = [{include = "contract_proxy"}]
 python = "^3.10"
 python-dotenv = "^1.0.0"
 thirdweb-sdk = "^3.1.1"
-google-cloud-storage = "^2.13.0"
-firebase-admin = "4.5.3"
 fastapi = "^0.104.1"
 uvicorn = "^0.24.0.post1"
 
