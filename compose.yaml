@@ -11,3 +11,13 @@ services:
       - FONT_NAME=ipaexg
     volumes:
       - ./key.json:/app/key.json:ro
+
+  contract_proxy:
+    build:
+      context: ./functions/contract_proxy
+      dockerfile: Dockerfile
+    container_name: contract_proxy_server
+    volumes:
+      - ./.env:/contract_proxy/.env:ro
+    ports:
+      - "8080:8080"

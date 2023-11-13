@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "contract-proxy"
+version = "0.1.0"
+description = ""
+authors = ["sey323 <sey323_nm@yahoo.co.jp>"]
+readme = "README.md"
+packages = [{include = "contract_proxy"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+python-dotenv = "^1.0.0"
+thirdweb-sdk = "^3.1.1"
+fastapi = "^0.104.1"
+uvicorn = "^0.24.0.post1"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.11.0"
+flake8 = "^6.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 79

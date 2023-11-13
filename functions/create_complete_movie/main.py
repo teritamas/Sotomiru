@@ -8,7 +8,6 @@ from create_complete_movie.facades.storage.firestore import (
     download_bingo_cell_image,
 )
 
-from create_complete_movie.services.create_movie_service import create_movie
 from create_complete_movie.services.nft_service import mint_and_transfer_nft
 
 URL_PREFIX = (
