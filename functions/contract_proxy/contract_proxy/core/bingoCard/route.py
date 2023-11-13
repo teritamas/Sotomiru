@@ -1,4 +1,4 @@
-from contract_proxy.facades.firestore.bingo_card_cell import fetch_bingo_cell
+from contract_proxy.core.bingoCard.request import BingoUserTokenMintRequest
 from contract_proxy.facades.thirdweb.erc1155_bingo_token_contract import (
     transfer_nft,
 )
@@ -16,10 +16,13 @@ bingo_token_router = APIRouter(
 async def mint_bingo_token(
     bingo_card_id: str,
     bingo_cell_id: str,
+    request: BingoUserTokenMintRequest,
 ):
-    cell = fetch_bingo_cell(bingo_card_id, bingo_cell_id)
-    if cell is None:
-        print("cell is not found")
-        return
-    supply = int(cell.image_ai_check_score * 100)
-    transfer_nft(cell.wallet_address, supply)
+    transfer_nft(request.wallet_address, request.supply)
+    return {"message": "success"}
+    # cell = fetch_bingo_cell(bingo_card_id, bingo_cell_id)
+    # if cell is None:
+    #     print("cell is not found")
+    #     return
+    # supply = int(cell.image_ai_check_score * 100)
+    # transfer_nft(cell.wallet_address, supply)
