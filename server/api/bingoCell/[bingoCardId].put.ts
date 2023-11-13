@@ -9,6 +9,7 @@ import fs from "fs";
 import { BingoCellPutResponse as BingoCellPutResponse } from "~/server/models/bingo/response";
 import { idAuthentication } from "~/server/facades/auth/idAuthentication";
 import { incrementBingoClearCount } from "~/server/facades/repositories/users";
+import { mintBingoToken } from "~/server/facades/contracts/contract_proxy";
 
 export default defineEventHandler(async (event) => {
   try {
@@ -81,6 +82,9 @@ export default defineEventHandler(async (event) => {
       isBingoCompleteDto?.appearBingoCount || 0, // 発生したビンゴの数
       isBingoCompleteDto?.appearBingoCardComplete ? 1 : 0 // クリアした時は1
     );
+
+    // トークンを発行
+    mintBingoToken(bingoCardId, requestBody.bingoCellId);
 
     return isBingoCompleteDto as BingoCellPutResponse;
   } catch (e) {
