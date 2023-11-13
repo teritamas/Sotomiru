@@ -101,7 +101,10 @@ const postBingoCellRequest = async (
   form: { comments: string },
   file: any
 ) => {
-  loadingMessage.value = "ビンゴセルに画像を投稿中です";
+  const baseToken = isFollowingSubject.value?.score ?? 0;
+  // 小数点切り捨て
+  const expectedToken = Math.floor(baseToken * 10);
+  loadingMessage.value = `ビンゴセルに画像を投稿中です...<br>この投稿で${expectedToken}トークン付与されます！`;
   isLoading.value = true;
   const formData = new FormData();
   formData.append(

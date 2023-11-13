@@ -17,3 +17,11 @@ class BingoCardCell(BaseModel):
     imageAiCheckScore: Optional[int] = Field(None, description="画像AIチェックのスコア")
     answered_at: Optional[datetime] = Field(None, description="回答日時")
     answered_user: Optional[str] = Field(None, description="回答者のID")
+
+
+class BingoUserTokenMintDto(BaseModel):
+    answered_at: Optional[datetime] = Field(None, description="回答日時")
+    answered_user: Optional[str] = Field(None, description="回答者のID")
+    bingo_cell_id: str = Field(..., description="ビンゴセルのID")
+    image_ai_check_score: int = Field(None, description="画像AIチェックのスコア")
+    wallet_address: str = Field(..., description="ウォレットアドレス")

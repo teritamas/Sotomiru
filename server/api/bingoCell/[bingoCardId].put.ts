@@ -8,7 +8,12 @@ import { uploadBingoCellImage } from "@/server/facades/storage/bingoCellImage";
 import fs from "fs";
 import { BingoCellPutResponse as BingoCellPutResponse } from "~/server/models/bingo/response";
 import { idAuthentication } from "~/server/facades/auth/idAuthentication";
-import { incrementBingoClearCount } from "~/server/facades/repositories/users";
+import {
+  getUserInfo,
+  incrementBingoClearCount,
+} from "~/server/facades/repositories/users";
+import { mintBingoToken } from "~/server/facades/contracts/contractProxy";
+import { MintBingoTokenPutRequest } from "~/server/models/facades/contracts/contractProxy";
 
 export default defineEventHandler(async (event) => {
   try {
@@ -81,6 +86,14 @@ export default defineEventHandler(async (event) => {
       isBingoCompleteDto?.appearBingoCount || 0, // 発生したビンゴの数
       isBingoCompleteDto?.appearBingoCardComplete ? 1 : 0 // クリアした時は1
     );
+
+    // トークンを発行
+    const user = await getUserInfo(uid);
+    const request = {
+      supply: Math.floor(requestBody.imageAiCheckScore * 10), // index.vueに表示される値と同じ
+      wallet_address: user?.walletAddress,
+    } as MintBingoTokenPutRequest;
+    await mintBingoToken(bingoCardId, requestBody.bingoCellId, request);
 
     return isBingoCompleteDto as BingoCellPutResponse;
   } catch (e) {
