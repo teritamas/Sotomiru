@@ -15,6 +15,7 @@ export default defineNuxtConfig({
       walletConnectProjectId: process.env.WALLET_CONNECT_PROJECT_ID || "",
       thirdWebClientId: process.env.THIRD_WEB_CLIENT_ID || "",
       erc1155ContractAddress: process.env.ERC1155_CONTRACT_ADDRESS || "",
+      bingoTokenId: process.env.BINGO_TOKEN_ID || "",
     },
   },
   vuefire: {

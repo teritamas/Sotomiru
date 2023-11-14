@@ -62,7 +62,7 @@ export const updateUserWallet = async (
     } as UserInfo;
 
     const docRef = await firestore.collection("users").doc(uid);
-    await docRef.update({ userInfo }); // 既に存在する場合は更新
+    await docRef.update({ ...userInfo }); // 既に存在する場合は更新
   } catch (e) {
     console.error("[updateUserWallet]", e);
   }
