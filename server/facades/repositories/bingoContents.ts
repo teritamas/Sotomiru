@@ -126,7 +126,9 @@ async function addBingoCreateUser(
 ): Promise<BingoCardDetail[]> {
   // bingoCardsに含まれるUidを取得する
   const uids = bingoCards.map((bingoCard) => bingoCard.createdUid);
-
+  if (uids.length === 0) {
+    return [];
+  }
   // uidsのユーザ情報を取得する
   const querySnapshot = await firestore
     .collection("users")
