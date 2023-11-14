@@ -109,7 +109,6 @@
                 v-if="isFollowingSubject"
                 :score="isFollowingSubject.score"
                 :reason="isFollowingSubject.reason"
-                :isFollowingSubject="isFollowingSubject.isFollowingSubject"
               />
             </div>
             <div class="mt-3">
@@ -309,7 +308,6 @@ const isRegisterButtonActive = computed(() => {
     !registered.value && // このセルが登録済みでない
     form.value.comments !== "" && // コメントが入力されている
     selectedFile.value !== null // 画像が選択されている
-    // props.isFollowingSubject?.isFollowingSubject // 画像がテーマに沿っている、検証中のためコメントアウト
   );
 });
 // ボタンの表示を切り替えるためのクラス

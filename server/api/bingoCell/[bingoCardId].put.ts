@@ -11,6 +11,7 @@ import { idAuthentication } from "~/server/facades/auth/idAuthentication";
 import {
   getUserInfo,
   incrementBingoClearCount,
+  updateUserPreGrantBingoToken,
 } from "~/server/facades/repositories/users";
 import { mintBingoToken } from "~/server/facades/contracts/contractProxy";
 import { MintBingoTokenPutRequest } from "~/server/models/facades/contracts/contractProxy";
@@ -88,14 +89,25 @@ export default defineEventHandler(async (event) => {
     );
 
     // トークンを発行
+    const assignToken = Math.floor(requestBody.imageAiCheckScore * 10);
     const user = await getUserInfo(uid);
-    const request = {
-      supply: Math.floor(requestBody.imageAiCheckScore * 10), // index.vueに表示される値と同じ
-      wallet_address: user?.walletAddress,
-    } as MintBingoTokenPutRequest;
-    await mintBingoToken(bingoCardId, requestBody.bingoCellId, request);
+    if (user === undefined || user.walletAddress === undefined) {
+      // 存在しない場合はトークンを付与しない
+      // TODO: トークンを付与しないことを通知する、ユーザ情報にキャッシュする
+      console.log("user or walletAddress is undefined", uid);
+      await updateUserPreGrantBingoToken(uid, assignToken);
+    } else {
+      // 存在する場合はトークン付与
+      const request = {
+        supply: assignToken, // index.vueに表示される値と同じ
+      } as MintBingoTokenPutRequest;
+      await mintBingoToken(user.walletAddress, request);
+    }
 
-    return isBingoCompleteDto as BingoCellPutResponse;
+    return {
+      ...isBingoCompleteDto,
+      mintBingoTokenAmount: assignToken,
+    } as BingoCellPutResponse;
   } catch (e) {
     console.error(e);
     return {
