@@ -27,7 +27,7 @@ OPENAI_API_KEY=${OpenAIのAPIキー}
 
 # GCPの設定
 GOOGLE_APPLICATION_CREDENTIALS=${GCPのサービスアカウントキーのパス}
-FIRE_STORAGE_BUCKET=${GCPのサービスアカウントキーのパス}
+FIRE_STORAGE_BUCKET=${fire storageのバケット名}
 
 # Firebase Authenticationの設定
 FIREBASE_API_KEY=${firebaseのAPIキー}
@@ -37,11 +37,18 @@ FIREBASE_MESSAGING_SENDER_ID=${firebaseのメッセージング送信者ID}
 FIREBASE_APP_ID=${firebaseのアプリID}
 FIREBASE_MEASUREMENT_ID=${firebaseの測定ID}
 
+# Wallet Connectの設定
+WALLET_CONNECT_PROJECT_ID=${wallet connectのプロジェクトID}
+
 # thirdwebの設定
 THIRD_WEB_CLIENT_ID=${Third WebのAPIクライアントID}
 THIRDWEB_API_KEY=${Third WebのAPIキー}
-ERC1155_CONTRACT_ADDRESS=${利用するコントラクト}
 THIRDWEB_SIGNER_PRIVATEKEY=${上記のコントラクトをデプロイしたクライアントの秘密鍵}
+ERC1155_CONTRACT_ADDRESS=${利用するコントラクト}
+BINGO_TOKEN_ID=${ERC1155_CONTRACT_ADDRESSのうち、ビンゴトークンのID}
+
+# Backend API Endpoint
+CONTRACT_PROXY_API_ENDPOINT=${コントラクトプロキシのエンドポイント}
 ```
 
 ### 2. サーバの起動
@@ -58,13 +65,19 @@ npm install
 npm run dev
 ```
 
+ThirdWeb の Proxy サーバと動画作成用のサーバを起動する。(初回はビルドに 30 分程度かかる)
+
+````bash
+docker compose up -d
+```
+
 #### 2-1. デプロイ環境の起動
 
 デプロイ環境の起動は、下記のコマンドで行う。
 
 ```bash
 npm run preview
-```
+````
 
 ## デプロイ
 
