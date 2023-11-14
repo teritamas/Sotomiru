@@ -63,6 +63,10 @@ const props = defineProps({
     type: Array as PropType<NFT[]>,
     required: true,
   },
+  bingoToken: {
+    type: Object as PropType<NFT>,
+    required: true,
+  },
 });
 
 // プロフィール画像が設定されていない場合のデフォルト画像
@@ -78,7 +82,8 @@ const exchangeableToken = computed(() => {
     return "???";
   }
   // トークン取得は未実装
-  return 0;
+  console.log(props.bingoToken);
+  return props.bingoToken?.quantityOwned ?? "???";
 });
 const walletAddress = computed(() => {
   return (

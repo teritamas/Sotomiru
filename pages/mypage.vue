@@ -7,6 +7,7 @@
     :userInfo="userInfo"
     :walletAccount="walletAccount"
     :ownNfts="ownNfts"
+    :bingoToken="bingoToken"
   />
 
   <div class="flex flex-col justify-center text-center mt-5">
@@ -71,6 +72,16 @@ const currentUser = useCurrentUser();
 const router = useRouter();
 const isLoading = ref(false);
 
+// WalletConnectのプロジェクトIDが取得できていることを確認する
+const runtimeConfig = useRuntimeConfig();
+const projectId = runtimeConfig.public.walletConnectProjectId;
+if (!projectId || projectId === "") {
+  // WalletConnectのプロジェクトIDが設定されていない場合はエラーを投げる
+  throw new Error("walletConnectProjectId is not defined");
+}
+const bingoTokenId = runtimeConfig.public.bingoTokenId;
+const chains = [goerli];
+
 // ログインしていない場合はログイン画面にリダイレクト
 onBeforeMount(async () => {
   if (!currentUser.value) {
@@ -116,15 +127,6 @@ const logout = async () => {
   router.push(`/`);
 };
 
-// WalletConnectのプロジェクトIDが取得できていることを確認する
-const runtimeConfig = useRuntimeConfig();
-const projectId = runtimeConfig.public.walletConnectProjectId;
-if (!projectId || projectId === "") {
-  // WalletConnectのプロジェクトIDが設定されていない場合はエラーを投げる
-  throw new Error("walletConnectProjectId is not defined");
-}
-const chains = [goerli];
-
 /**
  * Web3Modalの初期化する
  */
@@ -149,14 +151,34 @@ onMounted(async () => {
   walletAccount.value = getAccount();
 });
 
-onUpdated(async () => {
-  if (walletAccount.value.isConnected) {
+// NFTの一覧取得
+const ownNfts = ref<NFT[]>([]);
+const bingoToken = ref<NFT>();
+const { $contract } = useNuxtApp();
+watchEffect(async () => {
+  // ウォレットアドレスが取得できていない場合は何もしない
+  if (walletAccount.value.address) {
     // useテーブルにウォレットアドレスを登録
-    await registerWallet();
+    registerWallet(walletAccount.value.address); // 非同期で実行するのでawaitしない
+
+    isLoading.value = true;
+    const nfts = await $contract.erc1155.getOwned(walletAccount.value.address);
+    // 新しいものから先にする
+    ownNfts.value = nfts.reverse();
+    // bingoTokenIdの指定したものだけ省く
+    ownNfts.value = ownNfts.value.filter(
+      (nft) => nft.metadata.name !== bingoTokenId
+    );
+    bingoToken.value = ownNfts.value.find(
+      (nft) => nft.metadata.id === bingoTokenId
+    );
+    console.log(bingoToken.value);
+    isLoading.value = false;
   }
 });
+
 // useテーブルにウォレットを登録
-const registerWallet = async () => {
+const registerWallet = async (walletAddress: string) => {
   await fetch("/api/user/wallet", {
     method: "PUT",
     headers: {
@@ -164,22 +186,8 @@ const registerWallet = async () => {
       ContentType: "application/json",
     },
     body: JSON.stringify({
-      walletAddress: walletAccount.value.address?.toString(),
+      walletAddress: walletAddress,
     } as UserWalletPutRequest),
   });
 };
-
-// NFTの一覧取得
-const ownNfts = ref<NFT[]>([]);
-const { $contract } = useNuxtApp();
-watchEffect(async () => {
-  // ウォレットアドレスが取得できていない場合は何もしない
-  if (walletAccount.value.address) {
-    isLoading.value = true;
-    const nfts = await $contract.erc1155.getOwned(walletAccount.value.address);
-    // 新しいものから先にする
-    ownNfts.value = nfts.reverse();
-    isLoading.value = false;
-  }
-});
 </script>
