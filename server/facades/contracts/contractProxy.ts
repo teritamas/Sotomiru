@@ -8,7 +8,6 @@ export async function mintBingoToken(
   request: MintBingoTokenPutRequest
 ): Promise<any> {
   try {
-    console.log(API_URL, process.env);
     const response = await axios.put(
       `${API_URL}/mint-bingo-token/${walletAddress}`,
       {
