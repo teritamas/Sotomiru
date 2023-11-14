@@ -69,6 +69,24 @@ export const updateUserWallet = async (
 };
 
 /**
+ * 付与前のトークンを更新する。
+ */
+export const updateUserPreGrantBingoToken = async (
+  uid: string,
+  preGrantBingoToken: number
+) => {
+  try {
+    const docRef = await firestore.collection("users").doc(uid);
+    await docRef.update({
+      preGrantBingoToken: preGrantBingoToken,
+      updatedAt: new Date(),
+    });
+  } catch (e) {
+    console.error("[updateUserPreGrantBingoToken]", e);
+  }
+};
+
+/**
  * ビンゴカードを作成した回数をインクリメントする
  */
 export const incrementBingoCreationCount = async (uid: string) => {

@@ -8,6 +8,7 @@ TARGET_TOKEN_ID = config.BINGO_TOKE_ID
 
 
 def transfer_nft(address: str, supply: int):
+    print("トークンをミントします, supply: ", supply, "address: ", address)
     try:
         tx = contract.erc1155.mint_additional_supply(TARGET_TOKEN_ID, supply)
         token_id = tx.id

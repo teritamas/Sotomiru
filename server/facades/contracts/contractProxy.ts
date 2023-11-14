@@ -2,18 +2,16 @@ import axios from "axios";
 import { MintBingoTokenPutRequest } from "~/server/models/facades/contracts/contractProxy";
 
 export async function mintBingoToken(
-  bingoCardId: string,
-  bingoCellId: string,
+  walletAddress: string,
   request: MintBingoTokenPutRequest
 ) {
   // APIリクエストしてトークンを発行する
   // リクエストのbodyには、トークンの発行に必要な情報を入れる
   axios
     .put(
-      `${process.env.CONTRACT_PROXY_API_ENDPOINT}/mint-bingo-token/${bingoCardId}/cell/${bingoCellId}`,
+      `${process.env.CONTRACT_PROXY_API_ENDPOINT}/mint-bingo-token/${walletAddress}`,
       {
         supply: request.supply,
-        wallet_address: request.wallet_address,
       },
       {
         headers: {},

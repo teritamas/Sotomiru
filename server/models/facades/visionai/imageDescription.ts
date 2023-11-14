@@ -1,5 +1,4 @@
 export interface IsFollowingSubjectResponse {
-  isFollowingSubject: boolean; // 画像がお題に対して正しいかどうかのTrue/False
   score: number; // 画像がお題に対してどれくらい正しいか
   reason: string; // 判断理由
 }
