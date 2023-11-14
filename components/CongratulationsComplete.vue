@@ -58,8 +58,8 @@ const closeCongratulationsCompleteView = async () => {
 }
 [class^="firework-"] {
   position: absolute;
-  width: 0.1rem;
-  height: 0.1rem;
+  width: 0.2rem;
+  height: 0.2rem;
   border-radius: 50%;
 }
 

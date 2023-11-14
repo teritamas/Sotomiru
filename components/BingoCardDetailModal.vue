@@ -75,16 +75,18 @@
             />
 
             <div class="mt-8">
-              <label
-                for="message"
-                class="block mb-2 text-sm font-medium text-gray-700"
-                >投稿した人</label
-              >
-              <CreateUserBadge
-                :currentUserUid="currentUserUid"
-                :createdUid="answeredUserDetail?.uid"
-                :createdUserDetail="answeredUserDetail"
-              />
+              <div>
+                <label
+                  for="message"
+                  class="mb-2 text-sm font-medium text-gray-700"
+                  >投稿した人</label
+                >
+                <CreateUserBadge
+                  :currentUserUid="currentUserUid"
+                  :createdUid="answeredUserDetail?.uid"
+                  :createdUserDetail="answeredUserDetail"
+                />
+              </div>
             </div>
           </div>
           <!-- 投稿済みでない場合 -->
