@@ -1,11 +1,7 @@
 import { createError, MultiPartData } from "h3";
 import { getBingoCell } from "@/server/facades/repositories/bingoContents";
 import { BingoCell } from "@/server/models/bingo/dto";
-import { validateImage } from "@/server/facades/visionai/imageDescription";
-import {
-  ImageDescriptionResponse,
-  IsFollowingSubjectResponse,
-} from "@/server/models/facades/visionai/imageDescription";
+import { IsFollowingSubjectResponse } from "@/server/models/facades/visionai/imageDescription";
 import { validateFollowingSubject } from "@/server/facades/generativeai/chatgpt";
 
 export default defineEventHandler(async (event) => {
@@ -44,9 +40,6 @@ export default defineEventHandler(async (event) => {
         statusMessage: "Failed to read body",
       });
     }
-
-    // ファイルをCloud Vision APIで検証
-    // const result: ImageDescriptionResponse | null = await validateImage(file);
 
     // ビンゴカードのセルを取得
     const bingoCell: BingoCell | undefined = await getBingoCell(
