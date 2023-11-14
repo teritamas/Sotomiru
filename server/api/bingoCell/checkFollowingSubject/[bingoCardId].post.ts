@@ -46,7 +46,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // ファイルをCloud Vision APIで検証
-    const result: ImageDescriptionResponse | null = await validateImage(file);
+    // const result: ImageDescriptionResponse | null = await validateImage(file);
 
     // ビンゴカードのセルを取得
     const bingoCell: BingoCell | undefined = await getBingoCell(
@@ -54,16 +54,19 @@ export default defineEventHandler(async (event) => {
       requestBody!.bingoCellId
     );
 
-    if (result === null || bingoCell === undefined) {
+    if (bingoCell === undefined) {
       return createError({
         statusCode: 400,
         statusMessage: "Failed to validate image",
       });
     }
 
+    const base64Image = file.toString("base64");
+    // 先頭100文字を取得
+    console.log(base64Image.slice(0, 100));
     // ChatGPTで画像がお題と一致しているかを検証
-    const isFollowingSubject: IsFollowingSubjectResponse | undefined =
-      await validateFollowingSubject(bingoCell, result);
+    const isFollowingSubject: IsFollowingSubjectResponse | null =
+      await validateFollowingSubject(bingoCell, base64Image);
 
     return isFollowingSubject!;
   } catch (e) {
