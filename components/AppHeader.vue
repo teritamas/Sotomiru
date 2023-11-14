@@ -20,7 +20,7 @@
       <div
         class="col-span-2 md:col-span-7 text-center grid items-center color system-title"
       >
-        MEMORIAL BINGO
+        SOTOMIRU
       </div>
       <router-link class="footer-item block text-gray-500" to="/mypage">
         <div class="p-1 py-2 grid justify-items-center">
@@ -34,7 +34,7 @@
           <img
             v-if="currentUser"
             :src="currentUser.photoURL"
-            alt="プロフィールアイコン"
+            alt="you"
             class="rounded-full w-10"
           />
           <small v-if="!currentUser">マイページ</small>
