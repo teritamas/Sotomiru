@@ -1,11 +1,8 @@
 <template>
   <div
-    class="block bingo-card-frame rounded-lg"
+    class="block bingo-card-frame rounded-lg border border-gray-800"
     :class="bingoCard.completed ? 'bingo-card' : ''"
   >
-    <div class="title color-bg" v-if="isDisplayCenter && bingoCard.completed">
-      Bingo!
-    </div>
     <h1
       class="text-center tracking-wider font-normal text-xl text-gray-700"
       :class="bingoCard.name.length > 12 ? 'mb-2' : 'mb-7'"
@@ -18,9 +15,11 @@
     <div
       class="movie-button text-center"
       v-if="isDisplayCenter && bingoCard.completed"
-      @click="openMovieModal()"
+      @click="openMovieModal(bingoCard.clearMovieUrl)"
     >
-      <span class="text-xs font-bold"> \ Click Me /</span>
+      <span v-if="bingoCard.clearMovieUrl" class="text-xs font-bold">
+        \ Click Me /</span
+      >
       <svg viewBox="0 0 512 512" class="movie-icon">
         <g>
           <path
@@ -31,7 +30,12 @@
           />
         </g>
       </svg>
-      <span class="text-xs font-bold"> 動画を見る </span>
+      <span v-if="bingoCard.clearMovieUrl" class="text-xs font-bold">
+        動画を見る
+      </span>
+      <span v-if="!bingoCard.clearMovieUrl" class="text-xs font-bold">
+        動画準備中
+      </span>
     </div>
 
     <div class="container">
@@ -66,11 +70,6 @@
       <span class="mt-3">
         {{ createdAt }}
       </span>
-    </div>
-  </div>
-  <div class="relative">
-    <div class="bingo-icon" v-if="isDisplayCenter && bingoCard.completed">
-      🎉
     </div>
   </div>
   <MovieModal
@@ -143,7 +142,8 @@ const isReach = (index: number) => {
  */
 // ムービーモーダルを開く
 const movieModalIsOpen = ref(false);
-const openMovieModal = () => {
+const openMovieModal = (clearMovieUrl: String) => {
+  if (!clearMovieUrl) return false;
   movieModalIsOpen.value = true;
 };
 // ビンゴカード詳細モーダルを閉じる
@@ -204,6 +204,8 @@ const closeMovieModal = async () => {
 }
 
 .card .content {
+  border: 1px solid gray;
+  border-radius: 5px;
   position: absolute;
   left: 0;
   right: 0;
@@ -243,32 +245,6 @@ const closeMovieModal = async () => {
   syntax: "<angle>";
   initial-value: 0deg;
   inherits: false;
-}
-
-.title {
-  font-family: "Lato", serif;
-  font-weight: bold;
-  font-size: 1.5rem;
-  position: absolute;
-  top: 5%;
-  left: 3%;
-  text-transform: uppercase;
-  font-weight: bold;
-}
-
-.color-bg {
-  background: linear-gradient(-120deg, var(--c1), #ffffff, var(--c6)) fixed;
-  background-size: 800% 800%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.bingo-icon {
-  position: absolute;
-  font-size: 3.5rem;
-  bottom: -20%;
-  right: -10%;
-  animation: tada 3s infinite;
 }
 
 .movie-button {

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="bingo-owner-badge-object font-bold text-center"
+    class="bingo-owner-badge-object font-bold text-center text-start"
     :class="
       isAnonymousCard ? 'bingo-owner-badge-anonymous' : 'bingo-owner-badge-own'
     "
