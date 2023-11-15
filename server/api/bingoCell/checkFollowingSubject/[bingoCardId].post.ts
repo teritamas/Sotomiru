@@ -56,12 +56,16 @@ export default defineEventHandler(async (event) => {
 
     const base64Image = file.toString("base64");
     // 先頭100文字を取得
-    console.log(base64Image.slice(0, 100));
     // ChatGPTで画像がお題と一致しているかを検証
     const isFollowingSubject: IsFollowingSubjectResponse | null =
       await validateFollowingSubject(bingoCell, base64Image);
 
-    return isFollowingSubject!;
+    return (
+      isFollowingSubject ?? {
+        score: 0.2,
+        reason: "処理に失敗しました。固定で0.2を返します。",
+      }
+    );
   } catch (e) {
     console.error(e);
   }

@@ -14,6 +14,8 @@ class BingoCardCell(BaseModel):
     # 投稿後に追加される項目
     comments: Optional[str] = Field("", description="コメント")
     imageUrl: Optional[str] = Field(None, description="画像のURL")
-    imageAiCheckScore: Optional[int] = Field(None, description="画像AIチェックのスコア")
+    imageAiCheckScore: Optional[float] = Field(
+        None, description="画像AIチェックのスコア"
+    )
     answered_at: Optional[datetime] = Field(None, description="回答日時")
     answered_user: Optional[str] = Field(None, description="回答者のID")

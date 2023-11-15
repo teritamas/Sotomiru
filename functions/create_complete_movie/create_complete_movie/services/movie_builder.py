@@ -15,7 +15,7 @@ class BingoCompleteMovie:
         frame=24,
         fade_frame_ratio: float = 0.5,  # フェードイン、フェードアウトのフレーム数の比率
     ):
-        self.resolution = (768, 1024)  # (height, width)
+        self.resolution = (432, 768)  # (height, width)
         self.frame = frame
 
         # 動画の書き込み設定
@@ -25,6 +25,9 @@ class BingoCompleteMovie:
             cv2.VideoWriter_fourcc(*"avc1"),
             self.frame,
             (self.resolution[1], self.resolution[0]),
+        )
+        self.background_image = self.__fix_ratio(
+            self.resolution, cv2.imread("./assets/background.png")
         )
 
         # フェードイン処理で共通で利用する設定
@@ -55,66 +58,130 @@ class BingoCompleteMovie:
         else:
             print("動画の最後まで到達したので、最初のフレームに戻します。")
             self.org.set(cv2.CAP_PROP_POS_FRAMES, 0)
-            return self.__get_frame()[1]
+            end_flag, flame = self.org.read()
+            return flame
+
+    def end_frame(self, seconds: int = 3):
+        total_frame = self.frame * seconds
+        movie_end_image = cv2.imread("./assets/movie_end.png")
+        movie_end_image = cv2.resize(
+            movie_end_image, (self.resolution[1], self.resolution[0])
+        )
+        for i in range(total_frame):
+            # TODO: フェードインしたい
+            self.outfh.write(movie_end_image)
 
     def build_with_text(
         self, img, bingo_cell: BingoCardCell, seconds: int = 2
     ):
-        bingo_image_ratio = 0.7
+        bingo_image_ratio = 0.47  # 画像のサイズを縮小する比率
         total_frame = self.frame * seconds
 
         for i in range(total_frame):
-            bingo_cell_image = self.__fix_ratio(self.resolution, img)
+            bingo_cell_image = self.__create_bingo_cell_image(
+                img, bingo_image_ratio, total_frame, i
+            )
+
+            # コンテンツのテンプレートにビンゴセルに投稿した画像を挿入する
+            background_image_padding = (
+                int(0.15 * self.resolution[0]),
+                int(0.102 * self.resolution[1]),
+            )
+            bingo_celll_content_image = self.background_image.copy()
+            bingo_celll_content_image[
+                background_image_padding[0] : background_image_padding[0]
+                + bingo_cell_image.shape[0],
+                background_image_padding[1] : background_image_padding[1]
+                + bingo_cell_image.shape[1],
+            ] = bingo_cell_image
 
             # 日付を挿入
             dt = datetime.fromtimestamp(bingo_cell.answered_at.timestamp())
-            created_at_comment = f"撮影日 :{dt.strftime('%Y/%m/%d %H時%M分')}"
-            bingo_cell_image = self.__insert_text(
-                bingo_cell_image, created_at_comment, (700, 730), font_size=24
-            )
-
-            # 現在のフレームがフェードイン、フェードアウトの範囲内の時
-            bingo_cell_image = self.__add_fade(
-                bingo_cell_image, total_frame, i
-            )
-
-            # padding_imageを90%のサイズに縮小
-            bingo_cell_image = cv2.resize(
-                bingo_cell_image,
-                (0, 0),
-                fx=bingo_image_ratio,
-                fy=bingo_image_ratio,
-            )
-
-            # 素材となる画像を取得
-            background_image = self.__get_frame()
-            background_image = self.__fix_ratio(
-                self.resolution, background_image
+            created_at_comment = f"{dt.strftime('%Y/%m/%d %H時%M分')}"
+            bingo_celll_content_image = self.__insert_text(
+                bingo_celll_content_image,
+                created_at_comment,
+                (
+                    int(0.102 * self.resolution[1]),
+                    int(0.682 * self.resolution[0]),
+                ),
+                font_size=8,
             )
             # お題を挿入
-            background_image = self.__insert_text(
-                background_image,
-                f"お題: {bingo_cell.name}",
-                (10, 20),
-                font_size=32,
+            bingo_celll_content_image = self.__insert_text(
+                bingo_celll_content_image,
+                f"{bingo_cell.name}",
+                (
+                    int(0.101 * self.resolution[1]),
+                    int(0.626 * self.resolution[0]),
+                ),
+                font_size=18,
             )
             # コメントを挿入
-            background_image = self.__insert_text(
-                background_image, f"コメント: {bingo_cell.comments}", (10, 610)
+            bingo_celll_content_image = self.__insert_text(
+                bingo_celll_content_image,
+                f"{bingo_cell.comments}",
+                (
+                    int(0.628 * self.resolution[1]),
+                    int(0.526 * self.resolution[0]),
+                ),
+                font_size=14,
+                indent_text_count=12,
+                max_indent=5,
             )
 
-            # base_imageにpadding_imageを重ねる
-            w_padding = int(
-                self.resolution[1] * ((1 - bingo_image_ratio) / 2)
-            )  # 横の余白
-            h_padding = 70  # 縦の余白
-            background_image[
-                h_padding : h_padding + bingo_cell_image.shape[0],
-                w_padding : w_padding + bingo_cell_image.shape[1],
-            ] = bingo_cell_image
+            # 背景動画を重ねる
+            final_image = self.__overlay_base_image(bingo_celll_content_image)
 
-            # 動画に書き込み
-            self.outfh.write(background_image)
+            self.outfh.write(final_image)
+
+    def __overlay_base_image(self, bingo_celll_content_image):
+        """車が走る画像にコンテンツ画像を重ねる
+
+        Returns:
+            _type_: _description_
+        """
+        driving_car_image = self.__get_frame()
+        driving_car_image = self.__fix_ratio(
+            self.resolution,
+            driving_car_image,
+            background_color=[255, 255, 255],
+        )
+        # driving_car_imageの白色を投下して、bingo_celll_content_imageに貼り付ける
+        # maskを作成
+        mask = np.all(driving_car_image[:, :, :3] > [200, 200, 200], axis=-1)
+        driving_car_image = cv2.cvtColor(driving_car_image, cv2.COLOR_BGR2BGRA)
+        driving_car_image[mask, 3] = 0
+
+        # bingo_celll_content_imageにdriving_car_imageを重ねる
+        bingo_celll_content_image = cv2.cvtColor(
+            bingo_celll_content_image, cv2.COLOR_BGR2BGRA
+        )
+        final_image = np.where(
+            driving_car_image[:, :, 3:] != 0,
+            driving_car_image,
+            bingo_celll_content_image,
+        )
+        final_image = cv2.cvtColor(final_image, cv2.COLOR_BGRA2BGR)
+        return final_image
+
+    def __create_bingo_cell_image(
+        self, img, bingo_image_ratio, total_frame, i
+    ):
+        bingo_cell_image = self.__fix_ratio(self.resolution, img)
+
+        # 現在のフレームがフェードイン、フェードアウトの範囲内の時
+        bingo_cell_image = self.__add_fade(bingo_cell_image, total_frame, i)
+
+        # padding_imageを90%のサイズに縮小
+        bingo_cell_image = cv2.resize(
+            bingo_cell_image,
+            (0, 0),
+            fx=bingo_image_ratio,
+            fy=bingo_image_ratio,
+        )
+
+        return bingo_cell_image
 
     def __add_fade(self, bingo_cell_image, total_frame, i):
         """フェードイン、フェードアウトのエフェクトを追加する
@@ -144,7 +211,7 @@ class BingoCompleteMovie:
     def save(self):
         self.outfh.release()
 
-    def __fix_ratio(self, output_dim, img):
+    def __fix_ratio(self, output_dim, img, background_color=[0, 0, 0]):
         """画像の比率を固定して、paddingを追加する
 
         Args:
@@ -181,7 +248,7 @@ class BingoCompleteMovie:
             diff_left,
             diff_right,
             borderType=cv2.BORDER_CONSTANT,
-            value=[0, 0, 0],
+            value=background_color,
         )
         return padded_image
 
@@ -191,6 +258,8 @@ class BingoCompleteMovie:
         text: str,
         text_position: tuple = (10, 660),
         font_size=24,
+        indent_text_count=100,
+        max_indent=3,
     ):
         """テキストを挿入する
 
@@ -212,23 +281,20 @@ class BingoCompleteMovie:
         # 描画するオブジェクトを作成
         draw = ImageDraw.Draw(image_pil)
 
-        # テキストのバウンディングボックスを取得
-        bbox = draw.textbbox(
-            text_position,
-            text,
-            font=font,
-        )
-        bbox = (bbox[0] - 3, bbox[1] - 3, bbox[2] + 3, bbox[3] + 3)
-
-        # 半透明のグレー色の背景矩形を描く
-        overlay = image_pil.copy()
-        draw_overlay = ImageDraw.Draw(overlay)
-        draw_overlay.rectangle(bbox, fill=(245, 245, 245))
-        image_pil = Image.blend(image_pil, overlay, alpha=0.8)
-
         # テキストを描く
         draw = ImageDraw.Draw(image_pil)
         # 文字色は #222222
+        # textの文字数がindent_text_count文字以上の時は、改行する
+        if len(text) > indent_text_count:
+            text = "\n".join(
+                [
+                    text[i : i + indent_text_count]
+                    for i in range(0, len(text), indent_text_count)
+                    if i < max_indent * indent_text_count
+                ]
+            )
+            if len(text) > indent_text_count * max_indent:
+                text = f"{text[:-3]}..."
         draw.text(text_position, text, font=font, fill=(34, 34, 34))
 
         # OpenCV形式に変換
