@@ -28,8 +28,11 @@ def create_movie(
         if not bingo_cell.imageUrl:
             continue
         photo_name = f"{dir_path}/{bingo_cell.id}.png"
-        print(photo_name)
-        movie.build_with_text(cv2.imread(photo_name), bingo_cell, 4)
+        try:
+            movie.build_with_text(cv2.imread(photo_name), bingo_cell, 4)
+        except Exception as e:
+            print(f"画像の生成でエラーが発生しました。ファイル名: {photo_name} ,{e}")
 
+    movie.end_frame()
     movie.save()
     return movie.get_path()

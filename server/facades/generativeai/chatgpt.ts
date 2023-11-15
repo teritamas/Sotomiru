@@ -134,7 +134,7 @@ async function requestImage(prompt: string, base64Image: string) {
         },
       ],
     });
-    console.debug(result, result.choices[0]); // デバッグ用
+    // console.debug(result, result.choices[0]); // デバッグ用
     const response = result.choices[0].message.content;
     console.log("生成が完了しました: ", response);
 
