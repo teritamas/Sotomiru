@@ -1,6 +1,6 @@
 import {
   getAnonymousBingoCard,
-  getAllBingoCardByUid,
+  getAllBingoCardByUidNotPublic,
 } from "@/server/facades/repositories/bingoContents";
 import { BingoCardsGetAllResponse } from "@/server/models/bingo/response";
 import { idAuthentication } from "@/server/facades/auth/idAuthentication";
@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
     await idAuthentication(token)
       .then(async (uid) => {
         // uidがある場合はuidでフィルタして取得
-        const myBingoCards = await getAllBingoCardByUid(uid);
+        const myBingoCards = await getAllBingoCardByUidNotPublic(uid);
         bingoCards = bingoCards.concat(myBingoCards);
       })
       .catch(async (e) => {});
