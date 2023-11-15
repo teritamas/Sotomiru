@@ -53,7 +53,10 @@
           [Math.abs(state.currentNum - i) > maxVisibility ? 'none' : 'block']
         "
       >
-        <div class="card bg-white rounded-lg">
+        <div
+          v-if="Math.abs(state.currentNum - i) < maxVisibility"
+          class="card bg-white rounded-lg"
+        >
           <BingoCardView
             @openBingoCardDetailModal="openBingoCardDetailModal"
             :bingoCard="bingoCard"
