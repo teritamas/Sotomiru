@@ -65,12 +65,17 @@ export const getBingoCellDetail = async (
 /**
  * Uidでフィルタして全件取得
  */
-export const getAllBingoCardByUid = async (uid: string) => {
+export const getAllBingoCardByUidNotPublic = async (uid: string) => {
   try {
     // createdUidがuidのものを取得する
     const querySnapshot = await firestore
       .collection("bingoCard")
-      .where("createdUid", "==", uid)
+      .where(
+        Filter.and(
+          Filter.where("createdUid", "==", uid),
+          Filter.where("isPublic", "==", false) // isPublicがfalseのものは、別の処理で取得するため取得しない
+        )
+      )
       .orderBy("createdAt", "desc")
       .get();
     const bingoCard = querySnapshot.docs.map((doc) => {
