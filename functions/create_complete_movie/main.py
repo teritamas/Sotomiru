@@ -1,14 +1,19 @@
 import os
 import shutil
 from create_complete_movie.facades.firestore.bingo_card import (
+    add_bingo_clear_movie,
     fetch_bingo_cell,
     fetch_clear_and_no_video_bingo_cards,
 )
 from create_complete_movie.facades.storage.firestore import (
     download_bingo_cell_image,
+    upload_bingo_clear_movie,
 )
 
 from create_complete_movie.services.nft_service import mint_and_transfer_nft
+from create_complete_movie.services.create_movie_service import (
+    create_movie,
+)
 
 URL_PREFIX = (
     "https://firebasestorage.googleapis.com/v0/b"
@@ -27,7 +32,7 @@ def main():
         __create_and_upload(bingo_card_id)
 
 
-def __create_and_upload(bingo_card_id):
+def __create_and_upload(bingo_card_id, debug_mode=False):
     bingo_cells = fetch_bingo_cell(bingo_card_id)
     # フォルダを削除する
     if os.path.exists(FOLDER_NAME):
@@ -47,13 +52,13 @@ def __create_and_upload(bingo_card_id):
         )
 
     print("動画を作成します")
-    # video_path = create_movie(FOLDER_NAME, bingo_cells)
+    video_path = create_movie(FOLDER_NAME, bingo_cells)
     # video_path = "_temp/bingoCellImage/video.mp4"
 
     print("動画をアップロードします")
-    # public_url = upload_bingo_clear_movie(video_path, f"{bingo_card_id}.mp4")
-    public_url = "https://storage.googleapis.com/key3-global-hackathon.appspot.com/bingoClearMovie/8d1a9a97-8e79-4c94-b7c6-4cbe9a0f03c2.mp4"
-    # add_bingo_clear_movie(bingo_card_id, public_url)
+    public_url = upload_bingo_clear_movie(video_path, f"{bingo_card_id}.mp4")
+    # public_url = "https://storage.googleapis.com/key3-global-hackathon.appspot.com/bingoClearMovie/8d1a9a97-8e79-4c94-b7c6-4cbe9a0f03c2.mp4"
+    add_bingo_clear_movie(bingo_card_id, public_url)
 
     # アップロード後動画をNFT化する
     print("動画をNFT化します")
@@ -62,3 +67,7 @@ def __create_and_upload(bingo_card_id):
 
 if __name__ == "__main__":
     main()
+
+    # __create_and_upload(
+    #     "e6ffc63f-25ed-4413-ad66-4a4600c38ebc", debug_mode=True
+    # )  # デバッグ用
