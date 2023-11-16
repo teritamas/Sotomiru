@@ -5,6 +5,10 @@ interface BongoCreateRequest {
   isPublic: boolean; // ビンゴの公開設定
 }
 
+interface BongoPutRequest {
+  isPublic: boolean; // ビンゴの公開設定
+}
+
 /**
  * ビンゴセルに投稿した画像が、ビンゴのタイトルに対して正しいかどうかを確認するリクエストに利用するDTO
  */

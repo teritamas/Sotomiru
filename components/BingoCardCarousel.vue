@@ -59,6 +59,9 @@
         >
           <BingoCardView
             @openBingoCardDetailModal="openBingoCardDetailModal"
+            @changeBingoViewSetting="
+              emits('changeBingoViewSetting', bingoCard.id, $event)
+            "
             :bingoCard="bingoCard"
             :currentUserUid="props.currentUserUid"
             :isDisplayCenter="state.currentNum == i"
@@ -132,6 +135,7 @@ const emits = defineEmits([
   "postCheckFollowingSubject",
   "clearIsFollowingSubject",
   "getBingoCellDetail",
+  "changeBingoViewSetting",
 ]);
 
 const bingoCellId = ref("");

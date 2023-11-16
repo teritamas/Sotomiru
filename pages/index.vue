@@ -5,6 +5,7 @@
     @postBingoCellRequest="postBingoCellRequest"
     @postCheckFollowingSubject="postCheckFollowingSubject"
     @getBingoCellDetail="getBingoCellDetail"
+    @changeBingoViewSetting="changeBingoViewSetting"
     :bingoCards="bingoCardDetails"
     :isFollowingSubject="isFollowingSubject"
     :currentUserUid="currentUser?.uid"
@@ -154,6 +155,28 @@ const getBingoCellDetail = async (bingoCardId: string, bingoCellId: string) => {
   );
   const data = (await res.json()) as BingoCellGetResponse;
   bingoCellDetail.value = data.bingoCellDetail;
+};
+
+// ビンゴカードの公開設定を変更する
+const changeBingoViewSetting = async (
+  bingoCardId: string,
+  isPublic: boolean
+) => {
+  const res = await useFetch(`/api/bingoCard/${bingoCardId}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${await currentUser.value?.getIdToken()}`,
+    },
+    body: JSON.stringify({
+      isPublic: isPublic,
+    } as BongoPutRequest),
+  });
+  // const data = (await res.json()) as BingoCardPutResponse;
+  // if (data.isSuccess) {
+  //   // 最新の状態を取得
+  //   const token = await currentUser.value?.getIdToken();
+  //   await getAllBingoCard(token);
+  // }
 };
 
 // ビンゴカードをコンプリートしたときのお祝い画面をひらく

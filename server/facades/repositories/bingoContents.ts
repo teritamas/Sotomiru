@@ -170,6 +170,23 @@ export const addBingoCard = async (bingoCard: BingoCard) => {
 };
 
 /**
+ * ビンゴカードを更新する
+ */
+export const updateBingoCard = async (
+  bingoCardId: string,
+  bingoPutRequest: BongoPutRequest
+) => {
+  try {
+    const docRef = await firestore
+      .collection("bingoCard")
+      .doc(bingoCardId)
+      .update({ ...bingoPutRequest });
+  } catch (e) {
+    console.error("[updateBingoCard]", e);
+  }
+};
+
+/**
  * ビンゴカードのセルを取得する
  */
 export const getBingoCell = async (
