@@ -1,12 +1,5 @@
-import {
-  BingoCardDetail,
-  AppearBingoCompleteDto,
-  BingoCellDetail,
-} from "./dto";
-
-export interface BingoCardsGetAllResponse {
-  bingoCardDetails: BingoCardDetail[];
-}
+import { AppearBingoCompleteDto } from "../bingoCard/dto";
+import { BingoCellDetail } from "./dto";
 
 export interface BingoCellGetResponse {
   bingoCellDetail: BingoCellDetail;

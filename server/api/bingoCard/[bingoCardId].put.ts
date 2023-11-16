@@ -1,5 +1,5 @@
-import { idAuthentication } from "~/server/facades/auth/idAuthentication";
-import { updateBingoCard } from "~/server/facades/repositories/bingoContents";
+import { idAuthentication } from "@/server/facades/auth/idAuthentication";
+import { updateBingoCard } from "@/server/facades/repositories/bingoCard/bingoCard";
 
 export default defineEventHandler(async (event) => {
   try {
