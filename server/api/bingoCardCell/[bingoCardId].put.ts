@@ -2,7 +2,7 @@ import { createError, MultiPartData } from "h3";
 import { v4 as uuidv4 } from "uuid";
 import { uploadBingoCellImage } from "@/server/facades/storage/bingoCellImage";
 import fs from "fs";
-import { BingoCellPutResponse as BingoCellPutResponse } from "~/server/models/bingo/response";
+import { BingoCellPutResponse as BingoCellPutResponse } from "~/server/models/bingoCard/response";
 import { idAuthentication } from "~/server/facades/auth/idAuthentication";
 import {
   getUserInfo,
@@ -38,7 +38,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // リクエストボディとファイルを取得
-    let requestBody: BingoCellPostRequest | undefined = undefined;
+    let requestBody: BingoCellPutRequest | undefined = undefined;
     let file: Buffer | undefined = undefined;
     for (const d of data) {
       if (d.name === "request") {

@@ -1,6 +1,6 @@
-import { BingoCardsGetAllResponse } from "@/server/models/bingo/response";
+import { BingoCardsGetAllResponse } from "~/server/models/bingoCard/response";
 import { idAuthentication } from "@/server/facades/auth/idAuthentication";
-import { BingoCard, BingoCardDetail } from "@/server/models/bingo/dto";
+import { BingoCard, BingoCardDetail } from "~/server/models/bingoCard/dto";
 import { checkBingoOrReachLines } from "../../utils/bingoCheck";
 import {
   getAllBingoCardByUidNotPublic,

@@ -2,7 +2,7 @@ import {
   BingoCard,
   CompleteBingoLine,
   ReachLine,
-} from "@/server/models/bingo/dto";
+} from "~/server/models/bingoCard/dto";
 
 /**
  * ビンゴかリーチが成立していることを確認する。

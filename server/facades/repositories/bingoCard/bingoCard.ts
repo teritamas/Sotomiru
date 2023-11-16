@@ -2,8 +2,7 @@ import {
   BingoCard,
   AppearBingoCompleteDto,
   BingoCardDetail,
-  BingoCellDetail,
-} from "@/server/models/bingo/dto";
+} from "~/server/models/bingoCard/dto";
 import { firestore } from "../../firebase";
 import { checkBingoOrReachLines } from "~/server/utils/bingoCheck";
 import { Filter } from "firebase-admin/firestore";
