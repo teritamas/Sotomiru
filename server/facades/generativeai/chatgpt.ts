@@ -1,5 +1,5 @@
 import { OpenAI } from "openai";
-import { BingoCell } from "@/server/models/bingo/dto";
+import { BingoCell } from "@/server/models/bingoCard/dto";
 import { CreateBingoCellThemeResponse } from "@/server/models/facades/generativeai/chatgpt";
 import {
   ImageDescriptionResponse,

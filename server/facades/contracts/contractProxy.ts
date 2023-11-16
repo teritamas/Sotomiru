@@ -1,5 +1,5 @@
 import axios from "axios";
-import { MintBingoTokenPutRequest } from "~/server/models/facades/contracts/contractProxy";
+import { MintBingoTokenPutRequest } from "@/server/models/facades/contracts/contractProxy";
 
 const API_URL = process.env.CONTRACT_PROXY_API_ENDPOINT;
 

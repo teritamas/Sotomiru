@@ -103,7 +103,7 @@
 <script setup lang="ts">
 import dayjs from "dayjs";
 import "dayjs/locale/ja"; // 日本語ロケールを有効化
-import { BingoCardDetail } from "~/server/models/bingo/dto";
+import { BingoCardDetail } from "@/server/models/bingo/dto";
 
 const props = defineProps({
   bingoCard: {
@@ -168,7 +168,7 @@ const bingoCardPublicMessage = computed(() => {
   if (props.bingoCard.createdUid !== props.currentUserUid) {
     return "公開中";
   } else {
-    return props.bingoCard.isPublic ? "公開する" : "非公開にする";
+    return props.bingoCard.isPublic ? "公開中" : "非公開";
   }
 });
 

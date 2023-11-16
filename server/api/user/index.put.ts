@@ -1,5 +1,5 @@
-import { idAuthentication } from "~/server/facades/auth/idAuthentication";
-import { updateUserInfo } from "~/server/facades/repositories/users";
+import { idAuthentication } from "@/server/facades/auth/idAuthentication";
+import { updateUserInfo } from "@/server/facades/repositories/users";
 
 /**
  * ユーザ情報を更新する
