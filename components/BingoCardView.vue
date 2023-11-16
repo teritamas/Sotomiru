@@ -103,7 +103,7 @@
 <script setup lang="ts">
 import dayjs from "dayjs";
 import "dayjs/locale/ja"; // 日本語ロケールを有効化
-import { BingoCardDetail } from "~/server/models/bingo/dto";
+import { BingoCardDetail } from "@/server/models/bingo/dto";
 
 const props = defineProps({
   bingoCard: {

@@ -2,9 +2,9 @@ import {
   BingoCard,
   AppearBingoCompleteDto,
   BingoCardDetail,
-} from "~/server/models/bingoCard/dto";
+} from "@/server/models/bingoCard/dto";
 import { firestore } from "../../firebase";
-import { checkBingoOrReachLines } from "~/server/utils/bingoCheck";
+import { checkBingoOrReachLines } from "@/server/utils/bingoCheck";
 import { Filter } from "firebase-admin/firestore";
 
 /**

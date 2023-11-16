@@ -1,5 +1,5 @@
 import { idAuthentication } from "@/server/facades/auth/idAuthentication";
-import { updateUserWallet } from "~/server/facades/repositories/users";
+import { updateUserWallet } from "@/server/facades/repositories/users";
 
 export default defineEventHandler(async (event) => {
   try {

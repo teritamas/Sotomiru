@@ -1,6 +1,6 @@
-import { BingoCard } from "~/server/models/bingoCard/dto";
+import { BingoCard } from "@/server/models/bingoCard/dto";
 import { firestore } from "../../firebase";
-import { BingoCellDetail } from "~/server/models/bingoCardCell/dto";
+import { BingoCellDetail } from "@/server/models/bingoCardCell/dto";
 
 /**
  * ビンゴセルの詳細を取得する

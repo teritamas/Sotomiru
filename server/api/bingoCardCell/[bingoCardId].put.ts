@@ -2,17 +2,17 @@ import { createError, MultiPartData } from "h3";
 import { v4 as uuidv4 } from "uuid";
 import { uploadBingoCellImage } from "@/server/facades/storage/bingoCellImage";
 import fs from "fs";
-import { BingoCellPutResponse as BingoCellPutResponse } from "~/server/models/bingoCard/response";
-import { idAuthentication } from "~/server/facades/auth/idAuthentication";
+import { BingoCellPutResponse as BingoCellPutResponse } from "@/server/models/bingoCard/response";
+import { idAuthentication } from "@/server/facades/auth/idAuthentication";
 import {
   getUserInfo,
   incrementBingoClearCount,
   updateUserPreGrantBingoToken,
-} from "~/server/facades/repositories/users";
-import { mintBingoToken } from "~/server/facades/contracts/contractProxy";
-import { MintBingoTokenPutRequest } from "~/server/models/facades/contracts/contractProxy";
-import { updateBingoCell } from "~/server/facades/repositories/bingoCard/bingoCardCell";
-import { checkBingoComplete } from "~/server/facades/repositories/bingoCard/bingoCard";
+} from "@/server/facades/repositories/users";
+import { mintBingoToken } from "@/server/facades/contracts/contractProxy";
+import { MintBingoTokenPutRequest } from "@/server/models/facades/contracts/contractProxy";
+import { updateBingoCell } from "@/server/facades/repositories/bingoCard/bingoCardCell";
+import { checkBingoComplete } from "@/server/facades/repositories/bingoCard/bingoCard";
 
 export default defineEventHandler(async (event) => {
   try {
