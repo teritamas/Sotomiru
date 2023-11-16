@@ -80,7 +80,7 @@ const postCheckFollowingSubject = async (
     } as CheckFollowingSubjectPostRequest)
   );
   const res = await fetch(
-    `/api/bingoCell/checkFollowingSubject/${bingoCardId}`,
+    `/api/bingoCardCell/checkFollowingSubject/${bingoCardId}`,
     {
       method: "POST",
       body: formData,
@@ -119,7 +119,7 @@ const postBingoCellRequest = async (
     } as BingoCellPostRequest)
   );
   formData.append("file", file);
-  const res = await fetch(`/api/bingoCell/${bingoCardId}`, {
+  const res = await fetch(`/api/bingoCardCell/${bingoCardId}`, {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${await currentUser.value?.getIdToken()}`,
@@ -148,7 +148,7 @@ const postBingoCellRequest = async (
 // ビンゴセルの詳細情報を取得する
 const getBingoCellDetail = async (bingoCardId: string, bingoCellId: string) => {
   const res = await fetch(
-    `/api/bingoCell/${bingoCardId}?bingoCellId=${bingoCellId}`,
+    `/api/bingoCardCell/${bingoCardId}?bingoCellId=${bingoCellId}`,
     {
       headers: {},
     }
