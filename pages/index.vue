@@ -32,7 +32,7 @@ import {
 import { IsFollowingSubjectResponse } from "@/server/models/facades/visionai/imageDescription";
 import { useCurrentUser } from "vuefire";
 
-const currentUser = useCurrentUser(); // TODO: 画面をリロードすると全てのビンゴカードが表示される不具合あり
+const currentUser = useCurrentUser();
 const bingoCardDetails = ref([] as BingoCardDetail[]);
 const bingoCellDetail = ref(null as BingoCellDetail | null);
 const isFollowingSubject = ref(null as IsFollowingSubjectResponse | null);
@@ -171,12 +171,6 @@ const changeBingoViewSetting = async (
       isPublic: isPublic,
     } as BongoPutRequest),
   });
-  // const data = (await res.json()) as BingoCardPutResponse;
-  // if (data.isSuccess) {
-  //   // 最新の状態を取得
-  //   const token = await currentUser.value?.getIdToken();
-  //   await getAllBingoCard(token);
-  // }
 };
 
 // ビンゴカードをコンプリートしたときのお祝い画面をひらく
