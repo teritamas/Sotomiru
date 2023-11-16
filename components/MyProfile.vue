@@ -64,7 +64,7 @@ const props = defineProps({
     required: true,
   },
   bingoToken: {
-    type: Object as PropType<NFT>,
+    type: Object as PropType<NFT | undefined>,
     required: true,
   },
 });
