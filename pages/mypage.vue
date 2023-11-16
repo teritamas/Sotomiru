@@ -172,7 +172,6 @@ watchEffect(async () => {
     bingoToken.value = ownNfts.value.find(
       (nft) => nft.metadata.id === bingoTokenId
     );
-    console.log(bingoToken.value);
     isLoading.value = false;
   }
 });
