@@ -1,10 +1,10 @@
 import { v4 as uuidv4 } from "uuid";
-import { addBingoCard } from "@/server/facades/repositories/bingoContents";
 import { BingoCard, BingoCell } from "@/server/models/bingo/dto";
 import { createBingoCellTheme } from "@/server/facades/generativeai/chatgpt";
 import { CreateBingoCellThemeResponse } from "@/server/models/facades/generativeai/chatgpt";
 import { idAuthentication } from "@/server/facades/auth/idAuthentication";
 import { incrementBingoCreationCount } from "@/server/facades/repositories/users";
+import { addBingoCard } from "~/server/facades/repositories/bingoCard/bingoCard";
 
 /**
  * ビンゴカードを新規作成する

@@ -1,11 +1,11 @@
-import {
-  getAnonymousBingoCard,
-  getAllBingoCardByUidNotPublic,
-} from "@/server/facades/repositories/bingoContents";
 import { BingoCardsGetAllResponse } from "@/server/models/bingo/response";
 import { idAuthentication } from "@/server/facades/auth/idAuthentication";
 import { BingoCard, BingoCardDetail } from "@/server/models/bingo/dto";
 import { checkBingoOrReachLines } from "../../utils/bingoCheck";
+import {
+  getAllBingoCardByUidNotPublic,
+  getAnonymousBingoCard,
+} from "~/server/facades/repositories/bingoCard/bingoCard";
 
 /**
  * ビンゴカードを　全件取得する

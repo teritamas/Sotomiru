@@ -1,4 +1,4 @@
-import { getBingoCellDetail } from "~/server/facades/repositories/bingoContents";
+import { getBingoCellDetail } from "~/server/facades/repositories/bingoCard/bingoCardCell";
 import { BingoCellGetResponse } from "~/server/models/bingo/response";
 
 export default defineEventHandler(async (event) => {

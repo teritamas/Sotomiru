@@ -1,8 +1,8 @@
 import { createError, MultiPartData } from "h3";
-import { getBingoCell } from "@/server/facades/repositories/bingoContents";
 import { BingoCell } from "@/server/models/bingo/dto";
 import { IsFollowingSubjectResponse } from "@/server/models/facades/visionai/imageDescription";
 import { validateFollowingSubject } from "@/server/facades/generativeai/chatgpt";
+import { getBingoCell } from "~/server/facades/repositories/bingoCard/bingoCardCell";
 
 export default defineEventHandler(async (event) => {
   try {
