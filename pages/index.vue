@@ -41,7 +41,7 @@ const isLoading = ref(false);
 const loadingMessage = ref("");
 
 // 全てのビンゴカードを取得
-onMounted(async () => {
+watchEffect(async () => {
   loadingMessage.value = "ビンゴカードを読み込んでいます";
   isLoading.value = true;
   const token = await currentUser.value?.getIdToken();
