@@ -168,7 +168,7 @@ const bingoCardPublicMessage = computed(() => {
   if (props.bingoCard.createdUid !== props.currentUserUid) {
     return "公開中";
   } else {
-    return props.bingoCard.isPublic ? "公開する" : "非公開にする";
+    return props.bingoCard.isPublic ? "公開中" : "非公開";
   }
 });
 
