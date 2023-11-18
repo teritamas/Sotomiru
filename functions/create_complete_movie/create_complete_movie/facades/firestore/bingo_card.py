@@ -20,6 +20,19 @@ def fetch_bingo_cell(bingo_card_id: str) -> Union[list[BingoCardCell], None]:
     return [BingoCardCell(**cell) for cell in bingo_cells]
 
 
+def fetch_bingo_card_name(bingo_card_id: str) -> Union[str, None]:
+    """ビンゴカードに紐づくビンゴセルを取得する
+
+    Args:
+        bingo_card_id (str): _description_
+
+    Returns:
+        Union[list[BingoCardCell], None]: _description_
+    """
+    bingo_card = db.fetch(collection=COLLECTION_PREFIX, id=bingo_card_id)
+    return bingo_card.get("name")
+
+
 def fetch_bingo_card_answer_users(
     bingo_card_id: str,
 ) -> Union[list[str], None]:

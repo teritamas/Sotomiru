@@ -4,7 +4,9 @@ from create_complete_movie.services.movie_builder import BingoCompleteMovie
 
 
 def create_movie(
-    dir_path, bingo_cells: list[BingoCardCell], output_dim=(768, 1024)
+    dir_path,
+    bingo_card_name: str,
+    bingo_cells: list[BingoCardCell],
 ):
     """ビンゴカードのクリア動画を作成する
 
@@ -17,6 +19,8 @@ def create_movie(
         _type_: _description_
     """
     movie = BingoCompleteMovie(dir_path)
+    movie.start_frame(bingo_card_name)
+
     target_bingo_cells = [
         bingo_cell for bingo_cell in bingo_cells if bingo_cell.imageUrl
     ]
