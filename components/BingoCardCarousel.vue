@@ -1,14 +1,15 @@
 <template>
   <div
     id="vue-carousel"
-    style="height: 35rem; width: 100vw; overflow: hidden"
+    class="h-[90vh]"
+    style="width: 100vw; overflow: hidden"
     @touchstart="onTouchStartCard"
     @mousedown="onTouchStartCard"
   >
     <div class="carousel">
       <button
         class="nav left text-4xl"
-        v-if="state.currentNum > 0 && !modalIsOpen"
+        v-if="state.currentNum > 0 && !modalIsOpen && !videoModalIsOpen"
         @click="activeDecrement"
       >
         <svg
@@ -59,6 +60,8 @@
         >
           <BingoCardView
             @openBingoCardDetailModal="openBingoCardDetailModal"
+            @openVideoModal="openVideoModal"
+            @closeVideoModal="closeVideoModal"
             @changeBingoViewSetting="
               emits('changeBingoViewSetting', bingoCard.id, $event)
             "
@@ -70,19 +73,19 @@
       </div>
       <button
         class="nav right text-4xl"
-        v-if="state.currentNum < props.bingoCards.length - 1 && !modalIsOpen"
+        v-if="
+          state.currentNum < props.bingoCards.length - 1 &&
+          !modalIsOpen &&
+          !videoModalIsOpen
+        "
         @click="activeIncrement"
       >
         <svg
           stroke="currentColor"
           fill="currentColor"
-          stroke-width="0"
-          version="1.2"
-          baseProfile="tiny"
           viewBox="0 0 24 24"
           height="1em"
           width="1em"
-          xmlns="http://www.w3.org/2000/svg"
         >
           <path
             d="M10 20c-.802 0-1.555-.312-2.122-.879-.566-.566-.878-1.32-.878-2.121s.312-1.555.879-2.122l2.878-2.878-2.878-2.879c-.567-.566-.879-1.32-.879-2.121s.312-1.555.879-2.122c1.133-1.132 3.109-1.133 4.243.001l7.121 7.121-7.122 7.121c-.566.567-1.319.879-2.121.879zm0-14c-.268 0-.518.104-.707.292-.189.19-.293.441-.293.708s.104.518.293.707l4.292 4.293-4.292 4.293c-.189.189-.293.439-.293.707s.104.518.293.707c.378.379 1.037.378 1.414.001l5.708-5.708-5.708-5.707c-.189-.189-.439-.293-.707-.293z"
@@ -229,6 +232,15 @@ const selectedBingoCardCellNo = computed(() => {
  */
 // ビンゴカード詳細モーダルを開く
 const modalIsOpen = ref(false);
+const videoModalIsOpen = ref(false); //孫の  MovieModalのステータス管理のため
+const openVideoModal = () => {
+  //孫の  MovieModalのステータス管理のため
+  videoModalIsOpen.value = true;
+};
+const closeVideoModal = () => {
+  //孫の  MovieModalのステータス管理のため
+  videoModalIsOpen.value = false;
+};
 const openNextBingoCardDetailModal = (index: number) => {
   openBingoCardDetailModal(selectedBingoCard.value.bingoCells[index].id);
 };
