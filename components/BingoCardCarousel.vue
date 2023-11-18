@@ -149,6 +149,17 @@ const state = reactive({
 });
 
 /**
+ * BingoCardsが更新された時、currentNumを更新する
+ */
+watchEffect(() => {
+  if (props.bingoCards.length === 0) {
+    state.currentNum = 0;
+  } else if (state.currentNum >= props.bingoCards.length) {
+    state.currentNum = props.bingoCards.length - 1;
+  }
+});
+
+/**
  *  ビンゴカード一覧のスワイプ処理
  */
 const onTouchMoveCard = (event: any) => {
