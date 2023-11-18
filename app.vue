@@ -77,11 +77,11 @@ body {
 .main {
   /*max-width: 600px;*/
   margin: 0 auto;
-  padding-top: 5rem;
+  padding-top: 4rem;
 }
 .bingo-card-frame {
   max-width: 500px;
-  margin: 1rem auto;
+  margin: 0 auto;
   padding-top: 2rem;
   padding-left: 1rem;
   padding-right: 1rem;

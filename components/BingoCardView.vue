@@ -98,6 +98,7 @@
     :clearMovieUrl="bingoCard.clearMovieUrl"
     :bingoCard="bingoCard"
     @closeMovieModal="closeMovieModal"
+    @closeVideoModal="closeVideoModal"
   />
 </template>
 
@@ -123,9 +124,14 @@ const props = defineProps({
 const emits = defineEmits([
   "openBingoCardDetailModal",
   "changeBingoViewSetting",
+  "closeVideoModal", //親の BingoCardCarouselでのステータス管理のため
+  "openVideoModal", //親の BingoCardCarouselでのステータス管理のため
 ]);
-const openBingoCardDetailModal = async (bingoCellId: string) => {
-  await emits("openBingoCardDetailModal", bingoCellId);
+const closeVideoModal = () => {
+  emits("closeVideoModal"); //親の BingoCardCarouselでのステータス管理のため
+};
+const openBingoCardDetailModal = (bingoCellId: string) => {
+  emits("openBingoCardDetailModal", bingoCellId);
 };
 // computed プロパティを作成
 const createdAt = computed(() => {
@@ -181,6 +187,7 @@ const movieModalIsOpen = ref(false);
 const openMovieModal = (clearMovieUrl: String) => {
   if (!clearMovieUrl) return false;
   movieModalIsOpen.value = true;
+  emits("openVideoModal");
 };
 // ビンゴカード詳細モーダルを閉じる
 const closeMovieModal = async () => {

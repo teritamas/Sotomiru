@@ -11,7 +11,7 @@
         :url="props.clearMovieUrl"
       ></ShareButton>
       <!-- Modal header -->
-      <div class="flex items-center justify-between p-5 rounded-t">
+      <div class="flex items-center justify-between pt-5 px-5 rounded-t">
         <h3 class="text-lg font-extrabold text-gray-00 pl-2"></h3>
         <button
           @click="closeMovieModal()"
@@ -39,13 +39,13 @@
       <!-- Modal body -->
       <div class="px-6">
         <video
-          class="m-auto w-11/12 md:w-8/12 lg:w-6/12"
+          class="m-auto w-11/12 md:w-8/12 lg:w-6/12 sm:h-[74vh]"
           :src="clearMovieUrl"
           controls
         ></video>
       </div>
       <!-- Modal footer -->
-      <div class="flex justify-between p-6 space-x-2 rounded-b">
+      <div class="flex justify-between pb-6 px-6 space-x-2 rounded-b">
         <button
           @click="closeMovieModal()"
           data-modal-hide="extralarge-modal"
@@ -72,14 +72,15 @@ const props = defineProps({
   },
 });
 
-const emits = defineEmits(["closeMovieModal"]);
+const emits = defineEmits(["closeMovieModal", "closeVideoModal"]);
 
 /**
  * モーダルの状態に関する定義
  */
 // モーダルクローズのイベント発火
-const closeMovieModal = async () => {
-  await emits("closeMovieModal");
+const closeMovieModal = () => {
+  emits("closeMovieModal");
+  emits("closeVideoModal"); //親の親の BingoCardCarouselでのステータス管理のため
 };
 </script>
 
