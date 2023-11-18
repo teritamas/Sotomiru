@@ -62,7 +62,7 @@ footer {
   box-shadow: 10px;
 }
 .footer-item:hover {
-  background: #878c8d;
+  background: var(--c7);
   color: white;
   border-radius: 1rem;
   cursor: pointer;

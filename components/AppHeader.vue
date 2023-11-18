@@ -51,7 +51,7 @@ const currentUser = useCurrentUser();
 
 <style scoped>
 header {
-  z-index: 5;
+  z-index: 10;
 }
 .system-title {
   font: 700 1rem var(--font);
