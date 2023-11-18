@@ -173,9 +173,9 @@ const isReach = (index: number) => {
  */
 const bingoCardPublicMessage = computed(() => {
   if (props.bingoCard.createdUid !== props.currentUserUid) {
-    return "公開中";
+    return "パブリックモード";
   } else {
-    return props.bingoCard.isPublic ? "公開中" : "非公開";
+    return props.bingoCard.isPublic ? "パブリックモード" : "プライベートモード";
   }
 });
 

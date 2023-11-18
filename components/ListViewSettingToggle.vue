@@ -35,9 +35,7 @@ const emits = defineEmits(["getAllBingoCard"]);
  * ビンゴカードの公開設定
  */
 const bingoCardPublicMessage = computed(() => {
-  return props.isPublicOnly
-    ? "公開中のビンゴカードのみ表示中"
-    : "自分のビンゴカードのみ表示中";
+  return props.isPublicOnly ? "パブリックモード" : "プライベートモード";
 });
 
 const updateInput = (event: InputEvent) => {
