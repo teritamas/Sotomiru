@@ -10,8 +10,6 @@ CRED_PATH = environ.get(
 GOOGLE_CLOUD_STORAGE_BUCKET_NAME = environ.get(
     "GOOGLE_CLOUD_STORAGE_BUCKET_NAME", "key3-global-hackathon.appspot.com"
 )
-FONT_NAME = environ.get("FONT_NAME", "Arial Unicode")
-
 THIRDWEB_API_KEY = environ.get("THIRDWEB_API_KEY", "")
 THIRDWEB_SIGNER_PRIVATEKEY = environ.get("THIRDWEB_SIGNER_PRIVATEKEY", "")
 ERC1155_CONTRACT_ADDRESS = environ.get("ERC1155_CONTRACT_ADDRESS", "")

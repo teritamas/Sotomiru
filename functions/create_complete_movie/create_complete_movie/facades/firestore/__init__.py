@@ -1,9 +1,8 @@
 from typing import Any
+from create_complete_movie import config
 
 import firebase_admin
 from firebase_admin import credentials, firestore
-
-from create_complete_movie import config
 
 
 class FireStore:

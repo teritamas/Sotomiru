@@ -1,10 +1,11 @@
 import os
-from create_complete_movie import config
 from create_complete_movie.models.bingo_card import BingoCardCell
 import cv2
 from PIL import Image, ImageDraw, ImageFont
 import numpy as np
 from datetime import datetime
+
+FONT_NAME = "./assets/font/KiwiMaru-Regular.ttf"
 
 
 class BingoCompleteMovie:
@@ -91,9 +92,9 @@ class BingoCompleteMovie:
                 bingo_card_name,
                 (
                     int(0.197 * self.resolution[1]),
-                    int(0.40 * self.resolution[0]),
+                    int(0.36 * self.resolution[0]),
                 ),
-                font_size=24,
+                font_size=40,
             )
             self.outfh.write(bingo_card_name_image)
 
@@ -137,7 +138,7 @@ class BingoCompleteMovie:
                 bingo_cell_content_image,
                 created_at_comment,
                 (
-                    int(0.690 * self.resolution[1]),
+                    int(0.668 * self.resolution[1]),
                     int(0.090 * self.resolution[0]),
                 ),
                 font_size=12,
@@ -326,14 +327,11 @@ class BingoCompleteMovie:
         )
 
         # フォントを読み込む
-        font = ImageFont.truetype(config.FONT_NAME, font_size)
+        font = ImageFont.truetype(FONT_NAME, font_size)
 
         # 描画するオブジェクトを作成
         draw = ImageDraw.Draw(image_pil)
 
-        # テキストを描く
-        draw = ImageDraw.Draw(image_pil)
-        # 文字色は #222222
         # textの文字数がindent_text_count文字以上の時は、改行する
         if len(text) > indent_text_count:
             text = "\n".join(
@@ -345,7 +343,13 @@ class BingoCompleteMovie:
             )
             if len(text) > indent_text_count * max_indent:
                 text = f"{text[:-3]}..."
-        draw.text(text_position, text, font=font, fill=(34, 34, 34))
+        # テキストを描画,フォントの色は#7d7d7d
+        draw.text(
+            text_position,
+            text,
+            font=font,
+            fill=(125, 125, 125),
+        )
 
         # OpenCV形式に変換
         padded_image = cv2.cvtColor(np.array(image_pil), cv2.COLOR_RGB2BGR)
