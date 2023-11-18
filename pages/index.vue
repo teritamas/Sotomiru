@@ -6,7 +6,7 @@
     @postCheckFollowingSubject="postCheckFollowingSubject"
     @getBingoCellDetail="getBingoCellDetail"
     @changeBingoViewSetting="changeBingoViewSetting"
-    @changeBingoListViewSetting="changeBingoListViewSetting"
+    @getAllBingoCard="getAllBingoCard"
     :isPublicOnly="isPublicOnly"
     :bingoCards="bingoCardDetails"
     :isFollowingSubject="isFollowingSubject"
@@ -49,20 +49,15 @@ watchEffect(async () => {
   loadingMessage.value = "ビンゴカードを読み込んでいます";
   isLoading.value = true;
   const token = await currentUser.value?.getIdToken();
-  isPublicOnly.value = token !== null;
   await getAllBingoCard(isPublicOnly.value);
   isLoading.value = false;
 });
 
-const changeBingoListViewSetting = async (toggle: boolean) => {
-  isPublicOnly.value = toggle;
-  await getAllBingoCard(isPublicOnly.value);
-};
-
 // ビンゴカードの情報取得
-const getAllBingoCard = async (isPublicOnly: boolean) => {
+const getAllBingoCard = async (toggle: boolean) => {
+  isPublicOnly.value = toggle;
   const token = await currentUser.value?.getIdToken();
-  const res = await fetch(`api/bingoCard?isPublicOnly=${isPublicOnly}`, {
+  const res = await fetch(`api/bingoCard?isPublicOnly=${isPublicOnly.value}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
