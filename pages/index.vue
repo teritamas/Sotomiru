@@ -1,17 +1,13 @@
 <template>
   <loading v-show="isLoading" :LoadingText="loadingMessage" />
-  <!-- 中央揃え -->
-  <ListViewSettingToggle
-    :isPublicOnly="isPublicOnly"
-    @changeBingoListViewSetting="changeBingoListViewSetting"
-  />
-
   <BingoCardCarousel
     @clearIsFollowingSubject="clearIsFollowingSubject"
     @postBingoCellRequest="postBingoCellRequest"
     @postCheckFollowingSubject="postCheckFollowingSubject"
     @getBingoCellDetail="getBingoCellDetail"
     @changeBingoViewSetting="changeBingoViewSetting"
+    @changeBingoListViewSetting="changeBingoListViewSetting"
+    :isPublicOnly="isPublicOnly"
     :bingoCards="bingoCardDetails"
     :isFollowingSubject="isFollowingSubject"
     :currentUserUid="currentUser?.uid"
@@ -40,7 +36,7 @@ import { useCurrentUser } from "vuefire";
 
 const currentUser = useCurrentUser();
 const bingoCardDetails = ref([] as BingoCardDetail[]);
-const isPublicOnly = ref(false);
+const isPublicOnly = ref(true);
 const bingoCellDetail = ref(null as BingoCellDetail | null);
 const isFollowingSubject = ref(null as IsFollowingSubjectResponse | null);
 const congratulationsCompleteViewIsOpen = ref(false);
@@ -53,6 +49,7 @@ watchEffect(async () => {
   loadingMessage.value = "ビンゴカードを読み込んでいます";
   isLoading.value = true;
   const token = await currentUser.value?.getIdToken();
+  isPublicOnly.value = token !== null;
   await getAllBingoCard(isPublicOnly.value);
   isLoading.value = false;
 });
