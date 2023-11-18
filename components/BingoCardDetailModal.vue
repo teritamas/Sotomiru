@@ -41,7 +41,7 @@
             class="text-base border border-gray-300 font-bold rounded-lg leading-relaxed text-gray-700 border p-5 bg-white"
           >
             <span class="color tracking-widest mission">Mission</span><br />
-            {{ selectedBingoCell.description }} を撮ってください
+            {{ selectedBingoCell.description }}
           </p>
           <!-- 投稿済みの時 -->
           <div v-if="registered">

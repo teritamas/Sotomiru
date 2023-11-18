@@ -5,11 +5,11 @@
     <div
       class="relative border bg-white rounded-lg border-gray-700 w-11/12 md:w-9/12 lg:7/12 m-auto"
     >
-      <ShareButton
+      <!--<ShareButton
         :title="`Sotomiruからの投稿`"
         :text="`「${bingoCard.name}」のビンゴカードをクリアしました！`"
         :url="props.clearMovieUrl"
-      ></ShareButton>
+      ></ShareButton>-->
       <!-- Modal header -->
       <div class="flex items-center justify-between pt-5 px-5 rounded-t">
         <h3 class="text-lg font-extrabold text-gray-00 pl-2"></h3>
@@ -39,7 +39,7 @@
       <!-- Modal body -->
       <div class="px-6">
         <video
-          class="m-auto w-11/12 md:w-8/12 lg:w-6/12 sm:h-[74vh]"
+          class="m-auto w-11/12 md:w-8/12 lg:w-6/12 sm:h-[550px]"
           :src="clearMovieUrl"
           controls
         ></video>
