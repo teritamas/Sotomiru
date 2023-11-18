@@ -5,6 +5,11 @@
     <div
       class="relative border bg-white rounded-lg border-gray-700 w-11/12 md:w-9/12 lg:7/12 m-auto"
     >
+      <ShareButton
+        :title="`Sotomiruからの投稿`"
+        :text="`「${bingoCard.name}」のビンゴカードをクリアしました！`"
+        :url="props.clearMovieUrl"
+      ></ShareButton>
       <!-- Modal header -->
       <div class="flex items-center justify-between p-5 rounded-t">
         <h3 class="text-lg font-extrabold text-gray-00 pl-2"></h3>
@@ -55,7 +60,12 @@
 </template>
 
 <script setup lang="ts">
+import { BingoCard } from "~/server/models/bingoCard/dto";
 const props = defineProps({
+  bingoCard: {
+    type: Object as PropType<BingoCard>,
+    required: true,
+  },
   clearMovieUrl: {
     type: String,
     required: true,

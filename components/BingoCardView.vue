@@ -96,6 +96,7 @@
   <MovieModal
     v-if="movieModalIsOpen && bingoCard.clearMovieUrl"
     :clearMovieUrl="bingoCard.clearMovieUrl"
+    :bingoCard="bingoCard"
     @closeMovieModal="closeMovieModal"
   />
 </template>
