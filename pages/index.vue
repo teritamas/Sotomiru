@@ -1,5 +1,11 @@
 <template>
   <loading v-show="isLoading" :LoadingText="loadingMessage" />
+  <!-- 中央揃え -->
+  <ListViewSettingToggle
+    :isPublicOnly="isPublicOnly"
+    @changeBingoListViewSetting="changeBingoListViewSetting"
+  />
+
   <BingoCardCarousel
     @clearIsFollowingSubject="clearIsFollowingSubject"
     @postBingoCellRequest="postBingoCellRequest"
@@ -34,6 +40,7 @@ import { useCurrentUser } from "vuefire";
 
 const currentUser = useCurrentUser();
 const bingoCardDetails = ref([] as BingoCardDetail[]);
+const isPublicOnly = ref(false);
 const bingoCellDetail = ref(null as BingoCellDetail | null);
 const isFollowingSubject = ref(null as IsFollowingSubjectResponse | null);
 const congratulationsCompleteViewIsOpen = ref(false);
@@ -46,12 +53,19 @@ watchEffect(async () => {
   loadingMessage.value = "ビンゴカードを読み込んでいます";
   isLoading.value = true;
   const token = await currentUser.value?.getIdToken();
-  await getAllBingoCard(token);
+  await getAllBingoCard(isPublicOnly.value);
   isLoading.value = false;
 });
+
+const changeBingoListViewSetting = async (toggle: boolean) => {
+  isPublicOnly.value = toggle;
+  await getAllBingoCard(isPublicOnly.value);
+};
+
 // ビンゴカードの情報取得
-const getAllBingoCard = async (token: string | undefined) => {
-  const res = await fetch(`api/bingoCard`, {
+const getAllBingoCard = async (isPublicOnly: boolean) => {
+  const token = await currentUser.value?.getIdToken();
+  const res = await fetch(`api/bingoCard?isPublicOnly=${isPublicOnly}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -140,8 +154,7 @@ const postBingoCellRequest = async (
   }
 
   // 最新の状態を取得
-  const token = await currentUser.value?.getIdToken();
-  await getAllBingoCard(token);
+  await getAllBingoCard(isPublicOnly.value);
   clearIsFollowingSubject(); // AIの検出結果のキャッシュをクリア
 };
 
