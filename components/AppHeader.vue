@@ -55,9 +55,6 @@ const currentUser = useCurrentUser();
   text-transform: uppercase;
   letter-spacing: 2px;
 }
-header {
-  z-index: 10;
-}
 .router-link-active {
   border-bottom: 2px solid var(--c5);
   -webkit-background-clip: text;
