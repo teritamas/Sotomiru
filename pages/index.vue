@@ -1,18 +1,13 @@
 <template>
   <loading v-show="isLoading" :LoadingText="loadingMessage" />
-  <!-- 中央揃え -->
-  <ListViewSettingToggle
-    :isPublicOnly="isPublicOnly"
-    :currentUser="currentUser"
-    @changeBingoListViewSetting="changeBingoListViewSetting"
-  />
-
   <BingoCardCarousel
     @clearIsFollowingSubject="clearIsFollowingSubject"
     @postBingoCellRequest="postBingoCellRequest"
     @postCheckFollowingSubject="postCheckFollowingSubject"
     @getBingoCellDetail="getBingoCellDetail"
     @changeBingoViewSetting="changeBingoViewSetting"
+    @changeBingoListViewSetting="changeBingoListViewSetting"
+    :isPublicOnly="isPublicOnly"
     :bingoCards="bingoCardDetails"
     :isFollowingSubject="isFollowingSubject"
     :currentUserUid="currentUser?.uid"

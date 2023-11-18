@@ -6,7 +6,6 @@
           type="checkbox"
           :value="props.isPublicOnly"
           :checked="props.isPublicOnly"
-          :disabled="props.currentUser === null"
           @input="updateInput($event)"
           class="sr-only peer"
         />
@@ -30,10 +29,6 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
-  currentUser: {
-    type: Object as PropType<User | undefined>,
-    required: true,
-  },
 });
 
 const emits = defineEmits(["changeBingoListViewSetting"]);
@@ -43,8 +38,8 @@ const emits = defineEmits(["changeBingoListViewSetting"]);
  */
 const bingoCardPublicMessage = computed(() => {
   return props.isPublicOnly
-    ? "公開中のビンゴカードのみ"
-    : "自分のビンゴカードのみ";
+    ? "公開中のビンゴカードのみ表示中"
+    : "自分のビンゴカードのみ表示中";
 });
 
 const updateInput = (event: InputEvent) => {

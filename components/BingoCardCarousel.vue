@@ -1,4 +1,9 @@
 <template>
+  <ListViewSettingToggle
+    v-if="!modalIsOpen && !videoModalIsOpen && currentUserUid"
+    :isPublicOnly="props.isPublicOnly"
+    @changeBingoListViewSetting="emits('changeBingoListViewSetting', $event)"
+  />
   <div
     id="vue-carousel"
     class="h-[90vh]"
@@ -113,6 +118,10 @@ import { BingoCardDetail, BingoCellDetail } from "@/server/models/bingo/dto";
 import { IsFollowingSubjectResponse } from "@/server/models/facades/visionai/imageDescription";
 
 const props = defineProps({
+  isPublicOnly: {
+    type: Boolean,
+    required: true,
+  },
   currentUserUid: {
     type: Object as PropType<String | undefined>,
     required: true,
@@ -139,6 +148,7 @@ const emits = defineEmits([
   "clearIsFollowingSubject",
   "getBingoCellDetail",
   "changeBingoViewSetting",
+  "changeBingoListViewSetting",
 ]);
 
 const bingoCellId = ref("");
