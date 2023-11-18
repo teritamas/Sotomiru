@@ -15,7 +15,8 @@ class BingoCompleteMovie:
         frame=24,
         fade_frame_ratio: float = 0.5,  # フェードイン、フェードアウトのフレーム数の比率
     ):
-        self.resolution = (432, 768)  # (height, width)
+        # self.resolution = (1920, 1080)  # (height, width)
+        self.resolution = (990, 540)  # (height, width)
         self.frame = frame
 
         # 動画の書き込み設定
@@ -27,7 +28,9 @@ class BingoCompleteMovie:
             (self.resolution[1], self.resolution[0]),
         )
         self.background_image = self.__fix_ratio(
-            self.resolution, cv2.imread("./assets/background.png")
+            self.resolution,
+            cv2.imread("./assets/background.png"),
+            background_color=[255, 255, 255],
         )
 
         # フェードイン処理で共通で利用する設定
@@ -61,6 +64,39 @@ class BingoCompleteMovie:
             end_flag, flame = self.org.read()
             return flame
 
+    def start_frame(self, bingo_card_name: str):
+        # 開始動画を読み込んでself.outfhに書き込む
+        start_movie = cv2.VideoCapture("./assets/movie_start.mp4")
+        while True:
+            end_flag, flame = start_movie.read()
+            if end_flag:
+                resize_frame = self.__fix_ratio(
+                    self.resolution,
+                    flame,
+                    background_color=[255, 255, 255],
+                )
+                self.outfh.write(resize_frame)
+            else:
+                break
+
+        # bingoCardNameを挿入
+        bingo_card_name_image = cv2.imread("./assets/theme.png")
+        bingo_card_name_image = cv2.resize(
+            bingo_card_name_image, (self.resolution[1], self.resolution[0])
+        )
+        total_frame = self.frame * 2
+        for i in range(total_frame):
+            bingo_card_name_image = self.__insert_text(
+                bingo_card_name_image,
+                bingo_card_name,
+                (
+                    int(0.197 * self.resolution[1]),
+                    int(0.40 * self.resolution[0]),
+                ),
+                font_size=24,
+            )
+            self.outfh.write(bingo_card_name_image)
+
     def end_frame(self, seconds: int = 3):
         total_frame = self.frame * seconds
         movie_end_image = cv2.imread("./assets/movie_end.png")
@@ -74,21 +110,20 @@ class BingoCompleteMovie:
     def build_with_text(
         self, img, bingo_cell: BingoCardCell, seconds: int = 2
     ):
-        bingo_image_ratio = 0.47  # 画像のサイズを縮小する比率
         total_frame = self.frame * seconds
 
         for i in range(total_frame):
             bingo_cell_image = self.__create_bingo_cell_image(
-                img, bingo_image_ratio, total_frame, i
+                img, total_frame, i
             )
 
             # コンテンツのテンプレートにビンゴセルに投稿した画像を挿入する
             background_image_padding = (
-                int(0.15 * self.resolution[0]),
-                int(0.102 * self.resolution[1]),
+                int(0.18 * self.resolution[0]),
+                int(0.103 * self.resolution[1]),
             )
-            bingo_celll_content_image = self.background_image.copy()
-            bingo_celll_content_image[
+            bingo_cell_content_image = self.background_image.copy()
+            bingo_cell_content_image[
                 background_image_padding[0] : background_image_padding[0]
                 + bingo_cell_image.shape[0],
                 background_image_padding[1] : background_image_padding[1]
@@ -98,40 +133,40 @@ class BingoCompleteMovie:
             # 日付を挿入
             dt = datetime.fromtimestamp(bingo_cell.answered_at.timestamp())
             created_at_comment = f"{dt.strftime('%Y/%m/%d %H時%M分')}"
-            bingo_celll_content_image = self.__insert_text(
-                bingo_celll_content_image,
+            bingo_cell_content_image = self.__insert_text(
+                bingo_cell_content_image,
                 created_at_comment,
                 (
-                    int(0.102 * self.resolution[1]),
-                    int(0.682 * self.resolution[0]),
+                    int(0.690 * self.resolution[1]),
+                    int(0.090 * self.resolution[0]),
                 ),
-                font_size=8,
+                font_size=12,
             )
             # お題を挿入
-            bingo_celll_content_image = self.__insert_text(
-                bingo_celll_content_image,
+            bingo_cell_content_image = self.__insert_text(
+                bingo_cell_content_image,
                 f"{bingo_cell.name}",
                 (
-                    int(0.101 * self.resolution[1]),
-                    int(0.626 * self.resolution[0]),
+                    int(0.126 * self.resolution[1]),
+                    int(0.12 * self.resolution[0]),
                 ),
-                font_size=18,
+                font_size=24,
             )
             # コメントを挿入
-            bingo_celll_content_image = self.__insert_text(
-                bingo_celll_content_image,
+            bingo_cell_content_image = self.__insert_text(
+                bingo_cell_content_image,
                 f"{bingo_cell.comments}",
                 (
-                    int(0.628 * self.resolution[1]),
-                    int(0.526 * self.resolution[0]),
+                    int(0.150 * self.resolution[1]),
+                    int(0.810 * self.resolution[0]),
                 ),
-                font_size=14,
-                indent_text_count=12,
-                max_indent=5,
+                font_size=20,
+                indent_text_count=16,
+                max_indent=3,
             )
 
             # 背景動画を重ねる
-            final_image = self.__overlay_base_image(bingo_celll_content_image)
+            final_image = self.__overlay_base_image(bingo_cell_content_image)
 
             self.outfh.write(final_image)
 
@@ -147,6 +182,19 @@ class BingoCompleteMovie:
             driving_car_image,
             background_color=[255, 255, 255],
         )
+
+        # 画像の下25%を切り取り、切り取った部分を元画像の上に重ねる
+        crop_rate = 0.25
+        driving_car_image_cropped = driving_car_image[
+            int((1 - crop_rate) * self.resolution[0]) : self.resolution[0], :
+        ]
+        driving_car_image_base = driving_car_image[
+            : int((1 - crop_rate) * self.resolution[0]), :
+        ]
+        driving_car_image = np.vstack(
+            (driving_car_image_cropped, driving_car_image_base)
+        )
+
         # driving_car_imageの白色を投下して、bingo_celll_content_imageに貼り付ける
         # maskを作成
         mask = np.all(driving_car_image[:, :, :3] > [200, 200, 200], axis=-1)
@@ -165,21 +213,16 @@ class BingoCompleteMovie:
         final_image = cv2.cvtColor(final_image, cv2.COLOR_BGRA2BGR)
         return final_image
 
-    def __create_bingo_cell_image(
-        self, img, bingo_image_ratio, total_frame, i
-    ):
-        bingo_cell_image = self.__fix_ratio(self.resolution, img)
+    def __create_bingo_cell_image(self, img, total_frame, i):
+        # background_imageのサイズに合わせて、画像の比率を固定する
+        bingo_cell_image = self.__fix_ratio(
+            (int(self.resolution[0] * 0.59), int(self.resolution[1] * 0.79)),
+            img,
+            background_color=[255, 255, 255],
+        )
 
         # 現在のフレームがフェードイン、フェードアウトの範囲内の時
         bingo_cell_image = self.__add_fade(bingo_cell_image, total_frame, i)
-
-        # padding_imageを90%のサイズに縮小
-        bingo_cell_image = cv2.resize(
-            bingo_cell_image,
-            (0, 0),
-            fx=bingo_image_ratio,
-            fy=bingo_image_ratio,
-        )
 
         return bingo_cell_image
 
@@ -195,15 +238,22 @@ class BingoCompleteMovie:
         Returns:
             _type_: _description_
         """
+
+        # maskを入力画像と同じサイズにする
+        _mask = cv2.resize(
+            self.mask,
+            (bingo_cell_image.shape[1], bingo_cell_image.shape[0]),
+        )
+
         if i < self.fade_frame_count:
             alpha = i / self.fade_frame_count
             bingo_cell_image = cv2.addWeighted(
-                bingo_cell_image, alpha, self.mask, 1 - alpha, 0
+                bingo_cell_image, alpha, _mask, 1 - alpha, 0
             )
         elif i > total_frame - self.fade_frame_count:
             alpha = 1 - (i + 1) / self.fade_frame_count
             bingo_cell_image = cv2.addWeighted(
-                bingo_cell_image, alpha, self.mask, 1 - alpha, 0
+                bingo_cell_image, alpha, _mask, 1 - alpha, 0
             )
 
         return bingo_cell_image

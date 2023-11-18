@@ -2,6 +2,7 @@ import os
 import shutil
 from create_complete_movie.facades.firestore.bingo_card import (
     add_bingo_clear_movie,
+    fetch_bingo_card_name,
     fetch_bingo_cell,
     fetch_clear_and_no_video_bingo_cards,
 )
@@ -52,7 +53,8 @@ def __create_and_upload(bingo_card_id, debug_mode=False):
         )
 
     print("動画を作成します")
-    video_path = create_movie(FOLDER_NAME, bingo_cells)
+    bingo_card_name = fetch_bingo_card_name(bingo_card_id)
+    video_path = create_movie(FOLDER_NAME, bingo_card_name, bingo_cells)
     # video_path = "_temp/bingoCellImage/video.mp4"
 
     print("動画をアップロードします")
@@ -62,7 +64,7 @@ def __create_and_upload(bingo_card_id, debug_mode=False):
 
     # アップロード後動画をNFT化する
     print("動画をNFT化します")
-    mint_and_transfer_nft(bingo_card_id, public_url)
+    mint_and_transfer_nft(bingo_card_id, bingo_card_name, public_url)
 
 
 if __name__ == "__main__":
