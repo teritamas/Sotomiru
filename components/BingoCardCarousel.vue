@@ -6,7 +6,7 @@
   />
   <div
     id="vue-carousel"
-    :class="videoModalIsOpen ? 'h-[90vh]' : 'h-[63vh]'"
+    :class="videoModalIsOpen ? 'h-[700px]' : 'h-[535px]'"
     style="width: 100vw; overflow: hidden"
     @touchstart="onTouchStartCard"
     @mousedown="onTouchStartCard"
