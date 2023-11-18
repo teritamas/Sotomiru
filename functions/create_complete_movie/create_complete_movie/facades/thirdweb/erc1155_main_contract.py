@@ -35,6 +35,6 @@ def transfer_nft(token_id: str, to_address_list: list[str]):
     for to_address in to_address_list:
         try:
             tx = contract.erc1155.transfer(to_address, token_id, 1)
-            print(f"トークンの所有権移動が成功しました: {tx}")
+            print(f"トークンの所有権移動が成功しました: address: {to_address}, {tx}")
         except e:
             print(f"トークンの所有権移動の際にエラーが発生しました: {e}")
