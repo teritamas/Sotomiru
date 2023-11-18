@@ -7,7 +7,7 @@ from create_complete_movie.facades.thirdweb.erc1155_main_contract import (
 )
 
 
-def mint_and_transfer_nft(bingo_card_id, public_url):
+def mint_and_transfer_nft(bingo_card_id, bingo_card_name, public_url):
     """NFTをmintして、ビンゴの回答者全員にNFTを送る
 
     Args:
@@ -22,7 +22,7 @@ def mint_and_transfer_nft(bingo_card_id, public_url):
     # NFTをmintする. ビンゴカードに回答した人数分mintする
     mint_count = len(bingo_card_answer_users)
     token_id, nft = mint_movie_nft(
-        bingo_card_id, public_url, supply=mint_count
+        bingo_card_name, public_url, supply=mint_count
     )
 
     print(bingo_card_answer_users)
