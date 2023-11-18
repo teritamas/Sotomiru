@@ -2,7 +2,7 @@
   <ListViewSettingToggle
     v-if="!modalIsOpen && !videoModalIsOpen && currentUserUid"
     :isPublicOnly="props.isPublicOnly"
-    @changeBingoListViewSetting="emits('changeBingoListViewSetting', $event)"
+    @getAllBingoCard="emits('getAllBingoCard', $event)"
   />
   <div
     id="vue-carousel"
@@ -148,7 +148,7 @@ const emits = defineEmits([
   "clearIsFollowingSubject",
   "getBingoCellDetail",
   "changeBingoViewSetting",
-  "changeBingoListViewSetting",
+  "getAllBingoCard",
 ]);
 
 const bingoCellId = ref("");
@@ -185,7 +185,6 @@ const onTouchMoveCard = (event: any) => {
 };
 
 const canMove = (index: any) => {
-  // return props.loop ? true : props.bingoCards[index] != null; // prop.loopは未実装のためコメントアウト
   return props.bingoCards[index] != null;
 };
 

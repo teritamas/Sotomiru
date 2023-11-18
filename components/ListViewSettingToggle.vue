@@ -22,8 +22,6 @@
 </template>
 
 <script setup lang="ts">
-import { User } from "firebase/auth";
-
 const props = defineProps({
   isPublicOnly: {
     type: Boolean,
@@ -31,7 +29,7 @@ const props = defineProps({
   },
 });
 
-const emits = defineEmits(["changeBingoListViewSetting"]);
+const emits = defineEmits(["getAllBingoCard"]);
 
 /**
  * ビンゴカードの公開設定
@@ -45,6 +43,6 @@ const bingoCardPublicMessage = computed(() => {
 const updateInput = (event: InputEvent) => {
   const target = event.target as HTMLInputElement;
   const value = target.checked;
-  emits("changeBingoListViewSetting", value);
+  emits("getAllBingoCard", value);
 };
 </script>
