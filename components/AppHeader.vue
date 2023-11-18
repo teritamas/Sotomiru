@@ -50,6 +50,9 @@ const currentUser = useCurrentUser();
 </script>
 
 <style scoped>
+header {
+  z-index: 5;
+}
 .system-title {
   font: 700 1rem var(--font);
   text-transform: uppercase;

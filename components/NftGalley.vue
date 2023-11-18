@@ -11,11 +11,12 @@
         @playing="onVideoPlaying(index)"
         @pause="onVideoPaused()"
         :src="nft.metadata.animation_url!"
-        :class="!videoPlaying[index] ? 'color' : ''"
         controls
       ></video>
       <p v-show="!videoPlaying[index]">
-        {{ nft.metadata.name }}
+        <span :class="!videoPlaying[index] ? 'galley-video-bg' : ''">
+          {{ nft.metadata.name }}
+        </span>
       </p>
     </div>
   </div>
@@ -30,7 +31,16 @@ const props = defineProps({
   },
 });
 
-const videoPlaying = ref(Array(props.nfts.length).fill(false));
+const videoPlaying = ref([]);
+
+/**
+ * BingoCardsが更新された時、currentNumを更新する
+ */
+watchEffect(() => {
+  if (videoPlaying.value.length === 0) {
+    videoPlaying.value = Array(props.nfts.length).fill(false);
+  }
+});
 
 const onVideoPlaying = (index) => {
   videoPlaying.value = videoPlaying.value.map((value, i) => i === index);
@@ -52,9 +62,10 @@ const onVideoPaused = () => {
   border-radius: 10px;
 }
 
-.galley-video .color {
+.galley-video .galley-video-bg {
   background: white;
-  filter: opacity(0.5);
+  filter: opacity(0.8);
+  padding: 0 0.5rem;
 }
 
 .galley-video p {
@@ -66,7 +77,7 @@ const onVideoPaused = () => {
   left: 0%;
   max-height: 70%;
   border-radius: 10px;
-  color: black;
+  galley-video-bg: black;
   font-weight: bold;
 }
 </style>
