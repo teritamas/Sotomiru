@@ -24,6 +24,7 @@ const config = {
     GoogleAuthProvider.PROVIDER_ID,
     EmailAuthProvider.PROVIDER_ID,
   ],
+  signInFlow: "popup",
   signInSuccessUrl: "/",
   callbacks: {
     signInSuccessWithAuthResult() {
