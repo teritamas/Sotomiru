@@ -8,9 +8,9 @@ services:
     container_name: create_complete_movie_function
     environment:
       - CRED_PATH=/app/key.json
-      - FONT_NAME=ipaexg
     volumes:
       - ./key.json:/app/key.json:ro
+      - ./.env:/app/.env:ro
 
   contract_proxy:
     build:
