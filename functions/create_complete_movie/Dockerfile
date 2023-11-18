@@ -6,17 +6,6 @@ RUN poetry export -f requirements.txt > requirements.txt
 
 FROM python:3.10-alpine
 
-# フォントをインストール
-RUN apk add --no-cache curl fontconfig &&\
-  curl -O https://moji.or.jp/wp-content/ipafont/IPAexfont/IPAexfont00301.zip && \
-  mkdir -p /usr/share/fonts/ipa && \
-  mkdir -p /temp && \
-  unzip IPAexfont00301.zip -d /temp && \
-  cp /temp/IPAexfont00301/*.ttf /usr/share/fonts/ipa/ && \
-  rm IPAexfont00301.zip && \
-  rm -rf /temp && \
-  fc-cache -fv
-
 WORKDIR /opt/build
 
 ENV OPENCV_VERSION=4.8.1
