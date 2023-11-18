@@ -36,8 +36,6 @@
         </v-icon>
       </div>
     </div>
-    <!-- NFTギャラリー -->
-    <NftGalley class="card card-one" :nfts="ownNfts" />
   </div>
 </template>
 <script lang="ts" setup>
@@ -57,10 +55,6 @@ const props = defineProps({
   },
   walletAccount: {
     type: Object,
-    required: true,
-  },
-  ownNfts: {
-    type: Array as PropType<NFT[]>,
     required: true,
   },
   bingoToken: {
