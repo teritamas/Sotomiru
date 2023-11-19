@@ -39,7 +39,8 @@ const config = {
   callbacks: {
     signInSuccessWithAuthResult() {
       // ログイン後マイページに遷移
-      router.push(`/mypage`);
+      //ページ遷移しないでそのままリロードする
+      //router.push(`/mypage`);
     },
   },
 };
@@ -48,14 +49,16 @@ onMounted(() => {
   if (!currentUser.value) {
     ui.start("#firebase-ui-auth-container", config as any);
   } else {
-    router.push(`/mypage`);
+    //ページ遷移しないでそのままリロードする
+    //router.push(`/mypage`);
   }
 });
 
 // リロード時ログインしていたらマイページに遷移
 onUpdated(() => {
   if (currentUser.value) {
-    router.push(`/mypage`);
+    //ページ遷移しないでそのままリロードする
+    //router.push(`/mypage`);
   }
 });
 </script>
