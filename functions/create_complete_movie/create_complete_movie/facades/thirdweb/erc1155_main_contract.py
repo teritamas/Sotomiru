@@ -32,6 +32,7 @@ def mint_movie_nft(name: str, animation_url: str, supply: int = 1):
 
 
 def transfer_nft(token_id: str, to_address_list: list[str]):
+    print(to_address_list)
     for to_address in to_address_list:
         try:
             tx = contract.erc1155.transfer(to_address, token_id, 1)

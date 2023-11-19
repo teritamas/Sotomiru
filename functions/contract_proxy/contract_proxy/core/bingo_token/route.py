@@ -1,5 +1,5 @@
-from contract_proxy.core.bingoCard.request import BingoUserTokenMintRequest
-from contract_proxy.core.bingoCard.response import BingoUserTokenMintResponse
+from contract_proxy.core.bingo_token.request import BingoUserTokenMintRequest
+from contract_proxy.core.bingo_token.response import BingoUserTokenMintResponse
 from contract_proxy.facades.thirdweb.erc1155_bingo_token_contract import (
     transfer_nft,
 )

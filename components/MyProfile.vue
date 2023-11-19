@@ -9,8 +9,14 @@
       <h3>{{ props.displayName }}</h3>
       <div class="stats px-5">
         <div class="stat text-center">
-          <i>現金と交換可能なトークン</i>
-          <i class="grid">{{ exchangeableToken }}<span>pts</span></i>
+          <i>獲得したビンゴトークン</i>
+          <i class="grid"
+            >{{ exchangeableToken
+            }}<span
+              >pts
+              {{ !props.walletAccount?.address ? "(付与前)" : "" }}
+            </span></i
+          >
         </div>
       </div>
       <div class="stats px-5">
@@ -32,6 +38,13 @@
         <v-icon @click=""
           ><p class="text-white" style="word-break: break-all">
             {{ walletAddress }}
+          </p>
+          <p
+            v-if="hasPreGrantBingoToken"
+            class="text-white"
+            style="word-break: break-all"
+          >
+            {{ hasPreGrantBingoTokenMessage }}
           </p>
         </v-icon>
       </div>
@@ -73,15 +86,26 @@ const avatarImageURL = computed(() => {
 
 const exchangeableToken = computed(() => {
   if (!props.walletAccount?.address) {
-    return "???";
+    return props.userInfo?.preGrantBingoToken ?? "0";
   }
-  // トークン取得は未実装
-  return props.bingoToken?.quantityOwned ?? "???";
+  return props.bingoToken?.quantityOwned ?? "0";
 });
 const walletAddress = computed(() => {
   return (
     props.walletAccount?.address ??
     "接続されていません。ウォレットと接続してください"
+  );
+});
+const hasPreGrantBingoToken = computed(() => {
+  return (
+    props.userInfo?.preGrantBingoToken && props.userInfo?.preGrantBingoToken > 0
+  );
+});
+const hasPreGrantBingoTokenMessage = computed(() => {
+  return (
+    `ウォレットと接続すると` +
+    props.userInfo?.preGrantBingoToken +
+    `pt付与されます！`
   );
 });
 </script>
