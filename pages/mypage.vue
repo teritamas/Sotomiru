@@ -24,9 +24,9 @@ import {
 } from "@web3modal/ethereum";
 import { Web3Modal } from "@web3modal/html";
 import { configureChains, createConfig } from "@wagmi/core";
-import { goerli } from "@wagmi/chains";
 import { getAccount, GetAccountResult, PublicClient } from "@wagmi/core";
 import { NFT } from "@thirdweb-dev/sdk/dist/declarations/src/core/schema/nft";
+import { ZKATANA } from "~/utils/chains";
 
 const currentUser = useCurrentUser();
 const router = useRouter();
@@ -40,7 +40,6 @@ if (!projectId || projectId === "") {
   throw new Error("walletConnectProjectId is not defined");
 }
 const bingoTokenId = runtimeConfig.public.bingoTokenId;
-const chains = [goerli];
 
 // ログインしていない場合はログイン画面にリダイレクト
 onBeforeMount(async () => {
@@ -90,6 +89,7 @@ const logout = async () => {
 /**
  * Web3Modalの初期化する
  */
+const chains = [ZKATANA];
 const initWeb3Client = async () => {
   const { publicClient } = configureChains(chains, [
     w3mProvider({ projectId }),
