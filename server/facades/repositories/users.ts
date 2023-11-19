@@ -94,6 +94,24 @@ export const updateUserPreGrantBingoToken = async (
 };
 
 /**
+ * 付与前のNFTを更新する。
+ */
+export const updateUserPreGrantMemoryNftTokenIds = async (
+  uid: string,
+  tokenIds: string[]
+) => {
+  try {
+    const docRef = await firestore.collection("users").doc(uid);
+    await docRef.update({
+      preGrantMemoryNftTokenIds: tokenIds,
+      updatedAt: new Date(),
+    });
+  } catch (e) {
+    console.error("[updateUserPreGrantMemoryNftTokenIds]", e);
+  }
+};
+
+/**
  * ビンゴカードを作成した回数をインクリメントする
  */
 export const incrementBingoCreationCount = async (uid: string) => {

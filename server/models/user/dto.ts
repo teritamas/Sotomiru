@@ -15,4 +15,5 @@ interface UserInfo {
 
   // 付与前のトークン量
   preGrantBingoToken?: number;
+  preGrantMemoryNftTokenIds?: string[];
 }

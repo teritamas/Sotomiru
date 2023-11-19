@@ -1,9 +1,13 @@
 import { idAuthentication } from "@/server/facades/auth/idAuthentication";
 import {
   updateUserPreGrantBingoToken,
+  updateUserPreGrantMemoryNftTokenIds,
   updateUserWallet,
 } from "@/server/facades/repositories/users";
-import { mintBingoToken } from "@/server/facades/contracts/contractProxy";
+import {
+  mintBingoToken,
+  mintMemoryNts,
+} from "@/server/facades/contracts/contractProxy";
 import { MintBingoTokenPutRequest } from "@/server/models/facades/contracts/contractProxy";
 
 export default defineEventHandler(async (event) => {
@@ -24,10 +28,30 @@ export default defineEventHandler(async (event) => {
       const request = {
         supply: userWallet?.preGrantBingoToken, // index.vueに表示される値と同じ
       } as MintBingoTokenPutRequest;
-      mintBingoToken(body.walletAddress, request).then((response) => {
+      mintBingoToken(body.walletAddress, request).then(() => {
         console.log("トークンをアサインしました。", uid, request.supply);
         // アサインしたので、DBの値をリセット
         updateUserPreGrantBingoToken(uid, 0);
+        console.log("DBの値をリセットしました。", uid);
+      });
+    }
+
+    // アサイン前のトークンがあれば、アサインする
+    if (
+      userWallet?.preGrantMemoryNftTokenIds &&
+      userWallet?.preGrantMemoryNftTokenIds.length > 0
+    ) {
+      console.log("アサイン前のNFTがあるので、アサインします。");
+      mintMemoryNts(body.walletAddress, {
+        memoryTokenIds: userWallet?.preGrantMemoryNftTokenIds,
+      }).then(() => {
+        console.log(
+          "NFTをアサインしました。",
+          uid,
+          userWallet?.preGrantMemoryNftTokenIds
+        );
+        // アサインしたので、DBの値をリセット
+        updateUserPreGrantMemoryNftTokenIds(uid, []);
         console.log("DBの値をリセットしました。", uid);
       });
     }
