@@ -26,16 +26,11 @@
           class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
           >タイトル ※25文字以内</label
         >
-        <small
-          >ビンゴカードのタイトルを入力してください<br />
-          例：冬の景色と車、家族との思い出</small
-        >
+        <small>例：冬の景色と車、家族との思い出</small>
       </div>
       <div class="mb-3">
         <legend class="text-sm text-gray-500 mb-1">テーマ</legend>
-        <small
-          >これから何をしますか？テーマに沿ったビンゴカードを作成します。</small
-        >
+        <small>これから何をしますか？</small>
         <div class="sample-form flex">
           <div class="w-1/3 text-center">
             <input
@@ -78,23 +73,24 @@
           </div>
         </div>
       </div>
-      <!-- テーマカラーは利用方法が見つからないのでコメントアウト -->
-      <!-- <div class="mb-6">
-        <fieldset class="flex">
-          <legend class="text-sm text-gray-500 mb-1">テーマカラー</legend>
-          <div class="flex items-center mb-4 mr-9">
-            <input type="color" v-model="form.imageColor" class="w-1/2 mr-3" />
-            <input
-              v-model="form.imageColor"
-              type="text"
-              name="color"
-              id="color"
-              class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b border-gray-700 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-              placeholder=" "
-            />
-          </div>
-        </fieldset>
-      </div> -->
+      <div class="relative z-0 w-full mb-6 group">
+        <input
+          type="text"
+          name="title"
+          id="title"
+          class="block py-2.5 px-0 w-1/2 text-sm text-gray-900 bg-transparent border-0 border-b border-gray-700 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+          placeholder=" "
+          maxlength="10"
+          required
+          v-model="form.title"
+        />
+        <label
+          for="title"
+          class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+          >目的地 ※10文字以内</label
+        >
+        <small>例：浅草、会社、山</small>
+      </div>
 
       <!-- 公開ビンゴカードとするか -->
       <label class="relative inline-flex items-center cursor-pointer mb-3 m">
@@ -139,7 +135,7 @@ const submitButtonMessage = computed(() => {
 const form = ref({
   title: "",
   theme: "",
-  imageColor: "#6B8CFF",
+  destination: "",
   isPublic: false,
 });
 
