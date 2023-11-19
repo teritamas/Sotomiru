@@ -19,4 +19,4 @@ async def mint_memory_nfts(
     request: MemoryNftsMintRequest,
 ):
     add_owner_nfts(wallet_address, request.memoryTokenIds)
-    return MemoryNftsMintResponse(supply=request.memoryTokenIds)
+    return MemoryNftsMintResponse(memoryTokenIds=request.memoryTokenIds)
