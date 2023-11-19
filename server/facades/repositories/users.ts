@@ -1,3 +1,4 @@
+import { doc } from "firebase/firestore";
 import { firestore } from "../firebase";
 
 /**
@@ -63,6 +64,12 @@ export const updateUserWallet = async (
 
     const docRef = await firestore.collection("users").doc(uid);
     await docRef.update({ ...userInfo }); // 既に存在する場合は更新
+    // 更新後の値を返す
+    return docRef.get().then((doc) => {
+      if (doc.exists) {
+        return doc.data() as UserInfo;
+      }
+    });
   } catch (e) {
     console.error("[updateUserWallet]", e);
   }
