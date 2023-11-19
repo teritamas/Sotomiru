@@ -1,10 +1,9 @@
-import { inject } from "vue";
 import { ThirdwebSDK } from "@thirdweb-dev/sdk/evm";
-import { set } from "firebase/database";
+import { ZKATANA } from "~/utils/chains";
 
 export default defineNuxtPlugin(async (NuxtApp) => {
   const runtimeConfig = useRuntimeConfig();
-  const sdk = new ThirdwebSDK("goerli", {
+  const sdk = new ThirdwebSDK(ZKATANA.rpcUrls.public.http[0], {
     clientId: runtimeConfig.public.thirdwebClientId,
   });
   // WalletAddressが指定されている時はNFTの一覧を取得する

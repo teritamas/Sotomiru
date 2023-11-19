@@ -25,14 +25,15 @@
 </template>
 
 <script setup lang="ts">
-import { BingoCardDetail, BingoCellDetail } from "@/server/models/bingo/dto";
-import {
-  BingoCardsGetAllResponse,
-  BingoCellGetResponse,
-  BingoCellPutResponse,
-} from "@/server/models/bingo/response";
 import { IsFollowingSubjectResponse } from "@/server/models/facades/visionai/imageDescription";
 import { useCurrentUser } from "vuefire";
+import { BingoCardDetail } from "@/server/models/bingoCard/dto";
+import { BingoCellDetail } from "@/server/models/bingoCardCell/dto";
+import { BingoCardsGetAllResponse } from "@/server/models/bingoCard/response";
+import {
+  BingoCellGetResponse,
+  BingoCellPutResponse,
+} from "~/server/models/bingoCardCell/response";
 
 const currentUser = useCurrentUser();
 const bingoCardDetails = ref([] as BingoCardDetail[]);
@@ -122,7 +123,7 @@ const postBingoCellRequest = async (
       imageAiCheckScore: isFollowingSubject.value?.score ?? 0,
       imageAiCheckReason: isFollowingSubject.value?.reason ?? "なし",
       ...form,
-    } as BingoCellPostRequest)
+    } as BingoCellPutRequest)
   );
   formData.append("file", file);
   const res = await fetch(`/api/bingoCardCell/${bingoCardId}`, {
