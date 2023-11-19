@@ -91,44 +91,53 @@
           </div>
           <!-- 投稿済みでない場合 -->
           <div v-else>
-            <div class="mt-8">
-              <label
-                class="block mb-2 text-sm font-medium text-gray-700"
-                for="file_input"
-                >写真をアップロード</label
-              >
-              <input
-                class="white w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
-                id="file_input"
-                type="file"
-                @change="onFileChange"
-              />
-              <!-- アップロードした写真を表示 -->
-              <div v-if="fileUrl" class="border border-gray-200 my-2 shadow-md">
-                <img :src="fileUrl" alt="アップロードした写真" />
+            <login-invitation-pop-for-bingocard-detail-modal
+              v-if="!currentUser"
+            />
+            <div v-if="currentUser">
+              <div class="mt-8">
+                <label
+                  class="block mb-2 text-sm font-medium text-gray-700"
+                  for="file_input"
+                  >写真をアップロード</label
+                >
+                <input
+                  class="white w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+                  id="file_input"
+                  type="file"
+                  @change="onFileChange"
+                />
+                <!-- アップロードした写真を表示 -->
+                <div
+                  v-if="fileUrl"
+                  class="border border-gray-200 my-2 shadow-md"
+                >
+                  <img :src="fileUrl" alt="アップロードした写真" />
+                </div>
+                <CellImageAIInspectionResultArea
+                  v-if="isFollowingSubject"
+                  :score="isFollowingSubject.score"
+                  :reason="isFollowingSubject.reason"
+                />
               </div>
-              <CellImageAIInspectionResultArea
-                v-if="isFollowingSubject"
-                :score="isFollowingSubject.score"
-                :reason="isFollowingSubject.reason"
-              />
-            </div>
-            <div class="mt-3">
-              <label
-                for="message"
-                class="block mb-2 text-sm font-medium text-gray-700"
-                >コメントを残す</label
-              >
-              <textarea
-                id="message"
-                rows="4"
-                class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-700 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="コメント"
-                v-model="form.comments"
-              ></textarea>
+              <div class="mt-3">
+                <label
+                  for="message"
+                  class="block mb-2 text-sm font-medium text-gray-700"
+                  >コメントを残す</label
+                >
+                <textarea
+                  id="message"
+                  rows="4"
+                  class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-700 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="コメント"
+                  v-model="form.comments"
+                ></textarea>
+              </div>
             </div>
           </div>
         </div>
+
         <!-- Modal footer -->
         <div class="flex justify-between p-6 space-x-2 rounded-b">
           <button
@@ -222,7 +231,9 @@
 <script setup lang="ts">
 import { BingoCell } from "@/server/models/bingo/dto";
 import { IsFollowingSubjectResponse } from "@/server/models/facades/visionai/imageDescription";
+import { useCurrentUser } from "vuefire";
 
+const currentUser = useCurrentUser();
 const props = defineProps({
   currentUserUid: {
     type: Object as PropType<String | undefined>,

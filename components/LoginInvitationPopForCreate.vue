@@ -17,6 +17,7 @@
     </div>
   </div>
 </template>
+
 <script lang="ts" setup>
 import { EmailAuthProvider, GoogleAuthProvider } from "firebase/auth";
 import * as firebaseui from "firebaseui";
@@ -39,7 +40,7 @@ const config = {
   callbacks: {
     signInSuccessWithAuthResult() {
       // ログイン後マイページに遷移
-      router.push(`/mypage`);
+      router.push(`/create`);
     },
   },
 };
@@ -48,14 +49,14 @@ onMounted(() => {
   if (!currentUser.value) {
     ui.start("#firebase-ui-auth-container", config as any);
   } else {
-    router.push(`/mypage`);
+    router.push(`/create`);
   }
 });
 
 // リロード時ログインしていたらマイページに遷移
 onUpdated(() => {
   if (currentUser.value) {
-    router.push(`/mypage`);
+    router.push(`/create`);
   }
 });
 </script>
