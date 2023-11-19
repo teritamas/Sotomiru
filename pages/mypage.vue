@@ -124,14 +124,11 @@ watchEffect(async () => {
     isLoading.value = true;
     const nfts = await $contract.erc1155.getOwned(walletAccount.value.address);
     // 新しいものから先にする
-    ownNfts.value = nfts.reverse();
     // bingoTokenIdの指定したものだけ省く
-    ownNfts.value = ownNfts.value.filter(
-      (nft) => nft.metadata.name !== bingoTokenId
-    );
-    bingoToken.value = ownNfts.value.find(
-      (nft) => nft.metadata.id === bingoTokenId
-    );
+    ownNfts.value = nfts
+      .filter((nft) => nft.metadata.id !== bingoTokenId)
+      .reverse();
+    bingoToken.value = nfts.find((nft) => nft.metadata.id === bingoTokenId);
     isLoading.value = false;
   }
 });

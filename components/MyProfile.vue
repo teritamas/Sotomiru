@@ -76,7 +76,6 @@ const exchangeableToken = computed(() => {
     return "???";
   }
   // トークン取得は未実装
-  console.log(props.bingoToken);
   return props.bingoToken?.quantityOwned ?? "???";
 });
 const walletAddress = computed(() => {

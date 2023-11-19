@@ -22,10 +22,19 @@ export default defineEventHandler(async (event) => {
 
     const body = (await readBody(event).then((b) =>
       JSON.parse(b)
-    )) as BongoCreateRequest;
+    )) as BingoCreateRequest;
 
     // ChatGPTによるお題の生成
-    const gptGenerateTheme = await createBingoCellTheme(body, 9);
+    // 現在時刻を季節に変換する
+    const japanSeason = getSeason();
+    const createBingoCellThemeRequest = {
+      ...body,
+      japanSeason: japanSeason,
+      count: 9,
+    };
+    const gptGenerateTheme = await createBingoCellTheme(
+      createBingoCellThemeRequest
+    );
     if (gptGenerateTheme == null) {
       return {
         status: 500,
@@ -36,7 +45,7 @@ export default defineEventHandler(async (event) => {
     const entryBingoCard = createBingoCard(uid, body, gptGenerateTheme);
 
     // DBに追加
-    addBingoCard(entryBingoCard);
+    await addBingoCard(entryBingoCard);
 
     // ユーザが作成した場合、ビンゴカードの数を1増やす
     if (uid !== "") incrementBingoCreationCount(uid);
@@ -58,14 +67,14 @@ export default defineEventHandler(async (event) => {
  */
 function createBingoCard(
   uid: string,
-  body: BongoCreateRequest,
+  body: BingoCreateRequest,
   gptGenerateTheme: CreateBingoCellThemeResponse[] | null
 ) {
   const entryBingoCard = {
     id: uuidv4(),
     name: body.title,
     theme: body.theme,
-    imageColor: body.imageColor,
+    destination: body.destination,
     isPublic: body.isPublic,
     bingoCells: [],
     countOfBingoLine: 0, // ビンゴラインの数
@@ -91,6 +100,20 @@ function createBingoCard(
     } as BingoCell);
   });
   return entryBingoCard;
+}
+
+function getSeason(): string {
+  // 現在の月を取得
+  const month = new Date().getMonth() + 1;
+  if ([3, 4, 5].includes(month)) {
+    return "春";
+  } else if ([6, 7, 8].includes(month)) {
+    return "夏";
+  } else if ([9, 10, 11].includes(month)) {
+    return "秋";
+  } else {
+    return "冬";
+  }
 }
 
 // サンプル用のお題
