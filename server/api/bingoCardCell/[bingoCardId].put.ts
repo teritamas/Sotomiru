@@ -87,12 +87,12 @@ export default defineEventHandler(async (event) => {
 
     // トークンを発行
     const assignToken = Math.floor(requestBody.imageAiCheckScore * 10);
-    const user = await getUserInfo(uid);
+    const user = (await getUserInfo(uid)) as UserInfo;
     if (user === undefined || user.walletAddress === undefined) {
-      // 存在しない場合はトークンを付与しない
-      // TODO: トークンを付与しないことを通知する、ユーザ情報にキャッシュする
-      console.log("user or walletAddress is undefined", uid);
-      await updateUserPreGrantBingoToken(uid, assignToken);
+      // ウォレットアドレスが存在しない場合はトークンを付与しない。
+      // DBに、本来付与されるトークンを保存しておく
+      const updateValue = user.preGrantBingoToken ?? 0 + assignToken; // 更新後の値
+      await updateUserPreGrantBingoToken(uid, updateValue);
     } else {
       // 存在する場合はトークン付与
       const request = {

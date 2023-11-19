@@ -3,6 +3,10 @@ from create_complete_movie.facades.firestore import db
 from create_complete_movie.models.bingo_card import BingoCardCell
 from google.cloud.firestore_v1.base_query import FieldFilter
 
+from create_complete_movie.models.user import (
+    User,
+)
+
 COLLECTION_PREFIX = "bingoCard"
 
 
@@ -35,7 +39,7 @@ def fetch_bingo_card_name(bingo_card_id: str) -> Union[str, None]:
 
 def fetch_bingo_card_answer_users(
     bingo_card_id: str,
-) -> Union[list[str], None]:
+) -> list[User]:
     """ビンゴカードに紐づく回答者の一覧を取得する
 
     Args:
@@ -59,9 +63,7 @@ def fetch_bingo_card_answer_users(
     )
 
     return [
-        answered_user.to_dict().get("walletAddress")
-        for answered_user in answered_user_list
-        if answered_user.to_dict().get("walletAddress") is not None
+        User(**answered_user.to_dict()) for answered_user in answered_user_list
     ]
 
 
