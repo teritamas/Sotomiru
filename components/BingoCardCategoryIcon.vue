@@ -2,7 +2,7 @@
   <svg
     viewBox="0 0 512 512"
     class="category-icon"
-    v-if="bingoCardTheme == 'travel'"
+    v-if="bingoCardTheme == 'everyday'"
   >
     <g>
       <polygon
@@ -20,7 +20,7 @@
   <svg
     viewBox="0 0 512 512"
     class="category-icon"
-    v-if="bingoCardTheme == 'everyday'"
+    v-if="bingoCardTheme == 'travel'"
   >
     <g>
       <path
@@ -94,5 +94,8 @@ polygon.life {
 }
 .commute {
   fill: var(--c2);
+}
+.everyday {
+  fill: var(--c3);
 }
 </style>

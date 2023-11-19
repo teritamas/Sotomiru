@@ -10,17 +10,15 @@
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Kaisei+Opti:wght@700&family=Kiwi+Maru:wght@300&family=Lato:wght@900&family=Mochiy+Pop+P+One&family=Open+Sans:wght@300;400&display=swap");
 :root {
-  --bg1: #ddd;
-  --bg2: #ededed;
-  --bg: #fff;
+  --bg: #d3e3fd;
   --body: #666;
   --c1: #d9d7f1;
   --c2: #ffe0a3;
   --c3: #b0e0a8;
   --c4: #ffcbcb;
-  --c5: #a486ff;
+  --c5: #d3e3fd;
   --c6: #ff7b74;
-
+  --c7: #568de5;
   --font: radio canada;
   --smallfont: inconsolata;
 
@@ -33,45 +31,17 @@ h1 {
 }
 
 .color {
-  text-transform: uppercase;
-  font-weight: bold;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-image: linear-gradient(to right, var(--c5), var(--c6));
+  color: var(--c7);
 }
 body {
   font-family: "Mochiy Pop P One", sans-serif;
   font-family: "Open Sans", sans-serif;
-  background-image: -webkit-linear-gradient(
-    135deg,
-    #f8f8f8 25%,
-    #fff 25%,
-    #fff 50%,
-    #f8f8f8 50%,
-    #f8f8f8 75%,
-    #fff 75%,
-    #fff
-  );
-  background-image: linear-gradient(
-    -45deg,
-    #f8f8f8 25%,
-    #fff 25%,
-    #fff 50%,
-    #f8f8f8 50%,
-    #f8f8f8 75%,
-    #fff 75%,
-    #fff
-  );
-  background-size: 10px 10px;
-  background-image: linear-gradient(
-    to top right,
-    var(--bg1),
-    var(--c1),
-    var(--bg2)
-  );
-  background-size: cover;
-  background-attachment: fixed;
-  color: var(--body);
+  background-color: var(--bg);
+  background-attachment: fixed; /*--背景画像の固定--*/
+  background-repeat: no-repeat; /*--背景画像の繰り返し--*/
+  background-position: bottom; /*--背景画像の位置--*/
+  background-image: url("@/assets/img/bg-cloud.png");
+  min-height: 100%;
 }
 
 .main {
