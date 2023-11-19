@@ -1,6 +1,8 @@
 <template>
   <loading v-show="isLoading" LoadingText="ビンゴカードを作成しています" />
+  <login-invitation-pop-for-create v-if="!currentUser" />
   <div
+    v-if="currentUser"
     class="block border border-gray-300 p-5 m-3 md:max-w-[600px] md:m-auto md:mt-6 pb-10 bg-white"
   >
     <h1
