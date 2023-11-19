@@ -24,5 +24,5 @@ def update_pre_grant_memory_nft_token_ids(
         if "preGrantMemoryNftTokenIds" not in user:
             user["preGrantMemoryNftTokenIds"] = []
 
-        user["preGrantMemoryNftTokenIds"].append(token_id)
+        user["preGrantMemoryNftTokenIds"].append(str(token_id))
         db().collection(COLLECTION_PREFIX).document(uid).set(user)
