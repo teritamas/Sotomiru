@@ -76,16 +76,16 @@
       <div class="relative z-0 w-full mb-6 group">
         <input
           type="text"
-          name="title"
-          id="title"
+          name="destination"
+          id="destination"
           class="block py-2.5 px-0 w-1/2 text-sm text-gray-900 bg-transparent border-0 border-b border-gray-700 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
           placeholder=" "
           maxlength="10"
           required
-          v-model="form.title"
+          v-model="form.destination"
         />
         <label
-          for="title"
+          for="destination"
           class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
           >目的地 ※10文字以内</label
         >
@@ -152,7 +152,6 @@ const createBingoCard = async () => {
       Authorization: `Bearer ${await currentUser.value?.getIdToken()}`,
     },
     body: JSON.stringify({
-      ...form.value,
       title: form.value.title == "" ? "タイトルなし" : form.value.title,
     } as BongoCreateRequest),
   });
