@@ -1,10 +1,10 @@
 import { OpenAI } from "openai";
-import { BingoCell } from "@/server/models/bingoCard/dto";
-import { CreateBingoCellThemeResponse } from "@/server/models/facades/generativeai/chatgpt";
 import {
-  ImageDescriptionResponse,
-  IsFollowingSubjectResponse,
-} from "@/server/models/facades/visionai/imageDescription";
+  CreateBingoCellThemeRequest,
+  CreateBingoCellThemeResponse,
+} from "@/server/models/facades/generativeai/chatgpt";
+import { IsFollowingSubjectResponse } from "@/server/models/facades/visionai/imageDescription";
+import { BingoCell } from "@/server/models/bingoCardCell/dto";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -13,12 +13,10 @@ const openai = new OpenAI({
 /**
  * お題を9個生成する
  */
-export async function createBingoCellTheme(
-  body: BongoCreateRequest,
-  count: number
-) {
-  const prompt = `You are an event planner working for an automobile manufacturer. You have been assigned the task of coming up with a theme for a "Take a Friendly Photo from Inside a Car" contest. The title of the bingo is "${body.title}" and the theme of the subject is "${body.theme}".
-Please submit ${count} of subjects that meet the above requirements. A subject consists of a title and a description in the following format.
+export async function createBingoCellTheme(body: CreateBingoCellThemeRequest) {
+  const prompt = `You are an event planner working for an automobile manufacturer. You have been assigned the task of coming up with a theme for a "Take a Friendly Photo from Inside a Car" contest. The title of the bingo is "${body.title}" and the theme of the subject is "${body.theme}".destination is "${body.destination}".
+The current season is ${body.japanSeason}. Please include up to 3 seasonal topics.
+Please submit ${body.count} of subjects that meet the above requirements. A subject consists of a title and a description in the following format.
   
 [{
   "name": "Title of the first subject. 20 characters max.",
@@ -31,6 +29,7 @@ Please submit ${count} of subjects that meet the above requirements. A subject c
   
 Value is natural Japanese as Japanese would return it.
 Keys must be included.
+Must be an array.
 Remove any information other than JSON.
 Delete code blocks.
 `;
@@ -93,7 +92,7 @@ async function request(prompt: string) {
         },
       ],
     });
-    console.debug(result, result.choices[0]); // デバッグ用
+    // console.debug(result, result.choices[0]); // デバッグ用
     const response = result.choices[0].message.content;
     console.log("生成が完了しました: ", response);
 

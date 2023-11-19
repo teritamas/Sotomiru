@@ -4,8 +4,8 @@ export interface BingoCard {
   id: string;
   name: string;
   theme: string;
-  imageColor: string;
   isPublic: boolean;
+  destination: string;
   bingoCells: BingoCell[];
 
   countOfBingoLine?: number; // ビンゴラインの数

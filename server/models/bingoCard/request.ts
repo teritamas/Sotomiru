@@ -1,10 +1,10 @@
-interface BongoCreateRequest {
+interface BingoCreateRequest {
   title: string; // ビンゴのタイトル
   theme: string; // ビンゴのテーマ
-  imageColor: string; // ビンゴの画像の色
   isPublic: boolean; // ビンゴの公開設定
+  destination: string; // 旅行の目的地
 }
 
-interface BongoPutRequest {
+interface BingoPutRequest {
   isPublic: boolean; // ビンゴの公開設定
 }
