@@ -152,7 +152,6 @@ const createBingoCard = async () => {
       Authorization: `Bearer ${await currentUser.value?.getIdToken()}`,
     },
     body: JSON.stringify({
-      ...form.value,
       title: form.value.title == "" ? "タイトルなし" : form.value.title,
     } as BongoCreateRequest),
   });
