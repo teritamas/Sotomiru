@@ -153,7 +153,11 @@ const createBingoCard = async () => {
     },
     body: JSON.stringify({
       title: form.value.title == "" ? "タイトルなし" : form.value.title,
-    } as BongoCreateRequest),
+      theme: form.value.theme,
+      destination:
+        form.value.destination == "" ? "目的地なし" : form.value.destination,
+      isPublic: form.value.isPublic,
+    } as BingoCreateRequest),
   });
   const data = (await res.json()) as { message: string; bingoCardId: string };
 

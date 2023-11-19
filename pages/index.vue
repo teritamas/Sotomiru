@@ -175,7 +175,7 @@ const changeBingoViewSetting = async (
     },
     body: JSON.stringify({
       isPublic: isPublic,
-    } as BongoPutRequest),
+    } as BingoPutRequest),
   });
 };
 

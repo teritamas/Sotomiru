@@ -124,6 +124,7 @@ export const addBingoCard = async (bingoCard: BingoCard) => {
       .collection("bingoCard")
       .doc(bingoCard.id)
       .set(bingoCard);
+    console.log("[addBingoCard] docRef: ", docRef);
     return bingoCard.id;
   } catch (e) {
     console.error("[addBingoCard]", e);
@@ -135,7 +136,7 @@ export const addBingoCard = async (bingoCard: BingoCard) => {
  */
 export const updateBingoCard = async (
   bingoCardId: string,
-  bingoPutRequest: BongoPutRequest
+  bingoPutRequest: BingoPutRequest
 ) => {
   try {
     const docRef = await firestore
