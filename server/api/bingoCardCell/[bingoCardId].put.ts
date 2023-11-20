@@ -91,7 +91,9 @@ export default defineEventHandler(async (event) => {
     if (user === undefined || user.walletAddress === undefined) {
       // ウォレットアドレスが存在しない場合はトークンを付与しない。
       // DBに、本来付与されるトークンを保存しておく
-      const updateValue = user.preGrantBingoToken ?? 0 + assignToken; // 更新後の値
+      const updateValue = user.preGrantBingoToken
+        ? user.preGrantBingoToken + assignToken
+        : 0 + assignToken; // 更新後の値
       await updateUserPreGrantBingoToken(uid, updateValue);
     } else {
       // 存在する場合はトークン付与
