@@ -46,6 +46,14 @@
           >
             {{ hasPreGrantBingoTokenMessage }}
           </p>
+
+          <p
+            v-if="hasPreGrantMemoryNfts"
+            class="text-white"
+            style="word-break: break-all"
+          >
+            {{ hasPreGrantMemoryNftsMessage }}
+          </p>
         </v-icon>
       </div>
     </div>
@@ -96,16 +104,33 @@ const walletAddress = computed(() => {
     "接続されていません。ウォレットと接続してください"
   );
 });
+
+// ウォレットと接続していない時に、換金していないビンゴトークンを持っているか
 const hasPreGrantBingoToken = computed(() => {
   return (
     props.userInfo?.preGrantBingoToken && props.userInfo?.preGrantBingoToken > 0
   );
 });
+// ウォレットと接続していない時に、換金していないビンゴトークンの量
 const hasPreGrantBingoTokenMessage = computed(() => {
   return (
     `ウォレットと接続すると` +
     props.userInfo?.preGrantBingoToken +
     `pt付与されます！`
+  );
+});
+// ウォレットと接続していない時に、換金していないビンゴトークンを持っているか
+const hasPreGrantMemoryNfts = computed(() => {
+  return (
+    props.userInfo?.preGrantMemoryNftTokenIds &&
+    props.userInfo?.preGrantMemoryNftTokenIds.length > 0
+  );
+});
+// ウォレットと接続していない時に、換金していないビンゴトークンの量
+const hasPreGrantMemoryNftsMessage = computed(() => {
+  return (
+    props.userInfo?.preGrantMemoryNftTokenIds?.length +
+    `件の「思い出NFT」が付与前です`
   );
 });
 </script>

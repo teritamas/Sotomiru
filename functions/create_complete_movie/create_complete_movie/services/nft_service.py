@@ -35,7 +35,12 @@ def mint_and_transfer_nft(bingo_card_id, bingo_card_name, public_url):
 
     # walletAddressを保有しないユーザには、のちに配布できるように、DBにNFTの情報を保存する
     update_pre_grant_memory_nft_token_ids(
-        token_id, [user.uid for user in bingo_card_answer_users]
+        token_id,
+        [
+            user.uid
+            for user in bingo_card_answer_users
+            if user.walletAddress is None or user.walletAddress == ""
+        ],
     )
 
     if len(bingo_card_answer_users) == 0:
