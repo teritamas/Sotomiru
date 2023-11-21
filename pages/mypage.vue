@@ -9,7 +9,12 @@
     :bingoToken="bingoToken"
   />
   <!-- NFTギャラリー -->
-  <NftGalley :nfts="ownNfts" />
+  <NftGalley
+    v-if="currentUser"
+    :nfts="ownNfts"
+    :displayName="currentUser.displayName"
+    :userInfo="userInfo"
+  />
   <!-- 画面の更新ボタン -->
   <AppControlArea v-if="currentUser" @logout="logout" />
 </template>

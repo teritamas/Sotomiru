@@ -30,6 +30,9 @@ h1 {
   font-weight: bold;
 }
 
+.font-kiwi {
+  font-family: "Kiwi Maru", serif;
+}
 .color {
   color: var(--c7);
 }
