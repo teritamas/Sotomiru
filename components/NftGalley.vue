@@ -1,11 +1,17 @@
 <template>
   <div
     class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-2"
-    style="margin: 0rem 3rem"
+    style="margin: 0rem 3rem; margin-bottom: 7rem"
   >
     <h1 class="m-2 mt-8 text-xl mx-auto col-span-1 md:col-span-2 lg:col-span-5">
       獲得したNFTリスト
     </h1>
+    <img
+      v-show="nfts.length === 0"
+      src="@/assets/img/noItem.png"
+      alt=""
+      class="col-span-1 md:col-span-2 lg:col-span-5"
+    />
     <div v-for="(nft, index) in nfts" class="galley-video">
       <video
         @playing="onVideoPlaying(index)"
