@@ -14,6 +14,7 @@
       <small class="px-6 block m-auto w-2/3">
         ログインをするとトークンがたまったり、思い出の動画のNFTをGETできたりします！
       </small>
+      <img src="@/assets/img/present.png" class="w-1/2 m-auto" alt="" />
     </div>
   </div>
 </template>
