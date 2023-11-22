@@ -19,7 +19,6 @@ def create_movie(
         _type_: _description_
     """
     movie = BingoCompleteMovie(dir_path)
-    movie.start_frame(bingo_card_name)
 
     target_bingo_cells = [
         bingo_cell for bingo_cell in bingo_cells if bingo_cell.imageUrl
@@ -27,6 +26,14 @@ def create_movie(
 
     # 時系列順に並び替える
     target_bingo_cells.sort(key=lambda x: x.answered_at)
+    # aiCheckScoreが最も高いidを取得する
+    most_score_bingo_cell = max(
+        target_bingo_cells, key=lambda x: x.imageAiCheckScore
+    )
+
+    movie.start_frame(
+        bingo_card_name, f"{dir_path}/{most_score_bingo_cell.id}.png"
+    )
 
     for bingo_cell in target_bingo_cells:
         if not bingo_cell.imageUrl:
