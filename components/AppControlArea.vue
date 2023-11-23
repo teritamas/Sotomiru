@@ -53,7 +53,6 @@ const logout = () => {
 <style scoped>
 footer {
   border-radius: 1rem;
-  margin: 1rem;
   z-index: 10000;
 }
 .bg-footer {
