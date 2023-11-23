@@ -63,6 +63,7 @@
         @playing="onVideoPlaying(index)"
         @pause="onVideoPaused()"
         :src="nft.metadata.animation_url!"
+        poster="@/assets/img/video-loading.jpg"
         controls
       ></video>
       <p v-show="!videoPlaying[index]">
