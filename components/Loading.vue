@@ -57,7 +57,7 @@ const props = defineProps({
 }
 .demo_item_1 {
   left: 72px;
-  background-image: url("@/assets/img/car.png");
+  background-image: url("@/assets/img/car-white.png");
 }
 .demo_item_2 {
   /*木*/
@@ -65,13 +65,13 @@ const props = defineProps({
   z-index: -1;
   width: 30px;
   height: 30px;
-  background-image: url("@/assets/img/00663.png");
+  background-image: url("@/assets/img/tree-white.png");
 }
 .demo_item_3 {
   /*建物*/
   top: -5px;
   z-index: -1;
-  background-image: url("@/assets/img/01152.png");
+  background-image: url("@/assets/img/building-white.png");
 }
 .demo_item_4 {
   /*家*/
@@ -79,7 +79,7 @@ const props = defineProps({
   z-index: -1;
   width: 40px;
   height: 40px;
-  background-image: url("@/assets/img/00033.png");
+  background-image: url("@/assets/img/house-white.png");
 }
 
 .anime-updown {
@@ -101,7 +101,7 @@ const props = defineProps({
   height: 65px;
   top: 41%;
   display: block;
-  border-bottom: solid #777 1px;
+  border-bottom: solid #fff 1px;
 }
 
 .demo_wrap {
