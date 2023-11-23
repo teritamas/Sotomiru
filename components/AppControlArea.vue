@@ -1,6 +1,6 @@
 <template>
   <footer
-    class="text-gray-600 body-font fixed bottom-2 border border-gray-700 w-11/12"
+    class="text-gray-600 body-font fixed bottom-2 border border-gray-700 w-full m-auto"
   >
     <div class="bg-footer grid grid-cols-3">
       <router-link class="footer-item block text-gray-500" to="/login">
