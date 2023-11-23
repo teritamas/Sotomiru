@@ -11,7 +11,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Kaisei+Opti:wght@700&family=Kiwi+Maru:wght@300&family=Lato:wght@900&family=Mochiy+Pop+P+One&family=Open+Sans:wght@300;400&display=swap");
 :root {
   --bg: #d3e3fd;
-  --body: #666;
   --c1: #d9d7f1;
   --c2: #ffe0a3;
   --c3: #b0e0a8;
@@ -20,9 +19,6 @@
   --c6: #ff7b74;
   --c7: #568de5;
   --font: radio canada;
-  --smallfont: inconsolata;
-
-  --done: 44%;
 }
 h1 {
   font-family: "Kiwi Maru", serif;
