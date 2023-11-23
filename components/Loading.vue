@@ -29,7 +29,7 @@
       </div>
       <p
         class="font-bold text-white text-center"
-        style="position: relative; top: 74px; font-size: 1.25em"
+        style="position: relative; top: 74px; font-size: 0.9em"
       >
         {{ LoadingText }}
       </p>
