@@ -4,6 +4,12 @@
 
 - [デモページ](https://key3-global-hackathon.web.app/)
 
+## 概要
+
+本アプリケーションの概要は以下の URL を参照してください。
+
+- [Sotomiru | AKINDO](https://app.akindo.io/communities/Ql24naKJNfNQlllvZ/products/93llLoRrmFQmKvRZd?tab=overview)
+
 ## 全体構成
 
 Sotomiru の全体構成は下記の通り。
@@ -22,7 +28,7 @@ Sotomiru の全体構成は下記の通り。
 
 > Note: 動画生成ジョブは、動画生成に非常に時間がかかるため、別プロセスのジョブとして実装している。また Python を利用した理由は、nodeJs に動画生成に使いやすいライブラリが存在しなかったため、Python で実装している。
 
-NFT とトークンの発行に利用するコントラクトは、ThirdWeb を利用して Aster の Testnet である Zkatana にデプロイしている。
+NFT とトークンの発行に利用するコントラクトは、 Aster ekEVM の Testnet である zKatana にデプロイしている。
 
 - [Sotomiru Bingo Contract の Chain Explorer](https://zkatana.blockscout.com/address/0xdE430c046381D1814b678e9fF0f3f027A3D3Ac23)
 
