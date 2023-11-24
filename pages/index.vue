@@ -45,6 +45,12 @@ const congratulationsBingoViewIsOpen = ref(false);
 const isLoading = ref(false);
 const loadingMessage = ref("");
 
+// クエリパラメータから表示モードを取得
+const query = useRoute().query;
+if (query.isPublic) {
+  isPublicOnly.value = query.isPublic === "true";
+}
+
 // 全てのビンゴカードを取得
 watchEffect(async () => {
   loadingMessage.value = "ビンゴカードを読み込んでいます";
