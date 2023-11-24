@@ -170,7 +170,7 @@ const createBingoCard = async () => {
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
   isLoading.value = false;
-  router.push(`/`);
+  router.push(`/?isPublic=${form.value.isPublic}`);
 };
 </script>
 
