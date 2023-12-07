@@ -8,7 +8,10 @@
 
 本アプリケーションの概要は以下の URL を参照してください。
 
+- [ピッチ資料](https://www.canva.com/design/DAFzS5FRRks/O4aESXnqRAtgTm0v7bBDFQ/view?utm_content=DAFzS5FRRks&utm_campaign=designshare&utm_medium=link&utm_source=editor#1)
+
 - [Sotomiru | AKINDO](https://app.akindo.io/communities/Ql24naKJNfNQlllvZ/products/93llLoRrmFQmKvRZd?tab=overview)
+
 
 ## 全体構成
 
